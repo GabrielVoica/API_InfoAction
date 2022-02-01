@@ -9,6 +9,6 @@ use Illuminate\Routing\Controller;
 class UsrRegister extends Controller
 {
     public function registro(Request $request){
-        return 'hh';
+        return $request->input('name');
     }
 }

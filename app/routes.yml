@@ -1,0 +1,21 @@
+# Root
+api:
+  route: "/"
+  controller: "controllers/HomeController.php"
+
+# POST REQUEST TO CREATE USER
+register:
+  route: "/register"
+  controller: "controllers/RegisterController.php"
+  
+# POST REQUEST TO LOGIN USER
+login:
+  route: "/login"
+  controller: "controllers/LoginController.php"
+
+# GET REQUEST USER
+user:
+  route: "/user/{number}"
+  controller: "controllers/UserController.php"
+
+  

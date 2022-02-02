@@ -1,0 +1,17 @@
+{
+    "name": "daw2/api_info-action",
+    "autoload": {
+        "psr-4": {
+            "Daw2\\ApiInfoAction\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DarianMD",
+            "email": "darianmanasturean@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/yaml": "^6.0"
+    }
+}

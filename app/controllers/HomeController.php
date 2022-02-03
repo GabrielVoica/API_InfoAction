@@ -2,9 +2,8 @@
 
 namespace App\Controllers\HomeController;
 
+include 'services/Database.php';
 
 use \App\Services\Database;
 
-
-
-$prueba = new Database();
+$data = new Database();

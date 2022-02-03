@@ -1,4 +1,5 @@
 <?php
+
 use Symfony\Component\Yaml\Yaml;
 
 include "../vendor/autoload.php";
@@ -17,7 +18,11 @@ $yamlLoader = Yaml::parse(file_get_contents("routes.yml"));
 $request = $_SERVER['REQUEST_URI'];
 
 //TODO quitar en producción
-$request = str_replace("/api/app", "", $request);
+$filtered_request = str_replace("/API_InfoAction/app", "", $request);
+
+$request_params = explode('/', $filtered_request);
+
+print_r($request_params);
 
 
 /**

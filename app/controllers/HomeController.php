@@ -1,6 +1,5 @@
 <?php
 
-namespace App\Controllers;
 
 use App\Interface\Controller;
 
@@ -13,7 +12,6 @@ class HomeController implements Controller
 
     public function get()
     {
-        echo "Hello";
     }
 
     public function post()

@@ -2,6 +2,7 @@
 
 use Symfony\Component\Yaml\Yaml;
 
+
 include "../vendor/autoload.php";
 
 /**
@@ -57,23 +58,21 @@ $file_name = "";
 foreach ($directory as $file) {
     if (str_contains($file, $controller) && $controller !== '') {
         $file_name = $file;
-        require 'controllers/' . $file;
-    } else {
+        require_once 'controllers/' . $file;
     }
 }
 
-
-
-
-
-//$file_name = 'App\Controllers' .  . str_replace('.php', '', $file_name);
 
 $file_name = str_replace('.php', '', $file_name);
 
 
 
+
+
 $instance = new $file_name;
+
 $instance->get();
+
 
 
 //If the route doesn't exist the RouteNotFoundController is called

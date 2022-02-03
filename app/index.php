@@ -20,7 +20,7 @@ $request = $_SERVER['REQUEST_URI'];
 //TODO quitar en producción
 $filtered_request = str_replace("/API_InfoAction/app", "", $request);
 
-$request_params = explode('/', $filtered_request);
+$request_params = array_filter(explode('/', $filtered_request));
 
 print_r($request_params);
 
@@ -34,7 +34,7 @@ $existingRoute = false;
 
 //Checking if the route added by the user is present inside the routes file
 foreach ($yamlLoader as $yamlRoute) {
-    if ($yamlRoute['route'] == $request) {
+    if ($yamlRoute['route'] == $request_params[1]) {
         $existingRoute = true;
         include $yamlRoute['controller'];
     }

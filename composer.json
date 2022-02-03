@@ -12,6 +12,8 @@
         }
     ],
     "require": {
-        "symfony/yaml": "^6.0"
+        "symfony/yaml": "^6.0",
+        "vlucas/phpdotenv": "^5.4",
+        "symfony/http-foundation": "^6.0"
     }
 }

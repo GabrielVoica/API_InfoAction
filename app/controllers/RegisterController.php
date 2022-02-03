@@ -7,8 +7,7 @@ use App\Interface\Controller;
 require "src/interface/Controller.php";
 
 
-
-class HomeController implements Controller
+class RegisterController implements Controller
 {
 
     public function get()

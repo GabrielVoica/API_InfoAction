@@ -22,7 +22,16 @@ $filtered_request = str_replace("/API_InfoAction/app", "", $request);
 
 $request_params = array_filter(explode('/', $filtered_request));
 
-print_r($request_params);
+$request_params_array = [];
+
+foreach ($request_params as $param) {
+    array_push($request_params_array, $param);
+}
+
+if (count($request_params_array) == 0) {
+    $request_params_array = array(0 => '/');
+}
+
 
 
 /**
@@ -32,13 +41,40 @@ print_r($request_params);
 $existingRoute = false;
 
 
+$controller = "";
+
 //Checking if the route added by the user is present inside the routes file
 foreach ($yamlLoader as $yamlRoute) {
-    if ($yamlRoute['route'] == $request_params[1]) {
+    if ($yamlRoute['route'] == $request_params_array[0]) {
         $existingRoute = true;
-        include $yamlRoute['controller'];
+        $controller =  $yamlRoute['controller'];
     }
 }
+
+$directory = scandir('./controllers');
+$file_name = "";
+
+foreach ($directory as $file) {
+    if (str_contains($file, $controller) && $controller !== '') {
+        $file_name = $file;
+        require 'controllers/' . $file;
+    } else {
+    }
+}
+
+
+
+
+
+//$file_name = 'App\Controllers' .  . str_replace('.php', '', $file_name);
+
+$file_name = str_replace('.php', '', $file_name);
+
+
+
+$instance = new $file_name;
+$instance->get();
+
 
 //If the route doesn't exist the RouteNotFoundController is called
 /*if (!$existingRoute) { TODO

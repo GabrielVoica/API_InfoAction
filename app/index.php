@@ -66,16 +66,5 @@ foreach ($directory as $file) {
 $file_name = str_replace('.php', '', $file_name);
 
 
-
-
-
-$instance = new $file_name;
-
-$instance->get();
-
-
-
-//If the route doesn't exist the RouteNotFoundController is called
-/*if (!$existingRoute) { TODO
-    include "controllers/RouteNotFoundController.php";
-}*/
+//Main controller instance
+$controller_instance = new $file_name;

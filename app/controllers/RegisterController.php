@@ -18,4 +18,8 @@ class RegisterController implements Controller
     public function put()
     {
     }
+
+    public function delete()
+    {
+    }
 }

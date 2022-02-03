@@ -2,7 +2,6 @@
 
 use Symfony\Component\Yaml\Yaml;
 
-
 include "../vendor/autoload.php";
 
 /**
@@ -18,6 +17,8 @@ $yamlLoader = Yaml::parse(file_get_contents("routes.yml"));
  */
 $request = $_SERVER['REQUEST_URI'];
 
+
+
 //TODO quitar en producción
 $filtered_request = str_replace("/API_InfoAction/app", "", $request);
 
@@ -32,7 +33,6 @@ foreach ($request_params as $param) {
 if (count($request_params_array) == 0) {
     $request_params_array = array(0 => '/');
 }
-
 
 
 /**
@@ -68,3 +68,18 @@ $file_name = str_replace('.php', '', $file_name);
 
 //Main controller instance
 $controller_instance = new $file_name;
+
+switch ($_SERVER['REQUEST_METHOD']) {
+    case 'GET':
+        $controller_instance->get();
+        break;
+    case 'POST':
+        $controller_instance->post();
+        break;
+    case 'PUT':
+        $controller_instance->put();
+        break;
+    case 'DELETE':
+        $controller_instance->delete();
+        break;
+}

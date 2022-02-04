@@ -68,9 +68,13 @@ class BasePetition implements Petition{
         $this->requestVariables = explode('=',  implode("=",$this->requestVariables));
 
        
-        foreach($this->requestVariables as $prueba){
-        
-        
+        for($i = 0; $i < $this->requestVariables; $i++) {
+            if ($this->requestVariables[$i].sizeof % 2 == 0) 
+            $this->requestVariables[null][$i] = $this->requestVariables[$i];
+
+            else 
+                $this->requestVariables[null][$i] = $this->requestVariables[$i];
+            
         }
 
         echo "<pre>";

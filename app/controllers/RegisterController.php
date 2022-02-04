@@ -8,10 +8,12 @@ class RegisterController implements Controller
 
     public function get()
     {
+        
     }
 
     public function post()
     {
+      
     }
 
     public function put()

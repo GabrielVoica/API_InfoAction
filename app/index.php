@@ -4,6 +4,10 @@ use Symfony\Component\Yaml\Yaml;
 
 include "../vendor/autoload.php";
 
+require "src/middleware/ProcessPetition.php";
+require "services/petitions/BasePetition.php";
+
+
 /**
  * The yml php object that contains all the routes defined in the website
  * 
@@ -75,17 +79,9 @@ $file_name = str_replace('.php', '', $file_name);
 //Main controller instance
 $controller_instance = new $file_name;
 
-switch ($_SERVER['REQUEST_METHOD']) {
-    case 'GET':
-        $controller_instance->get();
-        break;
-    case 'POST':
-        $controller_instance->post();
-        break;
-    case 'PUT':
-        $controller_instance->put();
-        break;
-    case 'DELETE':
-        $controller_instance->delete();
-        break;
-}
+
+$petition = new BasePetition();
+
+
+$petition->process();
+$petition->send();

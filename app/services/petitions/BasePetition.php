@@ -2,25 +2,70 @@
 
 require "src/interface/Petition.php";
 
-
+/**
+ * 
+ */
 class BasePetition implements Petition{
 
-   private $petition;
+   /**
+    * 
+    */
+   private $petitionProcesser;
+
+   /**
+    * 
+    */
    private $controllerInstance;
+
+   /**
+    * 
+    */
    private $requestMethod;
+
+   /**
+    * 
+    */
    private $requestVariables;
 
-   public function __constructor($controllerInstance,$requestMethod,$requestVariables = null){
+   /**
+    * 
+    */
+   private $result;
 
-       $petitionProcesser = new ProcessPeticion();
 
+   public function __construct($controllerInstance,$requestMethod,$requestVariables){
+       /**
+        * 
+        */
+       $this->controllerInstance = $controllerInstance;
+
+       /**
+        * 
+        */
+       $this->requestMethod = $requestMethod;
+
+       /**
+        * 
+        */
+       $this->$requestVariables = $requestVariables;
+
+       /**
+        * 
+        */
+       $this->petitionProcesser = new ProcessPeticion();
    }
 
-    public function process(){
-
+    /**
+     * 
+     */
+    public function make(){
+        $this->petitionProcesser->process();
     }
 
+    /**
+     * 
+     */
     public function send(){
-
+        echo $this->result;
     }
 }

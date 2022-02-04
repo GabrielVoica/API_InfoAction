@@ -28,6 +28,7 @@ $filtered_request = str_replace("/API_InfoAction/app", "", $request);
 $request_params = array_filter(explode('/', $filtered_request));
 
 $request_params_array = [];
+$requestVariables = null;
 
 foreach ($request_params as $param) {
     if (!str_contains($param, '?')) {
@@ -38,7 +39,7 @@ foreach ($request_params as $param) {
 
         array_push($request_params_array,$request_variables[0]);
 
-        $request_variables = $request_variables[1];
+        $requestVariables = $request_variables[1];
     }
 }
 
@@ -77,11 +78,11 @@ foreach ($directory as $file) {
 $file_name = str_replace('.php', '', $file_name);
 
 //Main controller instance
-$controller_instance = new $file_name;
+$controllerInstance = new $file_name;
 
 
-$petition = new BasePetition();
+$petition = new BasePetition($controllerInstance,$_SERVER['REQUEST_METHOD'],$requestVariables);
 
 
-$petition->process();
+$petition->make();
 $petition->send();

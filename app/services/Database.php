@@ -8,11 +8,29 @@ namespace App\Services;
  */
 class Database
 {
-
+    /**
+     * 
+     */
     private $connection = null;
+
+    /**
+     * 
+     */
     private $user       = null;
+
+    /**
+     * 
+     */
     private $password   = null;
+
+    /**
+     * 
+     */
     private $hostname   = null;
+
+    /**
+     * 
+     */
     private $database   = null;
 
 
@@ -27,6 +45,9 @@ class Database
         $this->database = $_ENV['DB_DATABASE'];
     }
 
+    /**
+     * 
+     */
     public function connect()
     {
         $this->connection = mysqli_connect($this->hostname, $this->user, $this->password, $this->database);
@@ -37,6 +58,9 @@ class Database
         }
     }
 
+    /**
+     * 
+     */
     public function getConnection()
     {
         return $this->connection;

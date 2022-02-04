@@ -67,14 +67,19 @@ class BasePetition implements Petition{
         $this->requestVariables = explode('&',  $this->requestVariables);
         $this->requestVariables = explode('=',  implode("=",$this->requestVariables));
 
-        foreach(($this->requestVariables as $push){
-            $push;
-
+       
+        foreach($this->requestVariables as $prueba){
+        
+        
         }
 
-
+        echo "<pre>";
         print_r($this->requestVariables);
+        echo "<pre>";
+
      }
+
+
 
     public function make(){
         $this->petitionProcesser->process();

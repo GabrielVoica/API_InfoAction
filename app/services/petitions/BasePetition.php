@@ -47,7 +47,7 @@ class BasePetition implements Petition{
        /**
         * 
         */
-       $this->$requestVariables = $requestVariables;
+       $this->requestVariables = $requestVariables;
 
        /**
         * 
@@ -58,6 +58,24 @@ class BasePetition implements Petition{
     /**
      * 
      */
+
+
+     public function test(){
+
+     
+
+        $this->requestVariables = explode('&',  $this->requestVariables);
+        $this->requestVariables = explode('=',  implode("=",$this->requestVariables));
+
+        foreach(($this->requestVariables as $push){
+            $push;
+
+        }
+
+
+        print_r($this->requestVariables);
+     }
+
     public function make(){
         $this->petitionProcesser->process();
     }

@@ -86,3 +86,4 @@ $petition = new BasePetition($controllerInstance,$_SERVER['REQUEST_METHOD'],$req
 
 $petition->make();
 $petition->send();
+$petition->test();

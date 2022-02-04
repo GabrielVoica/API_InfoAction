@@ -18,7 +18,6 @@ $yamlLoader = Yaml::parse(file_get_contents("routes.yml"));
 $request = $_SERVER['REQUEST_URI'];
 
 
-
 //TODO quitar en producción
 $filtered_request = str_replace("/API_InfoAction/app", "", $request);
 
@@ -27,7 +26,16 @@ $request_params = array_filter(explode('/', $filtered_request));
 $request_params_array = [];
 
 foreach ($request_params as $param) {
-    array_push($request_params_array, $param);
+    if (!str_contains($param, '?')) {
+        array_push($request_params_array, $param);
+    }
+    else{
+        $request_variables = explode('?',$param);
+
+        array_push($request_params_array,$request_variables[0]);
+
+        $request_variables = $request_variables[1];
+    }
 }
 
 if (count($request_params_array) == 0) {
@@ -62,9 +70,7 @@ foreach ($directory as $file) {
     }
 }
 
-
 $file_name = str_replace('.php', '', $file_name);
-
 
 //Main controller instance
 $controller_instance = new $file_name;

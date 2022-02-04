@@ -1,7 +1,6 @@
 <?php
 
 
-use App\Interface\Controller;
 
 require "src/interface/Controller.php";
 

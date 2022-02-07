@@ -81,5 +81,5 @@ $controllerInstance = new $file_name;
 $petition = new BasePetition($controllerInstance, $_SERVER['REQUEST_METHOD'], $requestVariables);
 
 $petition->make();
-$petition->send();
-$petition->test();
+
+

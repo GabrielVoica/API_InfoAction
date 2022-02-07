@@ -22,5 +22,6 @@ class RegisterController implements Controller
 
     public function delete()
     {
+        
     }
 }

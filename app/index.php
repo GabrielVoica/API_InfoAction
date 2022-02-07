@@ -6,6 +6,7 @@ include "../vendor/autoload.php";
 
 require "src/middleware/ProcessPetition.php";
 require "services/petitions/BasePetition.php";
+require "services/Database.php";
 
 /**
  * The yml php object that contains all the routes defined in the website
@@ -76,7 +77,7 @@ foreach ($directory as $file) {
 $file_name = str_replace('.php', '', $file_name);
 
 //Main controller instance
-$controllerInstance = new $file_name;
+$controllerInstance = new $file_name(new Database());
 
 $petition = new BasePetition($controllerInstance, $_SERVER['REQUEST_METHOD'], $requestVariables);
 

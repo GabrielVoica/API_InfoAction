@@ -36,6 +36,7 @@ class BasePetition implements Petition
     private $result;
 
 
+
     public function __construct($controllerInstance, $requestMethod, $requestVariables)
     {
         $this->controllerInstance = $controllerInstance;
@@ -93,7 +94,7 @@ class BasePetition implements Petition
                 $this->result = $this->controllerInstance->get($this);
                 break;
             case 'POST':
-                $this->result = $this->controllerInstance->post();
+                $this->result = $this->controllerInstance->post($this->requestVariables);
                 break;
             case 'PUT':
                 $this->result = $this->controllerInstance->put();

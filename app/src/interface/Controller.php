@@ -11,7 +11,7 @@ interface Controller
     /**
      * 
      */
-    public function post();
+    public function post($variables);
 
     /**
      * 

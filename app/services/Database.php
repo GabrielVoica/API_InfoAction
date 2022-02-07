@@ -1,7 +1,5 @@
 <?php
 
-namespace App\Services;
-
 /**
  * This class provides a database conexion instance
  * 

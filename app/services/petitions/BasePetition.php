@@ -34,24 +34,9 @@ class BasePetition implements Petition{
 
 
    public function __construct($controllerInstance,$requestMethod,$requestVariables){
-       /**
-        * 
-        */
        $this->controllerInstance = $controllerInstance;
-
-       /**
-        * 
-        */
        $this->requestMethod = $requestMethod;
-
-       /**
-        * 
-        */
        $this->$requestVariables = $requestVariables;
-
-       /**
-        * 
-        */
        $this->petitionProcesser = new ProcessPeticion();
    }
 

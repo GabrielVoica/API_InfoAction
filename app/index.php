@@ -7,7 +7,6 @@ include "../vendor/autoload.php";
 require "src/middleware/ProcessPetition.php";
 require "services/petitions/BasePetition.php";
 
-
 /**
  * The yml php object that contains all the routes defined in the website
  * 
@@ -33,11 +32,10 @@ $requestVariables = null;
 foreach ($request_params as $param) {
     if (!str_contains($param, '?')) {
         array_push($request_params_array, $param);
-    }
-    else{
-        $request_variables = explode('?',$param);
+    } else {
+        $request_variables = explode('?', $param);
 
-        array_push($request_params_array,$request_variables[0]);
+        array_push($request_params_array, $request_variables[0]);
 
         $requestVariables = $request_variables[1];
     }
@@ -80,9 +78,7 @@ $file_name = str_replace('.php', '', $file_name);
 //Main controller instance
 $controllerInstance = new $file_name;
 
-
-$petition = new BasePetition($controllerInstance,$_SERVER['REQUEST_METHOD'],$requestVariables);
-
+$petition = new BasePetition($controllerInstance, $_SERVER['REQUEST_METHOD'], $requestVariables);
 
 $petition->make();
 $petition->send();

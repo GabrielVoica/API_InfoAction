@@ -4,18 +4,26 @@
 require "services/cookies/CookieService.php";
 require "services/errors/BadRequestError.php";
 require "services/errors/MethodNotAllowedError.php";
+require "services/errors/ForbiddenError.php";
+require "services/errors/NotFoundError.php";
+
+
 
 class EntryController implements Controller
 {
   private $cookieService;
   private $badRequestError;
   private $methodNotAllowedError;
+  private $notfounderror;
+  private $forbiddenerror;
 
   public function __construct()
   {
     $this->cookieService = new CookieService();
     $this->badRequestError = new BadRequestError();
     $this->methodNotAllowedError = new MethodNotAllowedError();
+    $this->notfounderror = new NotFoundError();
+    $this->forbiddenerror = new ForbiddenError();
   }
 
   public function get()

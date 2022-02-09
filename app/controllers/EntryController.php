@@ -1,43 +1,58 @@
 <?php
 
-require "src/interface/Controller.php";
-require "services/CookieService.php";
 
+require "services/cookies/CookieService.php";
+require "services/errors/BadRequestError.php";
+require "services/errors/MethodNotAllowedError.php";
 
 class EntryController implements Controller
 {
+  private $cookieService;
+  private $badRequestError;
+  private $methodNotAllowedError;
 
-    private $cookieService;
+  public function __construct()
+  {
+    $this->cookieService = new CookieService();
+    $this->badRequestError = new BadRequestError();
+    $this->methodNotAllowedError = new MethodNotAllowedError();
+  }
 
-    public function __construct()
-    {
-        $this->cookieService = new CookieService();
+  public function get()
+  {
+    return $this->methodNotAllowedError::throw();
+  }
+
+  public function post($variables)
+  {
+
+    if (!isset($variables['user_type'])) {
+      return $this->badRequestError::throw();
     }
 
-    public function get()
-    {    
-        
+    if ($variables['user_type'] != 0 && $variables['user_type'] != 1) { //TODO create comprobation class
+       return $this->badRequestError::throw();
     }
 
-    public function post($variables)
-    {
-       //Student
-       if($variables['user_type'] == 0){
-         $this->cookieService->createCookie('user_type','student',time()+1000000);
-         $this->cookieService->setCookie();
-       }
-       //Teacher
-       elseif($variables['user_type'] == 1){
-         $this->cookieService->createCookie('user_type','teacher',time()+1000000);
-         $this->cookieService->setCookie();
-       }
+    //Student
+    if ($variables['user_type'] == 0) {
+      $this->cookieService->createCookie('user_type', 'student', time() + 1000000);
+      $this->cookieService->setCookie();
     }
+    //Teacher
+    elseif ($variables['user_type'] == 1) {
+      $this->cookieService->createCookie('user_type', 'teacher', time() + 1000000);
+      $this->cookieService->setCookie();
+    }
+  }
 
-    public function put()
-    {
-    }
+  public function put()
+  {
+    $this->methodNotAllowedError::throw();
+  }
 
-    public function delete()
-    {
-    }
+  public function delete()
+  {
+    
+  }
 }

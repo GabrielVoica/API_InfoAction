@@ -7,6 +7,9 @@ include "../vendor/autoload.php";
 require "src/middleware/ProcessPetition.php";
 require "services/petitions/BasePetition.php";
 require "services/Database.php";
+require "src/interface/Controller.php";
+require "src/interface/HttpError.php";
+
 
 /**
  * The yml php object that contains all the routes defined in the website

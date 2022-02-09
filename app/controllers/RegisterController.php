@@ -28,8 +28,7 @@ class RegisterController implements Controller
 
     public function post($variables)
     {
-        $username = $variables['username'] ?? null;
-        $this->connection->query("INSERT INTO USERS (username) VALUES ('$username')");  
+         
     }
 
 

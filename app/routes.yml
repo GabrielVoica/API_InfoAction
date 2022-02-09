@@ -3,6 +3,10 @@ api:
   route: "/"
   controller: "HomeController"
 
+entry:
+  route: "entry"
+  controller: "EntryController"
+
 # POST REQUEST TO CREATE USER
 register:
   route: "register"

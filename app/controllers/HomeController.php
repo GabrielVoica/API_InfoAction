@@ -11,9 +11,10 @@ class HomeController implements Controller
 
     public function get()
     {
+        
     }
 
-    public function post()
+    public function post($variables)
     {
     }
 

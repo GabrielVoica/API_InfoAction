@@ -112,6 +112,11 @@ class BasePetition implements Petition
      */
     public function send()
     {
+        if($this->result == null){
+          $error = new MethodNotAllowedError();
+          $this->result = $error::throw();
+        }
+
         echo json_encode($this->result);
     }
 }

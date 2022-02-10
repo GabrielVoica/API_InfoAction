@@ -1,9 +1,8 @@
 <?php
 
-
 require "services/cookies/CookieService.php";
 require "services/errors/BadRequestError.php";
-require "services/errors/MethodNotAllowedError.php";
+
 
 class EntryController implements Controller
 {
@@ -15,12 +14,12 @@ class EntryController implements Controller
   {
     $this->cookieService = new CookieService();
     $this->badRequestError = new BadRequestError();
-    $this->methodNotAllowedError = new MethodNotAllowedError();
   }
 
   public function get()
   {
   }
+
 
   public function post($variables)
   {
@@ -51,6 +50,5 @@ class EntryController implements Controller
 
   public function delete()
   {
-    
   }
 }

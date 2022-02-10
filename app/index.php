@@ -10,6 +10,8 @@ require "services/Database.php";
 require "src/interface/Controller.php";
 require "src/interface/HttpError.php";
 
+require "services/errors/MethodNotAllowedError.php";
+
 
 /**
  * The yml php object that contains all the routes defined in the website

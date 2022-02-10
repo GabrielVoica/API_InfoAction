@@ -4,13 +4,13 @@ use Symfony\Component\Yaml\Yaml;
 
 include "../vendor/autoload.php";
 
-require "src/middleware/ProcessPetition.php";
-require "services/petitions/BasePetition.php";
-require "services/Database.php";
-require "src/interface/Controller.php";
-require "src/interface/HttpError.php";
-
-require "services/errors/MethodNotAllowedError.php";
+require_once("src/middleware/ProcessPetition.php");
+require_once("services/petitions/BasePetition.php");
+require_once("services/Database.php");
+require_once("src/interface/Controller.php");
+require_once("src/interface/HttpError.php");
+require_once("src/interface/Model.php");
+require_once("services/errors/MethodNotAllowedError.php");
 
 
 /**

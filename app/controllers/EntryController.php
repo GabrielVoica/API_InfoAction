@@ -2,6 +2,7 @@
 
 require "services/cookies/CookieService.php";
 require "services/errors/BadRequestError.php";
+require "services/responses/Response.php";
 
 
 class EntryController implements Controller
@@ -42,6 +43,8 @@ class EntryController implements Controller
       $this->cookieService->createCookie('user_type', 'teacher', time() + 1000000);
       $this->cookieService->setCookie();
     }
+
+    return Response::successful();
   }
 
   public function put()

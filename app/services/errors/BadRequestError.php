@@ -7,4 +7,3 @@ class BadRequestError implements HttpError{
         return array('code' => 400,'message' => 'The request values are invalid');
     }
 }
-

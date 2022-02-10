@@ -20,7 +20,6 @@ class EntryController implements Controller
 
   public function get()
   {
-    return $this->methodNotAllowedError::throw();
   }
 
   public function post($variables)
@@ -48,7 +47,6 @@ class EntryController implements Controller
 
   public function put()
   {
-    $this->methodNotAllowedError::throw();
   }
 
   public function delete()

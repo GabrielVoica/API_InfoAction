@@ -1,7 +1,6 @@
 <?php
 
 
-require "src/interface/Controller.php";
 
 class RegisterController implements Controller
 {

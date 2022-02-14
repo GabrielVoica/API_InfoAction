@@ -6,7 +6,7 @@ require_once("services/Database.php");
 
 class User implements Model
 {
-    public function get($id = null, array $fields = null)
+    public static function get($id = null, array $fields = null)
     {
         if($fields === null){
         $query = "SELECT * FROM user WHERE id = $id";
@@ -37,10 +37,11 @@ class User implements Model
 
         $data = mysqli_fetch_assoc($data);
 
+
         return $data;
     }
 
-    public function getAll()
+    public static function getAll()
     {
         $database = new Database();
         $database->connect();
@@ -51,21 +52,48 @@ class User implements Model
     }
 
 
-    public function insert(){
+    public static function insert(array $fields = null){
+
         
+            $query = "INSERT INTO User";
+
+            $keys = array_keys($fields);
+            $values = array_values($fields);
+     
+            for($i = 0; $i < count($fields); $i++){
+                $query = "$query ($keys[$i]) VALUES('$values[$i]') ";
+
+                //$sql="INSERT INTO `daw2`.`usuario` VALUES ('$id','$user', '$hashed_password', '$email', sysdate(), sysdate(),'null',null,'$rol',0)";
+
+
+                if($i == count($fields) - 1){
+                    $query = $query . ")";
+                }   
+                
+            }
+
+        
+        print_r($query);
+
+        $database = new Database();
+        $database->connect();
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+
+        return $data;
     }
 
-    public function delete($id)
+    public static function delete($id)
     {
 
     }
 
-    public function deleteAll()
+    public static function deleteAll()
     {
 
     }
 
-    public function update($id, array $fields)
+    public static function update($id, array $fields)
     {
 
     }

@@ -1,10 +1,10 @@
 <?php
 
 interface Model{
-    public function get($id, ?array $fields);
-    public function getAll();
-    public function delete($id);
-    public function insert();
-    public function deleteAll();
-    public function update($id, array $fields);
+    public static function get($id, ?array $fields);
+    public static function getAll();
+    public static function delete($id);
+    public static function insert();
+    public static function deleteAll();
+    public static function update($id, array $fields);
 }

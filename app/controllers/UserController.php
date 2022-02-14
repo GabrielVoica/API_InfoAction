@@ -24,10 +24,9 @@ class UserController implements Controller
 
   public function get($params)
   {
-    print_r($params);
-    $data =  $this->userModel->get($params[1],null); //TODO Improve
+    return User::get($params[1],null);
 
-    return $data;
+
   }
 
   public function post($variables)

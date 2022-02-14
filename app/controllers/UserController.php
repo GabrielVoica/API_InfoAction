@@ -1,6 +1,9 @@
 <?php
 
-class RegisterController implements Controller
+
+require_once('src/models/User.php');
+
+class UserController implements Controller
 {
 
   /**
@@ -8,6 +11,7 @@ class RegisterController implements Controller
    */
   private $connection;
 
+  private $userModel;
 
 
 
@@ -15,16 +19,21 @@ class RegisterController implements Controller
   {
     $database->connect();
     $this->connection = $database->getConnection();
+    $this->userModel = new User();
   }
-
-
 
   public function get($params)
   {
+    print_r($params);
+    $data =  $this->userModel->get($params[1],null); //TODO Improve
+
+    return $data;
   }
 
   public function post($variables)
-  { 
+  {
+   
+    
   }
 
 
@@ -32,6 +41,8 @@ class RegisterController implements Controller
   public function put()
   {
   }
+
+
 
   public function delete()
   {

@@ -29,6 +29,8 @@ class BasePetition implements Petition
     private $requestVariables;
 
 
+    private $requestUrlParams;
+
     /**
      * 
      * 
@@ -37,7 +39,7 @@ class BasePetition implements Petition
 
 
 
-    public function __construct($controllerInstance, $requestMethod, $requestVariables)
+    public function __construct($controllerInstance, $requestMethod, $requestVariables, $requestUrlParams)
     {
         $this->controllerInstance = $controllerInstance;
         $this->requestMethod = $requestMethod;
@@ -46,6 +48,13 @@ class BasePetition implements Petition
          * 
          */
         $this->requestVariables = $requestVariables;
+
+        /**
+         * 
+         * 
+         */
+        $this->requestUrlParams = $requestUrlParams;
+
 
         /**
          * 
@@ -91,7 +100,7 @@ class BasePetition implements Petition
     public function callControllerMethod(){
         switch($this->requestMethod){
             case 'GET':
-                $this->result = $this->controllerInstance->get($this);
+                $this->result = $this->controllerInstance->get($this->requestUrlParams);
                 break;
             case 'POST':
                 $this->result = $this->controllerInstance->post($this->requestVariables);

@@ -75,7 +75,7 @@ $file_name = "";
 foreach ($directory as $file) {
     if (str_contains($file, $controller) && $controller !== '') {
         $file_name = $file;
-        require_once 'controllers/' . $file;
+        require 'controllers/' . $file;
     }
 }
 
@@ -84,7 +84,9 @@ $file_name = str_replace('.php', '', $file_name);
 //Main controller instance
 $controllerInstance = new $file_name(new Database());
 
-$petition = new BasePetition($controllerInstance, $_SERVER['REQUEST_METHOD'], $requestVariables);
+
+
+$petition = new BasePetition($controllerInstance, $_SERVER['REQUEST_METHOD'], $requestVariables, $request_params_array);
 
 $petition->make();
 

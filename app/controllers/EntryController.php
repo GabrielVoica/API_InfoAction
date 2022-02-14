@@ -17,7 +17,7 @@ class EntryController implements Controller
     $this->badRequestError = new BadRequestError();
   }
 
-  public function get()
+  public function get($params)
   {
   }
 

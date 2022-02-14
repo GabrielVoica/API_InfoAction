@@ -6,7 +6,7 @@ interface Controller
     /**
      * 
      */
-    public function get();
+    public function get($params);
 
     /**
      * 

@@ -3,7 +3,7 @@
 class HomeController implements Controller
 {
 
-    public function get()
+    public function get($params)
     {
        return 'Welcome to our api!'; 
     }

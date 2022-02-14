@@ -50,6 +50,11 @@ class User implements Model
         return $data;
     }
 
+
+    public function insert(){
+        
+    }
+
     public function delete($id)
     {
 

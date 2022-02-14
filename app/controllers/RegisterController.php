@@ -10,7 +10,6 @@ class RegisterController implements Controller
 
 
 
-
   public function __construct($database)
   {
     $database->connect();
@@ -21,10 +20,12 @@ class RegisterController implements Controller
 
   public function get($params)
   {
+
   }
 
   public function post($variables)
   { 
+    
   }
 
 

@@ -1,5 +1,6 @@
 <?php
 
+use function PHPSTORM_META\type;
 
 require_once("services/Database.php");
 
@@ -54,34 +55,59 @@ class User implements Model
 
     public static function insert(array $fields = null){
 
-        
-            $query = "INSERT INTO User";
+        $database = new Database();
+        $database->connect();
+        $columns_show = "SHOW COLUMNS FROM user";
+        $types = $database->getConnection()->query($columns_show);
+        $types = mysqli_fetch_all($types);
+
+        print_r($types);
+
+            $query = "INSERT INTO user (";
 
             $keys = array_keys($fields);
             $values = array_values($fields);
      
             for($i = 0; $i < count($fields); $i++){
-                $query = "$query ($keys[$i]) VALUES('$values[$i]') ";
-
-                //$sql="INSERT INTO `daw2`.`usuario` VALUES ('$id','$user', '$hashed_password', '$email', sysdate(), sysdate(),'null',null,'$rol',0)";
-
-
-                if($i == count($fields) - 1){
-                    $query = $query . ")";
-                }   
-                
+                $query = "$query$keys[$i],";
             }
 
-        
-        print_r($query);
+            $query = substr($query,0,-1);
+            $query = $query.') ';
+            $query = $query."Values(";
 
-        $database = new Database();
-        $database->connect();
+
+           //TODO funcion aparte
+
+            for($x = 0; $x < count($types); $x++){
+                for($y = 0; $y < count($fields); $y++){
+
+
+                    if($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int')){
+                        $values[$y] = "'$values[$y]'";
+                    }
+                }
+            } 
+
+
+            for($i = 0; $i < count($fields); $i++){
+                    $query = "$query$values[$i],";
+            }
+
+            $query = substr($query,0,-1);
+            $query = $query.");";
+
+
         $data = $database->getConnection()->query($query);
-        $data = mysqli_fetch_assoc($data);
 
-        return $data;
+
+        return $query;
+
     }
+
+
+
+
 
     public static function delete($id)
     {

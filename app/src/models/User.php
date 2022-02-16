@@ -61,7 +61,6 @@ class User implements Model
         $types = $database->getConnection()->query($columns_show);
         $types = mysqli_fetch_all($types);
 
-        print_r($types);
 
             $query = "INSERT INTO user (";
 

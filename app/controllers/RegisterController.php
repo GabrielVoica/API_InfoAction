@@ -48,18 +48,19 @@ class RegisterController implements Controller
 
 
 
+
     for($y = 0; $y < count($types); $y++){
-      for($x = 0; $x < count($types); $x++)
-      if($keys[$y] == $types[$y][0]){
+      for($x = 0; $x < count($keys); $x++){     
+      if(array_diff($keys,$types[$y][0]) ){
         return BadRequestError::throw();
       }
-
-    }
-  
-
+    } 
+  }
 
 
-    return User::insert($variables);
+
+  return User::insert($variables);
+
   }
 
   public function put()

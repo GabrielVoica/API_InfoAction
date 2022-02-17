@@ -2,6 +2,7 @@
 
 require_once('src/models/User.php');
 require_once "services/errors/BadRequestError.php";
+require "services/responses/Response.php";
 require_once "services/Database.php";
 
 
@@ -23,6 +24,7 @@ class RegisterController implements Controller
     $this->connection = $database->getConnection();
     $this->badRequestError = new BadRequestError();
     $this->database = new Database();
+    $this->response = new Response();
 
 
 
@@ -39,27 +41,15 @@ class RegisterController implements Controller
   public function post($variables)
   { 
     $this->database->connect();
+  $reault = User::insert($variables);
 
-    //TODO implements in model
-    $columns_show = "SHOW COLUMNS FROM user";
-    $types = $this->database->getConnection()->query($columns_show);
-    $types = mysqli_fetch_all($types);
-    $keys = array_keys($variables);
+  if($reault === true)
+  {
+    return Response::successful();
 
-
-
-
-    for($y = 0; $y < count($types); $y++){
-      for($x = 0; $x < count($keys); $x++){     
-      if(array_diff($keys,$types[$y][0]) ){
-        return BadRequestError::throw();
-      }
-    } 
   }
-
-
-
-  return User::insert($variables);
+  else{
+    return BadRequestError::throw();  }
 
   }
 

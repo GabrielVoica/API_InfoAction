@@ -99,8 +99,12 @@ class User implements Model
 
         $data = $database->getConnection()->query($query);
 
-
-        return $query;
+        if($data){
+            return true;
+        }
+        else{
+            return false;
+        }
 
     }
 
@@ -110,7 +114,7 @@ class User implements Model
 
     public static function delete($id)
     {
-
+        
     }
 
     public static function deleteAll()

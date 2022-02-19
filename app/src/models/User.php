@@ -3,31 +3,29 @@
 use function PHPSTORM_META\type;
 
 require_once("services/Database.php");
+require_once("services/Validator.php");
 
 
 class User implements Model
 {
     public static function get($id = null, array $fields = null)
     {
-        if($fields === null){
-        $query = "SELECT * FROM user WHERE id = $id";
-        }
-        else{
+        if ($fields === null) {
+            $query = "SELECT * FROM user WHERE id = $id";
+        } else {
             $query = "SELECT * FROM user WHERE ";
             $keys = array_keys($fields);
             $values = array_values($fields);
-            for($i = 0; $i < count($fields); $i++){
-                if(count($fields) === 1){
+            for ($i = 0; $i < count($fields); $i++) {
+                if (count($fields) === 1) {
                     $query = $query . "$keys[$i] = '$values[$i]'";
-                }
-                else{
-                     $query = $query . "$keys[$i] = '$values[$i]' AND ";
-                     if($i == count($fields) - 1){
-                         $query = substr($query,0,strlen($query) - 5);
-                     }
+                } else {
+                    $query = $query . "$keys[$i] = '$values[$i]' AND ";
+                    if ($i == count($fields) - 1) {
+                        $query = substr($query, 0, strlen($query) - 5);
+                    }
                 }
             }
-             
         }
 
         $database = new Database();
@@ -53,7 +51,18 @@ class User implements Model
     }
 
 
-    public static function insert(array $fields = null){
+    public static function insert(array $fields = null)
+    {
+
+        if (!isset($fields['nick_name']) || !Validator::isNickname($fields['nick_name'])) {
+            return false;
+        }
+
+        if (!isset($fields['password']) || !Validator::isPassword($fields['password'])) {
+            return false;
+        } else {
+            $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
+        }
 
         $database = new Database();
         $database->connect();
@@ -62,68 +71,60 @@ class User implements Model
         $types = mysqli_fetch_all($types);
 
 
-            $query = "INSERT INTO user (";
+        $query = "INSERT INTO user (";
 
-            $keys = array_keys($fields);
-            $values = array_values($fields);
-     
-            for($i = 0; $i < count($fields); $i++){
-                $query = "$query$keys[$i],";
-            }
+        $keys = array_keys($fields);
+        $values = array_values($fields);
 
-            $query = substr($query,0,-1);
-            $query = $query.') ';
-            $query = $query."Values(";
+        for ($i = 0; $i < count($fields); $i++) {
+            $query = "$query$keys[$i],";
+        }
 
-
-           //TODO funcion aparte
-
-            for($x = 0; $x < count($types); $x++){
-                for($y = 0; $y < count($fields); $y++){
+        $query = substr($query, 0, -1);
+        $query = $query . ') ';
+        $query = $query . "Values(";
 
 
-                    if($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int')){
-                        $values[$y] = "'$values[$y]'";
-                    }
+        //TODO funcion aparte
+
+        for ($x = 0; $x < count($types); $x++) {
+            for ($y = 0; $y < count($fields); $y++) {
+
+
+                if ($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int')) {
+                    $values[$y] = "'$values[$y]'";
                 }
-            } 
-
-
-            for($i = 0; $i < count($fields); $i++){
-                    $query = "$query$values[$i],";
             }
+        }
 
-            $query = substr($query,0,-1);
-            $query = $query.");";
+
+        for ($i = 0; $i < count($fields); $i++) {
+            $query = "$query$values[$i],";
+        }
+
+        $query = substr($query, 0, -1);
+        $query = $query . ");";
 
 
         $data = $database->getConnection()->query($query);
 
-        if($data){
+        if ($data) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
-
     }
-
-
-
 
 
     public static function delete($id)
     {
-        
     }
 
     public static function deleteAll()
     {
-
     }
 
     public static function update($id, array $fields)
     {
-
     }
 }

@@ -25,32 +25,24 @@ class RegisterController implements Controller
     $this->badRequestError = new BadRequestError();
     $this->database = new Database();
     $this->response = new Response();
-
-
-
-
   }
 
 
 
   public function get($params)
   {
-
   }
 
   public function post($variables)
-  { 
-    $this->database->connect();
-  $reault = User::insert($variables);
-
-  if($reault === true)
   {
-    return Response::successful();
+    $this->database->connect();
+    $result = User::insert($variables);
 
-  }
-  else{
-    return BadRequestError::throw();  }
-
+    if ($result === true) {
+      return Response::successful();
+    } else {
+      return BadRequestError::throw();
+    }
   }
 
   public function put()

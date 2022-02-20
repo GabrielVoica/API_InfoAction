@@ -3,6 +3,8 @@
 require_once("services/Database.php");
 require_once("services/Validator.php");
 require_once("services/errors/NotFoundError.php");
+require_once("services/Insert.php");
+
 
 
 class User implements Model
@@ -85,57 +87,37 @@ class User implements Model
     public static function insert(array $fields = null)
     {
 
-        if (!isset($fields['nick_name']) || !Validator::isNickname($fields['nick_name'])) {
+        if (!isset($fields['nick_name']) || !Validator::isName($fields['nick_name'], 5, 10)) {
             return false;
         }
+
+        /*if (!isset($fields['email']) || !Validator::isEmail($fields['email'])) {
+            return false;
+        } 
 
         if (!isset($fields['password']) || !Validator::isPassword($fields['password'])) {
             return false;
         } else {
             $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
         }
+        if (!isset($fields['name']) || !Validator::isName($fields['name'],5,15)) {
+            return false;
+        }
+        if (!isset($fields['lastname']) || !Validator::isName($fields['lastname'],5,15)) {
+            return false;
+        }*/
+
+
+        if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
+            return false;
+        }
+
 
         $database = new Database();
         $database->connect();
-        $columns_show = "SHOW COLUMNS FROM user";
-        $types = $database->getConnection()->query($columns_show);
-        $types = mysqli_fetch_all($types);
 
-
-        $query = "INSERT INTO user (";
-
-        $keys = array_keys($fields);
-        $values = array_values($fields);
-
-        for ($i = 0; $i < count($fields); $i++) {
-            $query = "$query$keys[$i],";
-        }
-
-        $query = substr($query, 0, -1);
-        $query = $query . ') ';
-        $query = $query . "Values(";
-
-
-        //TODO funcion aparte
-
-        for ($x = 0; $x < count($types); $x++) {
-            for ($y = 0; $y < count($fields); $y++) {
-
-
-                if ($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int')) {
-                    $values[$y] = "'$values[$y]'";
-                }
-            }
-        }
-
-
-        for ($i = 0; $i < count($fields); $i++) {
-            $query = "$query$values[$i],";
-        }
-
-        $query = substr($query, 0, -1);
-        $query = $query . ");";
-
+        $types = Insert::showColumns('user');
+        $query = Insert::makInsertQuery('user', $fields, $types);
 
         $data = $database->getConnection()->query($query);
 

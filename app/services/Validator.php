@@ -5,6 +5,8 @@ class Validator
 {
     public static function isNumber($value)
     {
+
+        
         if (preg_match('/[^0-9]+/', $value)) {
             return true;
         } else {
@@ -33,9 +35,9 @@ class Validator
     }
 
     //Min 5 characters, max 20 characters, only numbers and letters valid
-    public static function isNickname($value)
+    public static function isName($value,$min_character,$max_character)
     {
-        if (preg_match('/^[A-Za-z][A-Za-z0-9]{5,20}$/', $value)) {
+        if (preg_match('/^[A-Za-z][A-Za-z0-9]{'.$min_character.','.$max_character.'}$/', $value)) {
             return true;
         } else {
             return false;

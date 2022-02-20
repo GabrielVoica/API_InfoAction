@@ -1,9 +1,9 @@
 <?php
 
 require_once('src/models/User.php');
-require_once "services/errors/BadRequestError.php";
+require_once("services/errors/BadRequestError.php");
 require "services/responses/Response.php";
-require_once "services/Database.php";
+require_once("services/Database.php");
 
 
 class RegisterController implements Controller

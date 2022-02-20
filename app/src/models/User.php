@@ -1,15 +1,15 @@
 <?php
 
-use function PHPSTORM_META\type;
-
 require_once("services/Database.php");
 require_once("services/Validator.php");
+require_once("services/errors/NotFoundError.php");
 
 
 class User implements Model
 {
     public static function get($id = null, array $fields = null)
     {
+
         if ($fields === null) {
             $query = "SELECT * FROM user WHERE id = $id";
         } else {
@@ -34,10 +34,41 @@ class User implements Model
 
         $data = $database->getConnection()->query($query);
 
+        if ($data === false) {
+            return false;
+        }
+
+        if (mysqli_num_rows($data) == 0) {
+            return false;
+        }
+
         $data = mysqli_fetch_assoc($data);
 
 
+
+
         return $data;
+    }
+
+
+
+    public static function login($email, $password)
+    {
+        $query = "SELECT * FROM user WHERE email = '$email'";
+
+        $database = new Database();
+
+        $database->connect();
+
+        $data = $database->getConnection()->query($query);
+
+        $data = mysqli_fetch_assoc($data);
+
+        if (password_verify($password, $data['password'])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static function getAll()

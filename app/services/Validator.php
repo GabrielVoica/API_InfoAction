@@ -6,13 +6,15 @@ class Validator
     public static function isNumber($value)
     {
 
-        
         if (preg_match('/[^0-9]+/', $value)) {
             return true;
         } else {
             return false;
         }
     }
+
+
+
 
 
     public static function isEmail($value)

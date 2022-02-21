@@ -101,6 +101,13 @@ class User implements Model
     public static function insert(array $fields = null)
     {
 
+        $columns = Insert::showRequiredColumns('user');
+        $fieldsKeys = array_keys($fields);
+
+        if (count($columns) > count($fields)) {
+            return array('result' => false, 'message' => 'Missing field');
+        }
+
         if (!isset($fields['nick_name']) || !Validator::isName($fields['nick_name'], 5, 10)) {
             return false;
         }

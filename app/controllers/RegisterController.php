@@ -38,7 +38,7 @@ class RegisterController implements Controller
     if ($result === true) {
       return Response::successful();
     } else {
-      return BadRequestError::throw();
+      return $result;
     }
   }
 

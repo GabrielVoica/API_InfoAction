@@ -100,12 +100,11 @@ class User implements Model
 
     public static function insert(array $fields = null)
     {
-
-        if (!isset($fields['nick_name']) || !Validator::isName($fields['nick_name'], 5, 10)) {
+        if (!isset($fields['nick_name']) || !Validator::isName($fields['nick_name'], 5, 10) || !Validator::isExist('user','nick_name',$fields['nick_name'])) {
             return false;
         }
 
-        /*if (!isset($fields['email']) || !Validator::isEmail($fields['email'])) {
+        /* if (!isset($fields['email']) || !Validator::isEmail($fields['email']) || !Validator::isExist('user','email',$fields['email'])) {
             return false;
         } 
 
@@ -119,10 +118,9 @@ class User implements Model
         }
         if (!isset($fields['lastname']) || !Validator::isName($fields['lastname'],5,15)) {
             return false;
-        }*/
+        }
 
-
-        /*if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
+        if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
             return false;
         }*/
 

@@ -1,12 +1,34 @@
 <?php
 
+require_once("Database.php");
 
 class Validator
 {
+
+
+    public static function isExist($table,$tablefield,$value){
+        $database = new Database();
+        $database->connect();
+
+        $query = "SELECT * FROM $table WHERE $tablefield = '$value'";
+        $result = $database->getConnection()->query($query);
+        
+
+
+        if(mysqli_num_rows($result) == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+
     public static function isNumber($value)
     {
 
-        
+
         if (preg_match('/[^0-9]+/', $value)) {
             return true;
         } else {
@@ -28,7 +50,7 @@ class Validator
     public static function isText($value)
     {
         if (preg_match('/[a-z]+/', $value)) {
-            return true;
+            return array('result' => false, 'message' => 'Is not Text');
         } else {
             return false;
         }
@@ -73,4 +95,7 @@ class Validator
             return true;
         }
     }
+
+
+
 }

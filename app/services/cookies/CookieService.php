@@ -32,7 +32,11 @@ class CookieService
     {
         $hash = hash('sha256', $userEmail . $userPassword);
 
-        setcookie('SESSION_ID', $hash);
+        setcookie('SESSION_ID', $hash,time() + 360000);
+
+        if(CookieService::checkAuthCookie($hash) === false){
+            return false;
+        }
 
         $query = "SELECT id FROM user WHERE email = '$userEmail'";
 
@@ -46,8 +50,26 @@ class CookieService
 
         $id = $data['id'];
 
-        $query = "INSERT INTO cookies VALUES ('$hash',$id)";
+        $query = "INSERT INTO cookies (id,user_id) VALUES ('$hash',$id)";
 
         $data = $database->getConnection()->query($query);
+
+        return true;
+    }
+
+
+    public static function checkAuthCookie($hash){
+        $query = "SELECT * FROM cookies WHERE id = '$hash'";
+
+        $database = new Database();
+        $database->connect();
+        $data = $database->getConnection()->query($query);
+
+        if($data && mysqli_num_rows($data) !== 0){
+            return false;
+        }
+        else{
+            return true;
+        }
     }
 }

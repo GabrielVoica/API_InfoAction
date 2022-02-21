@@ -1,7 +1,8 @@
 <?php
 
-
 require_once('src/models/User.php');
+require_once('services/errors/NotFoundError.php');
+require_once('services/responses/Response.php');
 
 class UserController implements Controller
 {
@@ -14,7 +15,6 @@ class UserController implements Controller
   private $userModel;
 
 
-
   public function __construct($database)
   {
     $database->connect();
@@ -24,17 +24,20 @@ class UserController implements Controller
 
   public function get($params)
   {
-    return User::get($params[1],null);
 
+    $user = User::get($params[1],null);
 
+    if($user == null){
+      return NotFoundError::throw();
+    }
+    else{
+      return Response::successfulData($user);
+    }
   }
 
   public function post($variables)
   {
-   
-    
   }
-
 
 
   public function put()

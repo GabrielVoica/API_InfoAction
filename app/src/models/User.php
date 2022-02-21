@@ -6,9 +6,9 @@ require_once("services/errors/NotFoundError.php");
 require_once("services/Insert.php");
 
 
-
 class User implements Model
 {
+
     public static function get($id = null, array $fields = null)
     {
 
@@ -54,6 +54,20 @@ class User implements Model
 
 
 
+    public static function getField($id, $field)
+    {
+        $query = "SELECT $field FROM user WHERE id = $id";
+
+        $database = new Database();
+        $database->connect();
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+
+        return $data[$field];
+    }
+
+
+
     public static function login($email, $password)
     {
         $query = "SELECT * FROM user WHERE email = '$email'";
@@ -66,7 +80,7 @@ class User implements Model
 
         $data = mysqli_fetch_assoc($data);
 
-        if (password_verify($password, $data['password'])) {
+        if (isset($data['password']) && password_verify($password, $data['password'])) {
             return true;
         } else {
             return false;
@@ -108,9 +122,9 @@ class User implements Model
         }*/
 
 
-        if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
+        /*if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
             return false;
-        }
+        }*/
 
 
         $database = new Database();

@@ -16,8 +16,7 @@ class RegisterController implements Controller
   private $badRequestError;
   private $database;
 
-
-
+  
   public function __construct($database)
   {
     $database->connect();
@@ -26,8 +25,6 @@ class RegisterController implements Controller
     $this->database = new Database();
     $this->response = new Response();
   }
-
-
 
   public function get($params)
   {

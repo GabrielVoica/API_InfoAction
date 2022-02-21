@@ -19,7 +19,11 @@ Class Insert{
 
         public static function makInsertQuery($table,$fields,$types){
 
-            $query = "INSERT INTO user (";
+            $query = "INSERT INTO $table (";
+
+            if(isset($fields['password'])){
+                $fields['password'] = password_hash($fields['password'],PASSWORD_DEFAULT);
+            }
 
             $keys = array_keys($fields);
             $values = array_values($fields);

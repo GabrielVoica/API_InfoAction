@@ -4,6 +4,7 @@ require_once("src/models/User.php");
 require_once("services/errors/NotFoundError.php");
 require_once("services/responses/Response.php");
 require_once("services/cookies/CookieService.php");
+require_once('services/errors/BadRequestError.php');
 
 class LoginController implements Controller
 {
@@ -17,8 +18,8 @@ class LoginController implements Controller
         $result = User::login($variables['email'], $variables['password']);
 
         if ($result != false) {
-            CookieService::createAuthCookie($variables['email'], $variables['password']);
-            return Response::successful(); //Create cookie and store in the BackEndTea
+            $cookie =  CookieService::createAuthCookie($variables['email'], $variables['password']);
+            return Response::successful();
         } else {
             return  NotFoundError::throw();
         }

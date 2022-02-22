@@ -35,10 +35,15 @@ class RegisterController implements Controller
     $this->database->connect();
     $result = User::insert($variables);
 
-    if ($result === true) {
-      return Response::successful();
+
+    $response = Response::successful();
+    $response ['final'] = $result['final'];
+
+
+    if ($result == true) {
+      return $response;
     } else {
-      return $result;
+      return false;
     }
   }
 

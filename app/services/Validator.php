@@ -92,7 +92,7 @@ class Validator
             $error .= "Password must include at least one CAPS!";
         }
         if ($error != "") {
-            return false;
+            return array('result' => false, 'final' => $error);
         } else {
             return true;
         }

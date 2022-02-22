@@ -101,32 +101,53 @@ class User implements Model
     public static function insert(array $fields = null)
     {
 
-        $columns = Insert::showRequiredColumns('user');
+        /*$columns = Insert::showRequiredColumns('user');
         $fieldsKeys = array_keys($fields);
+
+
 
         if (count($columns) > count($fields)) {
             return array('result' => false, 'message' => 'Missing field');
+        }*/
+
+
+        
+        //TODO isset with all fields
+        /*if (!isset($fields['nick_name'])) {
+            return array('result' => false, 'final' => 'Missing Field');
         }
 
-        if (!isset($fields['nick_name']) || !Validator::isName($fields['nick_name'], 5, 10)) {
-            return false;
+
+        if(!Validator::isName($fields['nick_name'], 5, 10)){
+            return array('result' => false, 'final' => 'Length is incorrect');
         }
 
-        /*if (!isset($fields['email']) || !Validator::isEmail($fields['email'])) {
-            return false;
-        } 
 
-        if (!isset($fields['password']) || !Validator::isPassword($fields['password'])) {
-            return false;
+
+        if(!Validator::isEmail($fields['email'])) {
+            return array('result' => false, 'final' => 'Email for is not correct');
+        } */
+
+
+
+        $response = Validator::isPassword($fields['password']);
+
+
+        /*if (!Validator::isPassword($fields['password'])) {
+            return array('result' => false, 'final' => $response);
         } else {
             $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
-        }
+        }*/
+
+
+
         if (!isset($fields['name']) || !Validator::isName($fields['name'],5,15)) {
             return false;
         }
-        if (!isset($fields['lastname']) || !Validator::isName($fields['lastname'],5,15)) {
+        
+        /*if (!isset($fields['lastname']) || !Validator::isName($fields['lastname'],5,15)) {
             return false;
-        }*/
+        }
 
 
         /*if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
@@ -143,9 +164,9 @@ class User implements Model
         $data = $database->getConnection()->query($query);
 
         if ($data) {
-            return true;
+            return array('result' => false, 'final' => 'The insert has been made');
         } else {
-            return false;
+            return array('result' => false, 'final' => 'The insert has not been made');
         }
     }
 

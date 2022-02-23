@@ -101,10 +101,10 @@ class User implements Model
     public static function insert(array $fields = null)
     {
 
+        
         $columns = Insert::showRequiredColumns('user');
         $fieldsKeys = array_keys($fields);
 
-    
         $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columns);
         
 
@@ -115,26 +115,32 @@ class User implements Model
         }
 
 
+
+
+        /*if(Validator::isNumber($fields['nick_name'])){
+            return array('result' => false, 'final' => 'Only letters and numbers');
+        }*/
+
         
-        //TODO isset with all fields
-        /*if (!isset($fields['nick_name'])) {
-            return array('result' => false, 'final' => 'Missing Field');
+        print(strlen($fields['nick_name']));
+
+        if(!Validator::isLenght($fields['nick_name'],'user','nick_name',5)){
+            $LenghtRETURN['final'] = $CheckFieldsInsert['final'];
+
+            return array('result' => false, 'final' => 'Length must be 5-20');
         }
-
-
-        if(!Validator::isName($fields['nick_name'], 5, 10)){
-            return array('result' => false, 'final' => 'Length is incorrect');
-        }
-
 
 
         if(!Validator::isEmail($fields['email'])) {
             return array('result' => false, 'final' => 'Email for is not correct');
         } 
 
+        if(!Validator::isLenght($fields['email'],'user','email',15)){
+            return array('result' => false, 'final' => 'Length must be 15-35');
+        }
 
 
-        $response = Validator::isPassword($fields['password']);
+
 
 
         /*if (!Validator::isPassword($fields['password'])) {

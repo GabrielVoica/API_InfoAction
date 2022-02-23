@@ -59,14 +59,40 @@ class Validator
     }
 
     //Min 5 characters, max 20 characters, only numbers and letters valid
-    public static function isName($value,$min_character,$max_character)
+    public static function isName($value)
     {
-        if (preg_match('/^[A-Za-z][A-Za-z0-9]{'.$min_character.','.$max_character.'}$/', $value)) {
+        if(preg_match("/[A-Za-z0-9]+/", $value)) {
             return true;
         } else {
             return false;
         }
     }
+
+
+    public static function isLenght($value,$table,$column,$min_lenght){
+
+        $database = new Database();
+        $database->connect();
+        $columns_show = "SHOW COLUMNS FROM $table WHERE Field = '$column'";
+
+
+        $types = $database->getConnection()->query($columns_show);
+        $types = mysqli_fetch_all($types);
+
+        $max_lenght = $types[0][1];
+        $max_lenght = substr($max_lenght, 0, -1);
+        $max_lenght = substr($max_lenght, 8);
+
+
+
+        if(strlen($value) >= $min_lenght & strlen($value) <= $max_lenght){
+            return true;
+        }
+        else{
+            return array('result' => false, 'final' => 'Length must be '.$min_lenght.'-'.$max_lenght.'');
+        }
+    }
+
 
     //One uppercase letter, numbers and letters, min-width 8 chars
     public static function isPassword($value)

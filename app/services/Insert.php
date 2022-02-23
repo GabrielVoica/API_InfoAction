@@ -84,7 +84,6 @@ class Insert
     public static function missingFieldsInsert($fieldsKeys,$requiredColumns){
         $checkField = 0;
 
-
         for ($x = 0; $x < count($fieldsKeys); $x++) {
             for ($y = 0; $y < count($requiredColumns); $y++) {
 
@@ -93,12 +92,10 @@ class Insert
                     $checkField++;
                 }
             }
-
             if($checkField == 0){
                 return array('result' => false, 'final' => 'Missing field '.$requiredColumns[$x].'');
 
             }
-
             $checkField = 0;
 
         }

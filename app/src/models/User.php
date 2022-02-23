@@ -101,14 +101,18 @@ class User implements Model
     public static function insert(array $fields = null)
     {
 
-        /*$columns = Insert::showRequiredColumns('user');
+        $columns = Insert::showRequiredColumns('user');
         $fieldsKeys = array_keys($fields);
 
+    
+        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columns);
+        
 
+        if($CheckFieldsInsert > 1){
+            $FinalCheck['final'] = $CheckFieldsInsert['final'];
+            return array('result' => false, 'final' => 'Missing field '.$FinalCheck['final'].'');
 
-        if (count($columns) > count($fields)) {
-            return array('result' => false, 'message' => 'Missing field');
-        }*/
+        }
 
 
         
@@ -126,7 +130,7 @@ class User implements Model
 
         if(!Validator::isEmail($fields['email'])) {
             return array('result' => false, 'final' => 'Email for is not correct');
-        } */
+        } 
 
 
 
@@ -137,7 +141,7 @@ class User implements Model
             return array('result' => false, 'final' => $response);
         } else {
             $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
-        }*/
+        }
 
 
 

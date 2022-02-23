@@ -77,6 +77,34 @@ class Insert
 
         return $query;
     }
+
+
+
+
+    public static function missingFieldsInsert($fieldsKeys,$requiredColumns){
+        $checkField = 0;
+
+
+        for ($x = 0; $x < count($fieldsKeys); $x++) {
+            for ($y = 0; $y < count($requiredColumns); $y++) {
+
+                if ($fieldsKeys[$x] == $requiredColumns[$y]) {
+                    
+                    $checkField++;
+                }
+            }
+
+            if($checkField == 0){
+                return array('result' => false, 'final' => 'Missing field '.$requiredColumns[$x].'');
+
+            }
+
+            $checkField = 0;
+
+        }
+
+        return true;
+    }
 }
 
 

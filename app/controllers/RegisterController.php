@@ -37,7 +37,7 @@ class RegisterController implements Controller
 
 
     $response = Response::successful();
-    $response ['final'] = $result['final'];
+    $response ['message'] = $result['message'];
 
 
     if ($result == true) {

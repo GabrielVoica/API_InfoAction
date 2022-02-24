@@ -21,3 +21,4 @@ login:
 user:
   route: "user"
   controller: "UserController"
+

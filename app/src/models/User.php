@@ -106,11 +106,9 @@ class User implements Model
         $fieldsKeys = array_keys($fields);
 
         $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columns);
-        
-
         if($CheckFieldsInsert > 1){
-            $FinalCheck['final'] = $CheckFieldsInsert['final'];
-            return array('result' => false, 'final' => 'Missing field '.$FinalCheck['final'].'');
+            $FinalCheck['message'] = $CheckFieldsInsert['message'];
+            return array('result' => false, 'message' => 'Missing field '.$FinalCheck['message'].'');
 
         }
 
@@ -122,25 +120,23 @@ class User implements Model
         }*/
 
         
-        print(strlen($fields['nick_name']));
-
-        if(!Validator::isLenght($fields['nick_name'],'user','nick_name',5)){
-            $LenghtRETURN['final'] = $CheckFieldsInsert['final'];
-
-            return array('result' => false, 'final' => 'Length must be 5-20');
+        $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
+        if($nameLenghtReturn > 1){
+            return array('result' => false, 'message' => $nameLenghtReturn['message']);
         }
+
+
 
 
         if(!Validator::isEmail($fields['email'])) {
-            return array('result' => false, 'final' => 'Email for is not correct');
+            return array('result' => false, 'message' => 'Email for is not correct');
         } 
 
-        if(!Validator::isLenght($fields['email'],'user','email',15)){
-            return array('result' => false, 'final' => 'Length must be 15-35');
-        }
-
-
-
+        /*$nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',5);
+        if($nameLenghtReturn > 1){
+            $FinalCheck['message'] = Validator::isLenght($fields['email'],'user','email',5);
+            return array('result' => false, 'message' => 'Length must be 15-35');
+        }*/
 
 
         /*if (!Validator::isPassword($fields['password'])) {
@@ -174,9 +170,9 @@ class User implements Model
         $data = $database->getConnection()->query($query);
 
         if ($data) {
-            return array('result' => false, 'final' => 'The insert has been made');
+            return array('result' => false, 'message' => 'The insert has been made');
         } else {
-            return array('result' => false, 'final' => 'The insert has not been made');
+            return array('result' => false, 'message' => 'The insert has not been made');
         }
     }
 

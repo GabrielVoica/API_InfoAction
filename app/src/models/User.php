@@ -113,30 +113,20 @@ class User implements Model
         }
 
 
-
-
-        /*if(Validator::isNumber($fields['nick_name'])){
-            return array('result' => false, 'final' => 'Only letters and numbers');
-        }*/
-
         
         $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
         if($nameLenghtReturn > 1){
             return array('result' => false, 'message' => $nameLenghtReturn['message']);
         }
 
-
-
-
         if(!Validator::isEmail($fields['email'])) {
             return array('result' => false, 'message' => 'Email for is not correct');
         } 
 
-        /*$nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',5);
+        $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10);
         if($nameLenghtReturn > 1){
-            $FinalCheck['message'] = Validator::isLenght($fields['email'],'user','email',5);
-            return array('result' => false, 'message' => 'Length must be 15-35');
-        }*/
+            return array('result' => false, 'message' => $nameLenghtReturn['message']);
+        }
 
 
         /*if (!Validator::isPassword($fields['password'])) {

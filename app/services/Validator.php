@@ -27,8 +27,7 @@ class Validator
 
     public static function isNumber($value)
     {
-
-        if (preg_match('/[^0-9]+/', $value)) {
+        if (preg_match('/[^a-z]+/', $value)) {
             return true;
         } else {
             return false;
@@ -51,10 +50,10 @@ class Validator
 
     public static function isText($value)
     {
-        if (preg_match('/[a-z]+/', $value)) {
-            return array('result' => false, 'message' => 'Is not Text');
-        } else {
+        if (preg_match('/[^a-z]+/', $value)) {
             return false;
+        } else {
+            return true;
         }
     }
 
@@ -89,7 +88,7 @@ class Validator
             return true;
         }
         else{
-            return array('result' => false, 'message' => 'Length must be '.$min_lenght.'-'.$max_lenght.'');
+            return array('result' => false, 'message' => ''.$column.' :Length must be '.$min_lenght.'-'.$max_lenght.'');
         }
     }
 

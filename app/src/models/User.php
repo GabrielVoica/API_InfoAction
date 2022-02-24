@@ -113,6 +113,12 @@ class User implements Model
         }
 
 
+
+
+        if (!Validator::isText($fields['nick_name'])) {
+            return array('result' => false, 'message' => 'The nickname have only letters');
+        }
+
         
         $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
         if($nameLenghtReturn > 1){
@@ -127,6 +133,8 @@ class User implements Model
         if($nameLenghtReturn > 1){
             return array('result' => false, 'message' => $nameLenghtReturn['message']);
         }
+
+
 
 
         /*if (!Validator::isPassword($fields['password'])) {

@@ -102,60 +102,64 @@ class User implements Model
     {
 
         
-        $columns = Insert::showRequiredColumns('user');
+        $columnsRequired = Insert::showRequiredColumns('user');
+        $columnsAll = Insert::showColumnsWithoutID('user');
+
         $fieldsKeys = array_keys($fields);
 
-        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columns);
+        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
             $FinalCheck['message'] = $CheckFieldsInsert['message'];
-            return array('result' => false, 'message' => 'Missing field '.$FinalCheck['message'].'');
+            return array('result' => false, 'message' => $FinalCheck['message']);
 
         }
 
 
-
-
-        if (!Validator::isText($fields['nick_name'])) {
-            return array('result' => false, 'message' => 'The nickname have only letters');
-        }
         
-        $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
-        if($nameLenghtReturn > 1){
-            return array('result' => false, 'message' => $nameLenghtReturn['message']);
+        if(isset($fields['nick_name'])){
+            if (!Validator::isText($fields['nick_name'])) {
+                return array('result' => false, 'message' => 'The nickname have only letters');
+            }
+            
+            $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+    
+            if(!Validator::isExist('user','nick_name',$fields['nick_name'])){
+                return array('result' => false, 'message' => ''.$fields['nick_name'].' exist, use another');
+            }
+
         }
 
-        if(!Validator::isExist('user','nick_name',$fields['nick_name'])){
-            return array('result' => false, 'message' => ''.$fields['nick_name'].' exist, use another');
+        if(isset($fields['email'])){
+            if(!Validator::isEmail($fields['email'])) {
+                return array('result' => false, 'message' => 'Email for is not correct');
+            } 
+    
+            $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+    
+            if(!Validator::isExist('user','email',$fields['email'])){
+                return array('result' => false, 'message' => ''.$fields['email'].' exist, use another');
+            }
         }
 
-
-        if(!Validator::isEmail($fields['email'])) {
-            return array('result' => false, 'message' => 'Email for is not correct');
-        } 
-
-        $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10);
-        if($nameLenghtReturn > 1){
-            return array('result' => false, 'message' => $nameLenghtReturn['message']);
+    
+        if(isset($fields['password'])){
+            $PasswordCheck = Validator::isPassword($fields['password']);
+            if (!Validator::isPassword($fields['password'])) {
+                return array('result' => false, 'message' => $PasswordCheck);
+            } else {
+                $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
+            }
         }
 
-        if(!Validator::isExist('user','email',$fields['email'])){
-            return array('result' => false, 'message' => ''.$fields['email'].' exist, use another');
-        }
-
-
-
-
-        /*if (!Validator::isPassword($fields['password'])) {
-            return array('result' => false, 'final' => $response);
-        } else {
-            $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
-        }
-
-
-
-        if (!isset($fields['name']) || !Validator::isName($fields['name'],5,15)) {
+        /*if (!isset($fields['name']) || !Validator::isName($fields['name'],5,15)) {
             return false;
-        }
+        }*/
         
         /*if (!isset($fields['lastname']) || !Validator::isName($fields['lastname'],5,15)) {
             return false;

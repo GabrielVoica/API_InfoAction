@@ -118,12 +118,16 @@ class User implements Model
         if (!Validator::isText($fields['nick_name'])) {
             return array('result' => false, 'message' => 'The nickname have only letters');
         }
-
         
         $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
         if($nameLenghtReturn > 1){
             return array('result' => false, 'message' => $nameLenghtReturn['message']);
         }
+
+        if(!Validator::isExist('user','nick_name',$fields['nick_name'])){
+            return array('result' => false, 'message' => ''.$fields['nick_name'].' exist, use another');
+        }
+
 
         if(!Validator::isEmail($fields['email'])) {
             return array('result' => false, 'message' => 'Email for is not correct');
@@ -132,6 +136,10 @@ class User implements Model
         $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10);
         if($nameLenghtReturn > 1){
             return array('result' => false, 'message' => $nameLenghtReturn['message']);
+        }
+
+        if(!Validator::isExist('user','email',$fields['email'])){
+            return array('result' => false, 'message' => ''.$fields['email'].' exist, use another');
         }
 
 

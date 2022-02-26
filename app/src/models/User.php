@@ -107,10 +107,11 @@ class User implements Model
 
         $fieldsKeys = array_keys($fields);
 
+        
+
         $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
-            $FinalCheck['message'] = $CheckFieldsInsert['message'];
-            return array('result' => false, 'message' => $FinalCheck['message']);
+            return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
         }
 
@@ -176,6 +177,9 @@ class User implements Model
 
         $types = Insert::showColumns('user');
         $query = Insert::makInsertQuery('user', $fields, $types);
+
+
+        print_r($query);
 
         $data = $database->getConnection()->query($query);
 

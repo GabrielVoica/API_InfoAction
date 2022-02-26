@@ -103,8 +103,18 @@ class Insert
 
         $columnsCorrect = false;
         $columnsRequired = false;
-        $missing = "";
+        $checkField = 0;
 
+
+
+        /*for ($x = 0; $x < count($fieldsKeys); $x++) {
+            for ($y = 0; $y < count($fieldsKeys); $y++) {
+                if ($fieldsKeys[$x] == $fieldsKeys[$y]) {
+                    return array('result' => false, 'message' => ''.$fieldsKeys[$y].' : repeated field ');
+
+                }
+            }
+        }*/
 
 
         for ($x = 0; $x < count($fieldsKeys); $x++) {
@@ -139,27 +149,26 @@ class Insert
 
 
 
-        for ($x = 0; $x < count($fieldsKeys); $x++) {
-            for ($y = 0; $y < count($requiredColumnsMap); $y++) {
 
-                if($fieldsKeys[$x] == $requiredColumnsMap[$y] ) {
-                    unset($requiredColumnsMap[$y]);
+        
 
+        for ($x = 0; $x < count($requiredColumnsMap); $x++) {
+            for ($y = 0; $y < count($fieldsKeys); $y++) {
 
+                if ($requiredColumnsMap[$x] ==$fieldsKeys[$y]) {
+                    
+                    $checkField++;
                 }
-                else{
-                    $missing = $requiredColumnsMap[$y];
-                }
-                
-            }      
+            }
+            if($checkField == 0){
+                return array('result' => false, 'message' => 'Missing field '.$requiredColumnsMap[$x].'');
+
+            }
+
+            $checkField = 0;
         }
+       
 
-        print_r($requiredColumnsMap);
-
-        if(count($fieldsKeys) > 0){
-            return array('result' => false, 'message' => 'Missing required field '.$missing.'');
-
-        }
 
         return true;
 

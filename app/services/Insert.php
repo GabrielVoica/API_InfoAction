@@ -100,21 +100,26 @@ class Insert
         $allColumnsMap = array_map('map', $allColumns);
         $requiredColumnsMap = array_map('map', $requiredColumns);
 
-
+        $columnsRepeated = 0;
         $columnsCorrect = false;
         $columnsRequired = false;
-        $checkField = 0;
+        $columnsRequiredMissing = 0;
 
 
 
-        /*for ($x = 0; $x < count($fieldsKeys); $x++) {
+        for ($x = 0; $x < count($fieldsKeys); $x++) {
             for ($y = 0; $y < count($fieldsKeys); $y++) {
-                if ($fieldsKeys[$x] == $fieldsKeys[$y]) {
-                    return array('result' => false, 'message' => ''.$fieldsKeys[$y].' : repeated field ');
-
+                if($fieldsKeys[$x] == $fieldsKeys[$y]){
+               $columnsRepeated++;
                 }
             }
-        }*/
+
+            if($columnsRepeated > 1){
+                return array('result' => false, 'message' => ''.$fieldsKeys[$x].' : repeated field ');
+            }
+            $columnsRepeated = 0;
+
+        }
 
 
         for ($x = 0; $x < count($fieldsKeys); $x++) {
@@ -157,15 +162,15 @@ class Insert
 
                 if ($requiredColumnsMap[$x] ==$fieldsKeys[$y]) {
                     
-                    $checkField++;
+                    $columnsRequiredMissing++;
                 }
             }
-            if($checkField == 0){
+            if($columnsRequiredMissing == 0){
                 return array('result' => false, 'message' => 'Missing field '.$requiredColumnsMap[$x].'');
 
             }
 
-            $checkField = 0;
+            $columnsRequiredMissing = 0;
         }
        
 

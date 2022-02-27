@@ -158,28 +158,44 @@ class User implements Model
             }
         }
 
-        /*if (!isset($fields['name']) || !Validator::isName($fields['name'],5,15)) {
-            return false;
-        }*/
-        
-        /*if (!isset($fields['lastname']) || !Validator::isName($fields['lastname'],5,15)) {
-            return false;
+        if(isset($fields['name'])){
+            if(!Validator::isText($fields['name'])){
+                return array('result' => false, 'message' => 'The name have only letters');
+
+            }
+            $nameLenghtReturn = Validator::isLenght($fields['name'],'user','name',5);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+        }
+
+      
+
+        if(isset($fields['lastname'])){
+            if(!Validator::isText($fields['lastname'])){
+                return array('result' => false, 'message' => 'The lastname have only letters');
+
+            }
+            $nameLenghtReturn = Validator::isLenght($fields['lastname'],'user','lastname',5);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
         }
 
 
-        /*if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
-            return false;
-        }*/
 
+        if(isset($fields['center_id'])){
+            if(!Validator::isNumber($fields['center_id'])){
+                return array('result' => false, 'message' => 'Center ID : Only numbers');
+
+            }
+        }
 
         $database = new Database();
         $database->connect();
 
         $types = Insert::showColumns('user');
         $query = Insert::makInsertQuery('user', $fields, $types);
-
-
-        print_r($query);
 
         $data = $database->getConnection()->query($query);
 

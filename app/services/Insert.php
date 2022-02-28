@@ -100,26 +100,9 @@ class Insert
         $allColumnsMap = array_map('map', $allColumns);
         $requiredColumnsMap = array_map('map', $requiredColumns);
 
-        $columnsRepeated = 0;
         $columnsCorrect = false;
         $columnsRequired = false;
         $columnsRequiredMissing = 0;
-
-
-
-        for ($x = 0; $x < count($fieldsKeys); $x++) {
-            for ($y = 0; $y < count($fieldsKeys); $y++) {
-                if($fieldsKeys[$x] == $fieldsKeys[$y]){
-               $columnsRepeated++;
-                }
-            }
-
-            if($columnsRepeated > 1){
-                return array('result' => false, 'message' => ''.$fieldsKeys[$x].' : repeated field ');
-            }
-            $columnsRepeated = 0;
-
-        }
 
 
         for ($x = 0; $x < count($fieldsKeys); $x++) {
@@ -146,6 +129,8 @@ class Insert
             }
             if($columnsRequired == false){
                 unset($fieldsKeys[$x++]);
+                Sort($fieldsKeys); 
+
             }
 
             $columnsRequired = false;
@@ -154,8 +139,6 @@ class Insert
 
 
 
-
-        
 
         for ($x = 0; $x < count($requiredColumnsMap); $x++) {
             for ($y = 0; $y < count($fieldsKeys); $y++) {

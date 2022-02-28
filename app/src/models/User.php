@@ -191,6 +191,16 @@ class User implements Model
             }
         }
 
+        if(isset($fields['rol'])){
+            if(!Validator::isNumber('rol')){
+                return array('result' => false, 'message' => 'Rol : Only numbers');
+            }
+            $nameLenghtReturn = Validator::isLenght($fields['lastname'],'user','lastname',5);
+
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+        }
         $database = new Database();
         $database->connect();
 

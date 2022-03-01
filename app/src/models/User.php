@@ -100,7 +100,7 @@ class User implements Model
 
     public static function insert(array $fields = null)
     {
-
+        
         $columns = Insert::showRequiredColumns('user');
         $fieldsKeys = array_keys($fields);
 

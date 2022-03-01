@@ -116,33 +116,39 @@ class User implements Model
         }
 
 
-        
         if(isset($fields['nick_name'])){
+             //Works
             if (!Validator::isText($fields['nick_name'])) {
-                return array('result' => false, 'message' => 'The nickname have only letters');
+                return array('result' => false, 'message' => 'Nickname must include only letters');
             }
             
+            //Works
             $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
     
+            //Works
             if(!Validator::isExist('user','nick_name',$fields['nick_name'])){
                 return array('result' => false, 'message' => ''.$fields['nick_name'].' exist, use another');
             }
 
         }
 
+
         if(isset($fields['email'])){
+            //Works
             if(!Validator::isEmail($fields['email'])) {
-                return array('result' => false, 'message' => 'Email for is not correct');
+                return array('result' => false, 'message' => 'Email is not correct');
             } 
     
+            //Works
             $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
     
+            //Works
             if(!Validator::isExist('user','email',$fields['email'])){
                 return array('result' => false, 'message' => ''.$fields['email'].' exist, use another');
             }
@@ -150,19 +156,32 @@ class User implements Model
 
     
         if(isset($fields['password'])){
+
+            //Works
+            $nameLenghtReturn = Validator::isLenght($fields['password'],'user','password',8);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+
+            //Works
             $PasswordCheck = Validator::isPassword($fields['password']);
-            if (!Validator::isPassword($fields['password'])) {
-                return array('result' => false, 'message' => $PasswordCheck);
+            if ($PasswordCheck > 1) {
+                return array('result' => false, 'message' => $PasswordCheck['message']);
             } else {
                 $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
             }
         }
 
+
+
         if(isset($fields['name'])){
+            //Works
             if(!Validator::isText($fields['name'])){
-                return array('result' => false, 'message' => 'The name have only letters');
+                return array('result' => false, 'message' => 'Name must include only letters');
 
             }
+
+           //Works
             $nameLenghtReturn = Validator::isLenght($fields['name'],'user','name',5);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
@@ -172,16 +191,23 @@ class User implements Model
       
 
         if(isset($fields['lastname'])){
+            //Works
             if(!Validator::isText($fields['lastname'])){
-                return array('result' => false, 'message' => 'The lastname have only letters');
+                return array('result' => false, 'message' => 'Lastname must include only letters');
 
             }
+            //Works
             $nameLenghtReturn = Validator::isLenght($fields['lastname'],'user','lastname',5);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
         }
 
+
+
+        if(isset($fields['birthday'])){
+
+        }
 
 
         if(isset($fields['center_id'])){
@@ -195,17 +221,21 @@ class User implements Model
             if(!Validator::isNumber('rol')){
                 return array('result' => false, 'message' => 'Rol : Only numbers');
             }
-            $nameLenghtReturn = Validator::isLenght($fields['lastname'],'user','lastname',5);
+            $nameLenghtReturn = Validator::isLenght($fields['rol'],'user','lastname',0);
 
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
         }
+
+
+
         $database = new Database();
         $database->connect();
 
         $types = Insert::showColumns('user');
         $query = Insert::makInsertQuery('user', $fields, $types);
+
 
         $data = $database->getConnection()->query($query);
 

@@ -98,15 +98,7 @@ class Validator
     {
         $error = "";
 
-        if (strlen($value) < 8) {
-            $error .= "Password too short!";
-        }
-        if (strlen($value) > 20) {
-            $error .= "Password too long!";
-        }
-        if (strlen($value) < 8) {
-            $error .= "Password too short!";
-        }
+
         if (!preg_match("#[0-9]+#", $value)) {
             $error .= "Password must include at least one number!";
         }
@@ -117,7 +109,7 @@ class Validator
             $error .= "Password must include at least one CAPS!";
         }
         if ($error != "") {
-            return array('result' => false, 'final' => $error);
+            return array('result' => false, 'message' => $error);
         } else {
             return true;
         }

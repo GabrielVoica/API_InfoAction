@@ -123,7 +123,7 @@ class User implements Model
             }
             
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
+            $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5,null);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
@@ -143,7 +143,7 @@ class User implements Model
             } 
     
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10);
+            $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10,null);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
@@ -158,7 +158,7 @@ class User implements Model
         if(isset($fields['password'])){
 
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['password'],'user','password',8);
+            $nameLenghtReturn = Validator::isLenght($fields['password'],'user','password',8,null);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
@@ -182,7 +182,7 @@ class User implements Model
             }
 
            //Works
-            $nameLenghtReturn = Validator::isLenght($fields['name'],'user','name',5);
+            $nameLenghtReturn = Validator::isLenght($fields['name'],'user','name',5,null);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
@@ -197,7 +197,7 @@ class User implements Model
 
             }
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['lastname'],'user','lastname',5);
+            $nameLenghtReturn = Validator::isLenght($fields['lastname'],'user','lastname',5,null);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
@@ -205,29 +205,43 @@ class User implements Model
 
 
 
-        if(isset($fields['birthday'])){
-
-        }
-
-
         if(isset($fields['center_id'])){
+            //Works
+            $nameLenghtReturn = Validator::isLenght($fields['center_id'],'user','center_id',1,5);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+            //Works
+            if($fields['center_id'] < 0){
+                return array('result' => false, 'message' => 'No negative numbers');
+
+            }
+            //Works
             if(!Validator::isNumber($fields['center_id'])){
                 return array('result' => false, 'message' => 'Center ID : Only numbers');
 
             }
+        
         }
 
         if(isset($fields['rol'])){
-            if(!Validator::isNumber('rol')){
-                return array('result' => false, 'message' => 'Rol : Only numbers');
-            }
-            $nameLenghtReturn = Validator::isLenght($fields['rol'],'user','lastname',0);
-
+            //Works
+            $nameLenghtReturn = Validator::isLenght($fields['rol'],'user','rol',1,1);
             if($nameLenghtReturn > 1){
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
-        }
+            //Works
+            if(!Validator::isNumber($fields['rol'])){
+                return array('result' => false, 'message' => 'Rol : Only numbers');
+            }
 
+            //Works
+            if($fields['rol'] != 0 & $fields['rol'] != 1){
+                return array('result' => false, 'message' => 'Rol : Only 0 => Student or 1 => Teacher');
+
+            }
+          
+        }
 
 
         $database = new Database();

@@ -47,11 +47,11 @@ class EntryController implements Controller
     return Response::successful();
   }
 
-  public function put()
+  public function put($variables)
   {
   }
 
-  public function delete()
+  public function delete($varibles)
   {
   }
 }

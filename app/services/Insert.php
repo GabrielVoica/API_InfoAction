@@ -18,6 +18,19 @@ class Insert
         return $types;
     }
 
+    public static function showColumnsWithoutID($table)
+    {
+        $database = new Database();
+        $database->connect();
+        $columns_show = "SHOW COLUMNS FROM $table WHERE field NOT LIKE 'id'";
+
+        $types = $database->getConnection()->query($columns_show);
+        $types = mysqli_fetch_all($types);
+
+
+        return $types;
+    }
+
 
     public static function showRequiredColumns($table)
     {
@@ -28,9 +41,8 @@ class Insert
         $types = $database->getConnection()->query($columns_show);
         $types = mysqli_fetch_all($types);
 
-        $columns = array_map('map', $types);
 
-        return $columns;
+        return $types;
     }
 
 
@@ -76,6 +88,78 @@ class Insert
         $query = $query . ");";
 
         return $query;
+    }
+
+
+
+
+
+
+    public static function missingFieldsInsert($fieldsKeys,$requiredColumns,$allColumns){
+
+        $allColumnsMap = array_map('map', $allColumns);
+        $requiredColumnsMap = array_map('map', $requiredColumns);
+
+        $columnsCorrect = false;
+        $columnsRequired = false;
+        $columnsRequiredMissing = 0;
+
+
+        for ($x = 0; $x < count($fieldsKeys); $x++) {
+            for ($y = 0; $y < count($allColumns); $y++) {
+                if ($fieldsKeys[$x] == $allColumnsMap[$y]) {
+                    $columnsCorrect = true;
+                }
+            }
+            if($columnsCorrect == false){
+                return array('result' => false, 'message' => ''.$fieldsKeys[$x].' not exist in table');
+
+            }
+            $columnsCorrect = false;
+        }
+
+
+
+
+        for ($x = 0; $x < count($fieldsKeys); $x++) {
+            for ($y = 0; $y < count($requiredColumnsMap); $y++) {
+                if ($fieldsKeys[$x] == $requiredColumnsMap[$y]) {
+                    $columnsRequired = true;
+                }
+            }
+            if($columnsRequired == false){
+                unset($fieldsKeys[$x++]);
+                Sort($fieldsKeys); 
+
+            }
+
+            $columnsRequired = false;
+        }
+
+
+
+
+
+        for ($x = 0; $x < count($requiredColumnsMap); $x++) {
+            for ($y = 0; $y < count($fieldsKeys); $y++) {
+
+                if ($requiredColumnsMap[$x] ==$fieldsKeys[$y]) {
+                    
+                    $columnsRequiredMissing++;
+                }
+            }
+            if($columnsRequiredMissing == 0){
+                return array('result' => false, 'message' => 'Missing field '.$requiredColumnsMap[$x].'');
+
+            }
+
+            $columnsRequiredMissing = 0;
+        }
+       
+
+
+        return true;
+
     }
 }
 

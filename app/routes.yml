@@ -21,3 +21,9 @@ login:
 user:
   route: "user"
   controller: "UserController"
+
+#
+ranking:
+  route: "ranking"
+  controller: "RankingController"
+  

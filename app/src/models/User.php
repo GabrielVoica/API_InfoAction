@@ -100,38 +100,134 @@ class User implements Model
 
     public static function insert(array $fields = null)
     {
+
         
-        $columns = Insert::showRequiredColumns('user');
+        $columnsRequired = Insert::showRequiredColumns('user');
+        $columnsAll = Insert::showColumnsWithoutID('user');
+
         $fieldsKeys = array_keys($fields);
 
-        if (count($columns) > count($fields)) {
-            return array('result' => false, 'message' => 'Missing field');
+        
+
+        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
+        if($CheckFieldsInsert > 1){
+            return array('result' => false, 'message' => $CheckFieldsInsert['message']);
+
         }
 
-        if (!isset($fields['nick_name']) || !Validator::isName($fields['nick_name'], 5, 10)) {
-            return false;
+
+        if(isset($fields['nick_name'])){
+             //Works
+            if (!Validator::isText($fields['nick_name'])) {
+                return array('result' => false, 'message' => 'Nickname must include only letters');
+            }
+            
+            //Works
+            $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+    
+            //Works
+            if(!Validator::isExist('user','nick_name',$fields['nick_name'])){
+                return array('result' => false, 'message' => ''.$fields['nick_name'].' exist, use another');
+            }
+
         }
 
-        /*if (!isset($fields['email']) || !Validator::isEmail($fields['email'])) {
-            return false;
-        } 
 
-        if (!isset($fields['password']) || !Validator::isPassword($fields['password'])) {
-            return false;
-        } else {
-            $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
+        if(isset($fields['email'])){
+            //Works
+            if(!Validator::isEmail($fields['email'])) {
+                return array('result' => false, 'message' => 'Email is not correct');
+            } 
+    
+            //Works
+            $nameLenghtReturn = Validator::isLenght($fields['email'],'user','email',10);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+    
+            //Works
+            if(!Validator::isExist('user','email',$fields['email'])){
+                return array('result' => false, 'message' => ''.$fields['email'].' exist, use another');
+            }
         }
-        if (!isset($fields['name']) || !Validator::isName($fields['name'],5,15)) {
-            return false;
+
+    
+        if(isset($fields['password'])){
+
+            //Works
+            $nameLenghtReturn = Validator::isLenght($fields['password'],'user','password',8);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+
+            //Works
+            $PasswordCheck = Validator::isPassword($fields['password']);
+            if ($PasswordCheck > 1) {
+                return array('result' => false, 'message' => $PasswordCheck['message']);
+            } else {
+                $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
+            }
         }
-        if (!isset($fields['lastname']) || !Validator::isName($fields['lastname'],5,15)) {
-            return false;
-        }*/
 
 
-        /*if (!isset($fields['center_id']) || !Validator::isNumber($fields['center_id'])) {
-            return false;
-        }*/
+
+        if(isset($fields['name'])){
+            //Works
+            if(!Validator::isText($fields['name'])){
+                return array('result' => false, 'message' => 'Name must include only letters');
+
+            }
+
+           //Works
+            $nameLenghtReturn = Validator::isLenght($fields['name'],'user','name',5);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+        }
+
+      
+
+        if(isset($fields['lastname'])){
+            //Works
+            if(!Validator::isText($fields['lastname'])){
+                return array('result' => false, 'message' => 'Lastname must include only letters');
+
+            }
+            //Works
+            $nameLenghtReturn = Validator::isLenght($fields['lastname'],'user','lastname',5);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+        }
+
+
+
+        if(isset($fields['birthday'])){
+
+        }
+
+
+        if(isset($fields['center_id'])){
+            if(!Validator::isNumber($fields['center_id'])){
+                return array('result' => false, 'message' => 'Center ID : Only numbers');
+
+            }
+        }
+
+        if(isset($fields['rol'])){
+            if(!Validator::isNumber('rol')){
+                return array('result' => false, 'message' => 'Rol : Only numbers');
+            }
+            $nameLenghtReturn = Validator::isLenght($fields['rol'],'user','lastname',0);
+
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+        }
+
 
 
         $database = new Database();
@@ -140,12 +236,13 @@ class User implements Model
         $types = Insert::showColumns('user');
         $query = Insert::makInsertQuery('user', $fields, $types);
 
+
         $data = $database->getConnection()->query($query);
 
         if ($data) {
-            return true;
+            return array('result' => false, 'message' => 'The insert has been made');
         } else {
-            return false;
+            return array('result' => false, 'message' => 'The insert has not been made');
         }
     }
 

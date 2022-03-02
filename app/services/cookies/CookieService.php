@@ -24,7 +24,7 @@ class CookieService
 
     public function setCookie()
     {
-        setcookie($this->cookieName, $this->cookieValue, $this->expiresAt,'/','localhost');
+        setcookie($this->cookieName, $this->cookieValue,['expires' => $this->expiresAt,'secure' => false,'samesite' => 'Strict']);
     }
 
 

@@ -4,8 +4,6 @@ require_once("services/Database.php");
 require_once("services/Validator.php");
 require_once("services/errors/NotFoundError.php");
 require_once("services/Insert.php");
-require_once("services/Delete.php");
-
 
 
 class User implements Model
@@ -263,13 +261,8 @@ class User implements Model
     }
 
 
-    public static function delete($id,$table)
+    public static function delete($id)
     {
-
-        $deleteid = Delete::delete($table,$id);
-
-
-       
     }
 
     public static function deleteAll()

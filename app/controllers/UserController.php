@@ -40,13 +40,27 @@ class UserController implements Controller
   }
 
 
-  public function put()
+  public function put($variables)
   {
   }
 
 
 
-  public function delete()
+  public function delete($variables)
   {
+
+
+    $this->database->connect();
+    $result = User::delete($variables);
+
+    $response = Response::successful();
+    $response ['message'] = $result['message'];
+
+
+    if ($result == true) {
+      return $response;
+    } else {
+      return false;
+    }
   }
 }

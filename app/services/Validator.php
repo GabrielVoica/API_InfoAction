@@ -68,21 +68,25 @@ class Validator
     }
 
 
-    public static function isLenght($value,$table,$column,$min_lenght){
+    public static function isLenght($value,$table,$column,$min_lenght,$max_lenght){
 
-        $database = new Database();
-        $database->connect();
-        $columns_show = "SHOW COLUMNS FROM $table WHERE Field = '$column'";
+        if($max_lenght == null){
+            $database = new Database();
+            $database->connect();
+            $columns_show = "SHOW COLUMNS FROM $table WHERE Field = '$column'";
+    
+    
+            $types = $database->getConnection()->query($columns_show);
+            $types = mysqli_fetch_all($types);
+    
+            
+            $max_lenght = $types[0][1];
+            $max_lenght = substr($max_lenght, 0, -1);
+            $max_lenght = substr($max_lenght, 8);
+    
+        }
 
-
-        $types = $database->getConnection()->query($columns_show);
-        $types = mysqli_fetch_all($types);
-
-        
-        $max_lenght = $types[0][1];
-        $max_lenght = substr($max_lenght, 0, -1);
-        $max_lenght = substr($max_lenght, 8);
-
+       
 
         if(strlen($value) >= $min_lenght & strlen($value) <= $max_lenght){
             return true;

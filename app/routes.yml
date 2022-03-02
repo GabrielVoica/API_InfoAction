@@ -22,8 +22,17 @@ user:
   route: "user"
   controller: "UserController"
 
-#
+# GET POST RANKING
 ranking:
   route: "ranking"
   controller: "RankingController"
-  
+ 
+# GET POST Ranking Data 
+rankingdata:
+  route: "rankingdata"
+  controller: "RankingDataController"
+
+# GET POST Ranking Members
+rankingmembers:
+  route: "rankingmembers"
+  controller: "RankingMembersController"

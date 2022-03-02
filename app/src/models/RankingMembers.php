@@ -4,8 +4,6 @@ require_once("services/Database.php");
 require_once("services/Validator.php");
 require_once("services/errors/NotFoundError.php");
 require_once("services/Insert.php");
-require_once("services/Delete.php");
-
 
 
 class User implements Model
@@ -70,24 +68,7 @@ class User implements Model
 
 
 
-    public static function login($email, $password)
-    {
-        $query = "SELECT * FROM user WHERE email = '$email'";
-
-        $database = new Database();
-
-        $database->connect();
-
-        $data = $database->getConnection()->query($query);
-
-        $data = mysqli_fetch_assoc($data);
-
-        if (isset($data['password']) && password_verify($password, $data['password'])) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+   
 
     public static function getAll()
     {
@@ -263,13 +244,8 @@ class User implements Model
     }
 
 
-    public static function delete($id,$table)
+    public static function delete($id)
     {
-
-        $deleteid = Delete::delete($table,$id);
-
-
-       
     }
 
     public static function deleteAll()

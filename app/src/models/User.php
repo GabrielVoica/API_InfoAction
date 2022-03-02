@@ -250,6 +250,7 @@ class User implements Model
         $database->connect();
 
         $types = Insert::showColumns('user');
+
         $query = Insert::makInsertQuery('user', $fields, $types);
 
 
@@ -263,13 +264,28 @@ class User implements Model
     }
 
 
-    public static function delete($id,$table)
+    public static function delete($values)
     {
+        $database = new Database();
+        $database->connect();
 
-        $deleteid = Delete::delete($table,$id);
+        $queryidexist = Delete::existID($values);
+        if($queryidexist > 1){
+            return array('result' => false, 'message' =>  $queryidexist['message']);
+
+        }
+
+        $querydelete = Delete::delete($values);
+        $data = $database->getConnection()->query($querydelete);
 
 
-       
+
+        if ($data) {
+            return array('result' => false, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
+
     }
 
     public static function deleteAll()

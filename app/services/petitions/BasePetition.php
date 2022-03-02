@@ -109,7 +109,7 @@ class BasePetition implements Petition
                 $this->result = $this->controllerInstance->put();
                 break;
             case 'DELETE':
-                $this->result = $this->controllerInstance->delete();
+                $this->result = $this->controllerInstance->delete($this->requestUrlParams);
                 break; 
         }
 

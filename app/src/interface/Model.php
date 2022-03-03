@@ -5,6 +5,5 @@ interface Model{
     public static function getAll();
     public static function delete($values);
     public static function insert();
-    public static function deleteAll();
-    public static function update($id, array $fields);
+    public static function update();
 }

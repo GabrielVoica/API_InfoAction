@@ -46,6 +46,19 @@ class UserController implements Controller
 
   public function put($variables)
   {
+    $this->database->connect();
+    $result = User::update($variables);
+
+
+    $response = Response::successful();
+    $response ['message'] = $result['message'];
+
+
+    if ($result == true) {
+      return $response;
+    } else {
+      return false;
+    }
   }
 
 

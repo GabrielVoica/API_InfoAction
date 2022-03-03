@@ -5,6 +5,8 @@ require_once("services/Validator.php");
 require_once("services/errors/NotFoundError.php");
 require_once("services/Insert.php");
 require_once("services/Delete.php");
+require_once("services/Update.php");
+
 
 
 
@@ -264,18 +266,19 @@ class User implements Model
     }
 
 
-    public static function delete($values)
+    public static function delete($fields)
     {
         $database = new Database();
         $database->connect();
 
-        $queryidexist = Delete::existID($values);
+        $queryidexist = Delete::existID($fields);
         if($queryidexist > 1){
             return array('result' => false, 'message' =>  $queryidexist['message']);
 
         }
 
-        $querydelete = Delete::delete($values);
+        
+        $querydelete = Delete::delete($fields);
         $data = $database->getConnection()->query($querydelete);
 
 
@@ -288,11 +291,36 @@ class User implements Model
 
     }
 
-    public static function deleteAll()
-    {
-    }
 
-    public static function update($id, array $fields)
+
+    public static function update(array $fields = null)
     {
+        $database = new Database();
+        $database->connect();
+
+
+
+        if(!isset($fields['id'])){
+            return array('result' => false, 'message' =>  'ID field not exist');
+
+        }
+
+        $queryidexist = Update::existID('user',$fields['id']);
+        if($queryidexist > 1){
+            return array('result' => false, 'message' =>  $queryidexist['message']);
+
+        }
+
+        $types = Insert::showColumns('user');
+        $querydelete = Update::update('user',$fields,$types);
+        $data = $database->getConnection()->query($querydelete);
+
+
+
+        if ($data) {
+            return array('result' => false, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
     }
 }

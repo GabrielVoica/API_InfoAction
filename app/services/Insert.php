@@ -73,7 +73,7 @@ class Insert
 
         for ($x = 0; $x < count($types); $x++) {
             for ($y = 0; $y < count($fields); $y++) {
-                if ($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int')) {
+                if ($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int') && !str_contains($values[$y], 'CURRENT_TIMESTAMP')) {
                     $values[$y] = "'$values[$y]'";
                 }
             }

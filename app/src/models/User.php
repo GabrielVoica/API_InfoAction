@@ -129,9 +129,9 @@ class User implements Model
             }
             
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5,null);
-            if($nameLenghtReturn > 1){
-                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            $LenghtReturn = Validator::isLenght($fields['nick_name'],'user','nick_name',5,null);
+            if($LenghtReturn > 1){
+                return array('result' => false, 'message' => $LenghtReturn['message']);
             }
     
             //Works

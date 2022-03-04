@@ -48,13 +48,13 @@ class Insert
 
 
 
-    public static function makInsertQuery($table, $fields, $types)
+    public static function makeInsertQuery($table, $fields, $types)
     {
 
         $query = "INSERT INTO $table (";
 
         if (isset($fields['password'])) {
-            $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
+            $fields['password'] = $fields['password'];
         }
 
         $keys = array_keys($fields);
@@ -86,6 +86,7 @@ class Insert
 
         $query = substr($query, 0, -1);
         $query = $query . ");";
+
 
         return $query;
     }

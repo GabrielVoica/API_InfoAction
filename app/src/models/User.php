@@ -76,6 +76,7 @@ class User implements Model
     {
         $query = "SELECT * FROM user WHERE email = '$email'";
 
+
         $database = new Database();
 
         $database->connect();
@@ -83,6 +84,7 @@ class User implements Model
         $data = $database->getConnection()->query($query);
 
         $data = mysqli_fetch_assoc($data);
+
 
         if (isset($data['password']) && password_verify($password, $data['password'])) {
             return true;
@@ -161,6 +163,7 @@ class User implements Model
     
         if(isset($fields['password'])){
 
+
             //Works
             $nameLenghtReturn = Validator::isLenght($fields['password'],'user','password',8,null);
             if($nameLenghtReturn > 1){
@@ -173,6 +176,7 @@ class User implements Model
                 return array('result' => false, 'message' => $PasswordCheck['message']);
             } else {
                 $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
+            
             }
         }
 
@@ -253,7 +257,7 @@ class User implements Model
 
         $types = Insert::showColumns('user');
 
-        $query = Insert::makInsertQuery('user', $fields, $types);
+        $query = Insert::makeInsertQuery('user', $fields, $types);
 
 
         $data = $database->getConnection()->query($query);
@@ -278,7 +282,7 @@ class User implements Model
         }
 
         
-        $querydelete = Delete::delete($fields);
+        $querydelete = Delete::deleteRow($fields);
         $data = $database->getConnection()->query($querydelete);
 
 
@@ -312,7 +316,7 @@ class User implements Model
         }
 
         $types = Insert::showColumns('user');
-        $querydelete = Update::update('user',$fields,$types);
+        $querydelete = Update::updateRow('user',$fields,$types);
         $data = $database->getConnection()->query($querydelete);
 
 

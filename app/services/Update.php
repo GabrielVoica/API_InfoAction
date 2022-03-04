@@ -6,7 +6,7 @@ class Update
 {
 
 
-    public static function update($table,$fields,$types){
+    public static function updateRow($table,$fields,$types){
         $database = new Database();
         $database->connect();
 

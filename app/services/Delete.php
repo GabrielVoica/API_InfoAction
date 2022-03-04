@@ -6,7 +6,7 @@ class Delete
 {
 
 
-    public static function delete($values){
+    public static function deleteRow($values){
        
         $database = new Database();
         $database->connect();

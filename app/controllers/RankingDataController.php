@@ -1,11 +1,11 @@
 <?php
 
-require_once('src/models/Ranking.php');
+require_once('src/models/RankingData.php');
 require_once("services/errors/BadRequestError.php");
 require "services/responses/Response.php";
 require_once("services/Database.php");
 
-class HomeController implements Controller
+class RankingDataController implements Controller
 {
 
     private $connection;
@@ -29,15 +29,29 @@ class HomeController implements Controller
 
     public function post($variables)
     {
-    
+      $this->database->connect();
+    $result = RankingData::insert($variables);
+
+
+    $response = Response::successful();
+    $response ['message'] = $result['message'];
+
+
+    if ($result == true) {
+      return $response;
+    } else {
+      return false;
     }
 
-    public function put()
+
+    }
+
+    public function put($variables)
     {
         
     }
 
-    public function delete()
+    public function delete($variables)
     {
     }
 }

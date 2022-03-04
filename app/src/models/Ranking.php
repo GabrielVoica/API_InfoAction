@@ -6,7 +6,7 @@ require_once("services/errors/NotFoundError.php");
 require_once("services/Insert.php");
 
 
-class User implements Model
+class Ranking implements Model
 {
 
     public static function get($id = null, array $fields = null)
@@ -43,7 +43,7 @@ class User implements Model
     {
     }
 
-    public static function update($id, array $fields)
+    public static function update(array $fields = null)
     {
     }
 }

@@ -25,11 +25,11 @@ class LoginController implements Controller
         }
     }
 
-    public function put()
+    public function put($variables)
     {
     }
 
-    public function delete()
+    public function delete($variables)
     {
     }
 }

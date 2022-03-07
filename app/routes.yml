@@ -36,3 +36,8 @@ rankingdata:
 rankingmembers:
   route: "rankingmembers"
   controller: "RankingMembersController"
+
+
+session:
+  route: "session"
+  controller: "SessionController"  

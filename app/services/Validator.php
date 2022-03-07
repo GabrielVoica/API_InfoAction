@@ -14,6 +14,23 @@ class Validator
         $result = $database->getConnection()->query($query);
         
 
+        
+        if(mysqli_num_rows($result) == 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
+
+    public static function isExistNumber($table,$tablefield,$value){
+        $database = new Database();
+        $database->connect();
+
+        $query = "SELECT * FROM $table WHERE $tablefield = $value";
+        $result = $database->getConnection()->query($query);
+        
 
         if(mysqli_num_rows($result) == 0){
             return true;

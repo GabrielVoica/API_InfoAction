@@ -231,7 +231,7 @@ class RankingMembers implements Model
         $database->connect();
 
         $types = Insert::showColumns('user');
-        $query = Insert::makInsertQuery('user', $fields, $types);
+        $query = Insert::makeInsertQuery('user', $fields, $types);
 
 
         $data = $database->getConnection()->query($query);

@@ -103,8 +103,6 @@ class RankingData implements Model
     public static function insert(array $fields = null)
     {
 
-       //TODO in Ranking model
-        //$fields['ranking_name'] = "R_".$fields['ranking_name'];
 
 
         $columnsRequired = Insert::showRequiredColumns('rankingdata');

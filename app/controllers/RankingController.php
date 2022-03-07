@@ -5,7 +5,7 @@ require_once("services/errors/BadRequestError.php");
 require "services/responses/Response.php";
 require_once("services/Database.php");
 
-class HomeController implements Controller
+class RankingController implements Controller
 {
 
     private $connection;
@@ -29,8 +29,21 @@ class HomeController implements Controller
 
     public function post($variables)
     {
-    
+      $this->database->connect();
+      $result = Ranking::insert($variables);
+  
+  
+      $response = Response::successful();
+      $response ['message'] = $result['message'];
+  
+  
+      if ($result == true) {
+        return $response;
+      } else {
+        return false;
     }
+
+  }
 
     public function put($variables)
     {

@@ -20,20 +20,15 @@ class Session implements Model
     {
    
 
-
-        if(Validator::isExistNumber('cookies','user_id',$id[1])){
+        if(Validator::isExist('user','email',$id[1])){
             return array('result' => false, 'message' => ''.$id[1].' not exist, try another');
         }
-     
-        
-
-        $query = "SELECT id FROM cookies where";
-        $query = "$query user_id = $id[1]";
 
 
- 
-        
-    
+
+         
+        $query = "SELECT b.id FROM user a, cookies b WHERE email = '$id[1]' AND a.id = b.user_id";
+
 
         $database = new Database();
         $database->connect();

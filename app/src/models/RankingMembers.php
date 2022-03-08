@@ -1,9 +1,11 @@
 <?php
 
 require_once("services/Database.php");
-require_once("services/Validator.php");
 require_once("services/errors/NotFoundError.php");
-require_once("services/Insert.php");
+
+
+require_once("src/lib/Validator.php");
+require_once("src/lib/Insert.php");
 
 
 class RankingMembers implements Model

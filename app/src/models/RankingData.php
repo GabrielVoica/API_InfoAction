@@ -165,7 +165,8 @@ class RankingData implements Model
             "id" => "int PRIMARY KEY",
             "user_name" => "varchar(20)",
             "nameandlastname" => "varchar(40)",
-            "points" => "int"
+            "points" => "int",
+            "status" => "int"
         );
 
 

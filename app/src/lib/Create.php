@@ -1,8 +1,8 @@
 <?php
 
-require_once("Database.php");
+require_once("services/Database.php");
 
-class Common
+class Create
 {
 
     public static function createTable($tablename){}

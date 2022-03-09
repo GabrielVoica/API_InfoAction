@@ -29,14 +29,21 @@ class UserController implements Controller
   public function get($params)
   {
 
-    $user = User::get($params[1],null);
+   
+      $result = User::get($params[1]);
+  
+      $response = Response::successful();
+      $response ['message'] = $result['message'];
+  
+  
 
-    if($user == null){
-      return NotFoundError::throw();
-    }
-    else{
-      return Response::successfulData($user);
-    }
+      if ($result == true) {
+        return $response;
+      } else {
+        return false;
+      }
+
+
   }
 
   public function post($variables)
@@ -46,9 +53,7 @@ class UserController implements Controller
 
   public function put($variables)
   {
-    $this->database->connect();
     $result = User::update($variables);
-
 
     $response = Response::successful();
     $response ['message'] = $result['message'];

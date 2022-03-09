@@ -6,16 +6,17 @@ require_once("services/Database.php");
 class Get
 {
 
-    public static function showColumns($table)
+    public static function getTable($table,$id,$id_field,$fields)
     {
         $database = new Database();
         $database->connect();
-        $columns_show = "SHOW COLUMNS FROM $table";
 
-        $types = $database->getConnection()->query($columns_show);
-        $types = mysqli_fetch_all($types);
+       $query = "SELECT * FROM $table WHERE $id_field = $id";
 
-        return array('result' => false, 'message' => $types);
+
+        return $query;
     }
+
+  
 
 }   

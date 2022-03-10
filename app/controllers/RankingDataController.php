@@ -53,5 +53,17 @@ class RankingDataController implements Controller
 
     public function delete($variables)
     {
+      $this->database->connect();
+      $result = RankingData::delete($variables,'rankingdata');
+  
+      $response = Response::successful();
+      $response ['message'] = $result['message'];
+  
+  
+      if ($result == true) {
+        return $response;
+      } else {
+        return false;
+      }
     }
 }

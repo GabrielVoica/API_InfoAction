@@ -6,25 +6,33 @@ class Delete
 {
 
 
-    public static function deleteRow($values){
+    public static function deleteRow($table, $id){
        
         $database = new Database();
         $database->connect();
 
-        if(count($values) == 1){
-            $querydelete = "DELETE FROM $values[0]";
+        if($id == null){
+            $querydelete = "DELETE FROM $table";
         }
         else{
-            $querydelete = "DELETE FROM $values[0] WHERE id = $values[1] ";
+            $querydelete = "DELETE FROM $table WHERE id = $id ";
 
         }
         
-
 
       
         return $querydelete;
     }
 
+
+    public static function deleteTable($table){
+        $database = new Database();
+        $database->connect();
+
+        $querydelete = "DROP TABLE $table";
+        
+        return $querydelete;
+    }
 
 
     public static function existID($values){

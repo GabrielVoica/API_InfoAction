@@ -258,7 +258,14 @@ class User implements Model
         }
 
         
-        $querydelete = Delete::deleteRow($fields);
+        if(count($fields) == 1){
+            $querydelete = Delete::deleteRow($fields[0],null);
+        }
+        else{
+            $querydelete = Delete::deleteRow($fields[0],$fields[1]);
+
+        }
+
         $data = $database->getConnection()->query($querydelete);
 
 

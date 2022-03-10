@@ -5,6 +5,10 @@ require_once("services/errors/NotFoundError.php");
 require_once("src/lib/Insert.php");
 require_once("src/lib/Create.php");
 require_once("src/lib/Validator.php");
+require_once("src/lib/Delete.php");
+require_once("src/lib/Get.php");
+
+
 
 
 
@@ -130,7 +134,7 @@ class RankingData implements Model
 
 
     
-        /*if(isset($fields['ranking_name'])){
+        if(isset($fields['ranking_name'])){
             //Works
            if (!Validator::isText($fields['ranking_name'])) {
                return array('result' => false, 'message' => 'Ranking Name must include only letters');
@@ -147,7 +151,7 @@ class RankingData implements Model
                return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
            }
 
-       }*/
+       }
 
     
         if(isset($fields['description'])){
@@ -158,12 +162,12 @@ class RankingData implements Model
 
 
 
-       /*if(isset($fields['teacher_id'])){
+       if(isset($fields['teacher_id'])){
         if(!Validator::isNumber($fields['teacher_id'])){
             return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
 
         }
-       }*/
+       }
 
 
         $database = new Database();
@@ -177,7 +181,8 @@ class RankingData implements Model
             "user_name" => "varchar(20)",
             "nameandlastname" => "varchar(40)",
             "points" => "int",
-            "status" => "int"
+            "status" => "int",
+            "level" => 'int'
         );
 
 
@@ -196,13 +201,53 @@ class RankingData implements Model
     }
 
 
-    public static function delete($id)
+    public static function delete($fields)
     {
+        $database = new Database();
+        $database->connect();
+
+        $queryidexist = Delete::existID($fields);
+        if($queryidexist > 1){
+            return array('result' => false, 'message' =>  $queryidexist['message']);
+
+        }
+
+        
+
+     
+        $querydelete = Get::getDataField($fields[0],$fields[1],'id');
+
+        $data = $database->getConnection()->query($querydelete);
+        $data = mysqli_fetch_assoc($data);
+
+
+        $tableDelete = "R_".$data['ranking_name'];
+
+
+
+        if(count($fields) == 1){
+            $querydelete = Delete::deleteRow($fields[0],null);
+        }
+        else{
+            $querydelete = Delete::deleteRow($fields[0],$fields[1]);
+
+        $data = $database->getConnection()->query($querydelete);
+
+
+
+        if ($data) {
+            $querydelete = Delete::deleteTable($tableDelete);
+            $data = $database->getConnection()->query($querydelete);
+
+            return array('result' => false, 'message' => 'The insert has been made');
+
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
     }
 
-    public static function deleteAll()
-    {
-    }
+}
+   
 
     public static function update(array $fields = null)
     {

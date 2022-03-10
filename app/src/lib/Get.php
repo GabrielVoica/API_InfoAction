@@ -17,6 +17,17 @@ class Get
         return $query;
     }
 
+
+    public static function getDataField($table,$value,$fields){
+        $database = new Database();
+        $database->connect();
+
+       $query = "SELECT * FROM $table WHERE $fields = $value";
+
+
+        return $query;
+    }
+
   
 
 }   

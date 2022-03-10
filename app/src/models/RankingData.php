@@ -1,10 +1,11 @@
 <?php
 
 require_once("services/Database.php");
-require_once("services/Validator.php");
 require_once("services/errors/NotFoundError.php");
-require_once("services/Insert.php");
-require_once("services/Create.php");
+require_once("src/lib/Insert.php");
+require_once("src/lib/Create.php");
+require_once("src/lib/Validator.php");
+
 
 
 
@@ -111,10 +112,13 @@ class RankingData implements Model
         $fieldsKeys = array_keys($fields);
 
 
-        if($fields['creationdate'] == null){
-            $fields['creationdate'] = "CURRENT_TIMESTAMP";
-        }
+      
 
+        if(isset($fields['creationdate'])){
+            if($fields['creationdate'] == null){
+                $fields['creationdate'] = "CURRENT_TIMESTAMP";
+            }
+        }
 
         
 
@@ -125,6 +129,7 @@ class RankingData implements Model
         }
 
 
+    
         /*if(isset($fields['ranking_name'])){
             //Works
            if (!Validator::isText($fields['ranking_name'])) {
@@ -142,12 +147,18 @@ class RankingData implements Model
                return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
            }
 
-       }
+       }*/
+
+    
+        if(isset($fields['description'])){
+            $fields['description'] = str_replace("-"," ",$fields['description']);
+               
+        }
 
 
 
 
-       if(isset($fields['teacher_id'])){
+       /*if(isset($fields['teacher_id'])){
         if(!Validator::isNumber($fields['teacher_id'])){
             return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
 

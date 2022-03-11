@@ -45,6 +45,18 @@ class Insert
         return $types;
     }
 
+    public static function showRequiredColumnsWhithID($table)
+    {
+        $database = new Database();
+        $database->connect();
+        $columns_show = "SHOW COLUMNS FROM $table WHERE `Null` = 'No'";
+
+        $types = $database->getConnection()->query($columns_show);
+        $types = mysqli_fetch_all($types);
+
+
+        return $types;
+    }
 
 
 

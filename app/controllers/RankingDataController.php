@@ -22,9 +22,22 @@ class RankingDataController implements Controller
       $this->response = new Response();
     }
 
+
+    
     public function get($params)
     {
-       return 'Welcome to our api!'; 
+      $result = RankingData::get($params[1]);
+  
+      $response = Response::successful();
+      $response ['message'] = $result['message'];
+  
+  
+
+      if ($result == true) {
+        return $response;
+      } else {
+        return false;
+      }
     }
 
     public function post($variables)
@@ -48,6 +61,17 @@ class RankingDataController implements Controller
 
     public function put($variables)
     {
+      $result = RankingData::update($variables);
+
+      $response = Response::successful();
+      $response ['message'] = $result['message'];
+  
+  
+      if ($result == true) {
+        return $response;
+      } else {
+        return false;
+      }
         
     }
 

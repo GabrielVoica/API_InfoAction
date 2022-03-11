@@ -7,6 +7,8 @@ require_once("src/lib/Create.php");
 require_once("src/lib/Validator.php");
 require_once("src/lib/Delete.php");
 require_once("src/lib/Get.php");
+require_once("src/lib/Update.php");
+
 
 
 
@@ -18,80 +20,25 @@ class RankingData implements Model
 
     public static function get($id = null, array $fields = null)
     {
-
-        if ($fields === null) {
-            $query = "SELECT * FROM user WHERE id = $id";
-        } else {
-            $query = "SELECT * FROM user WHERE ";
-            $keys = array_keys($fields);
-            $values = array_values($fields);
-            for ($i = 0; $i < count($fields); $i++) {
-                if (count($fields) === 1) {
-                    $query = $query . "$keys[$i] = '$values[$i]'";
-                } else {
-                    $query = $query . "$keys[$i] = '$values[$i]' AND ";
-                    if ($i == count($fields) - 1) {
-                        $query = substr($query, 0, strlen($query) - 5);
-                    }
-                }
-            }
-        }
-
         $database = new Database();
-
         $database->connect();
 
+       
+        $query = Get::getTable('rankingdata',$id,'id',null);
+        
         $data = $database->getConnection()->query($query);
 
+       
         if ($data === false) {
-            return false;
+            return array('result' => false, 'Error query select');
         }
-
         if (mysqli_num_rows($data) == 0) {
-            return false;
+            return array('result' => false, 'message' => NotFoundError::throw()['message']);
         }
 
         $data = mysqli_fetch_assoc($data);
 
-
-
-
-        return $data;
-    }
-
-
-
-    public static function getField($id, $field)
-    {
-        $query = "SELECT $field FROM user WHERE id = $id";
-
-        $database = new Database();
-        $database->connect();
-        $data = $database->getConnection()->query($query);
-        $data = mysqli_fetch_assoc($data);
-
-        return $data[$field];
-    }
-
-
-
-    public static function login($email, $password)
-    {
-        $query = "SELECT * FROM user WHERE email = '$email'";
-
-        $database = new Database();
-
-        $database->connect();
-
-        $data = $database->getConnection()->query($query);
-
-        $data = mysqli_fetch_assoc($data);
-
-        if (isset($data['password']) && password_verify($password, $data['password'])) {
-            return true;
-        } else {
-            return false;
-        }
+        return array('result' => false, 'message' => $data);
     }
 
     public static function getAll()
@@ -108,30 +55,22 @@ class RankingData implements Model
     public static function insert(array $fields = null)
     {
 
-
-
         $columnsRequired = Insert::showRequiredColumns('rankingdata');
         $columnsAll = Insert::showColumnsWithoutID('rankingdata');
 
         $fieldsKeys = array_keys($fields);
 
-
-      
-
         if(isset($fields['creationdate'])){
             if($fields['creationdate'] == null){
                 $fields['creationdate'] = "CURRENT_TIMESTAMP";
             }
-        }
-
-        
+        }    
 
         $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
         }
-
 
     
         if(isset($fields['ranking_name'])){
@@ -153,12 +92,10 @@ class RankingData implements Model
 
        }
 
-    
         if(isset($fields['description'])){
             $fields['description'] = str_replace("-"," ",$fields['description']);
                
         }
-
 
 
 
@@ -168,6 +105,7 @@ class RankingData implements Model
 
         }
        }
+
 
 
         $database = new Database();
@@ -251,5 +189,93 @@ class RankingData implements Model
 
     public static function update(array $fields = null)
     {
+        $database = new Database();
+        $database->connect();
+
+
+
+        $columnsRequired = Insert::showRequiredColumnsWhithID('rankingdata');
+        $columnsAll = Insert::showColumns('rankingdata');
+
+        $fieldsKeys = array_keys($fields);
+
+     
+        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
+        if($CheckFieldsInsert > 1){
+            return array('result' => false, 'message' => $CheckFieldsInsert['message']);
+
+        }
+
+    
+        if(isset($fields['ranking_name'])){
+            //Works
+           if (!Validator::isText($fields['ranking_name'])) {
+               return array('result' => false, 'message' => 'Ranking Name must include only letters');
+           }
+           
+           //Works
+           $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','ranking_name',4,null);
+           if($LenghtReturn > 1){
+               return array('result' => false, 'message' => $LenghtReturn['message']);
+           }
+   
+           //Works
+           if(!Validator::isExist('rankingdata','ranking_name',$fields['ranking_name'])){
+               return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
+           }
+
+       }
+
+        if(isset($fields['description'])){
+            $fields['description'] = str_replace("-"," ",$fields['description']);
+               
+        }
+
+
+
+       if(isset($fields['teacher_id'])){
+        if(!Validator::isNumber($fields['teacher_id'])){
+            return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
+
+        }
+       }
+
+       if(isset($fields['teacher_id'])){
+        if(!Validator::isNumber($fields['teacher_id'])){
+            return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
+
+        }
+       }
+
+       if(isset($fields['members'])){
+        if(!Validator::isNumber($fields['members'])){
+            return array('result' => false, 'message' => 'Members : Only numbers');
+
+        }
+       }
+
+
+        if(!isset($fields['id'])){
+            return array('result' => false, 'message' =>  'ID field not exist');
+
+        }
+
+        $queryidexist = Update::existID('rankingdata',$fields['id']);
+        if($queryidexist > 1){
+            return array('result' => false, 'message' =>  $queryidexist['message']);
+
+        }
+
+        $types = Insert::showColumns('rankingdata');
+        $querydelete = Update::updateRow('rankingdata',$fields,$types);
+        $data = $database->getConnection()->query($querydelete);
+
+
+
+        if ($data) {
+            return array('result' => false, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
     }
 }

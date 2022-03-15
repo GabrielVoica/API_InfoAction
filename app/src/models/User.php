@@ -25,7 +25,7 @@ class User implements Model
 
 
        
-        $query = Get::getTable('user',$id,'id',null);
+        $query = Get::getTable('user',$id,'id');
         
 
 

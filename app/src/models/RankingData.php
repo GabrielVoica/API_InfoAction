@@ -24,7 +24,7 @@ class RankingData implements Model
         $database->connect();
 
        
-        $query = Get::getTable('rankingdata',$id,'id',null);
+        $query = Get::getTable('rankingdata',$id,'id');
         
         $data = $database->getConnection()->query($query);
 
@@ -115,9 +115,9 @@ class RankingData implements Model
         $query = Insert::makeInsertQuery('rankingdata', $fields, $types);
 
         $rankingstructure = array(
-            "id" => "int PRIMARY KEY",
-            "user_name" => "varchar(20)",
-            "nameandlastname" => "varchar(40)",
+            "id" => "int NOT NULL AUTO_INCREMENT PRIMARY KEY",
+            "nick_name" => "varchar(20)",
+            "name_lastname" => "varchar(40)",
             "points" => "int",
             "status" => "int",
             "level" => 'int'

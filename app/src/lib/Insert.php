@@ -12,8 +12,10 @@ class Insert
         $database->connect();
         $columns_show = "SHOW COLUMNS FROM $table";
 
+
         $types = $database->getConnection()->query($columns_show);
         $types = mysqli_fetch_all($types);
+
 
         return $types;
     }

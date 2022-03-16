@@ -24,6 +24,23 @@ class Delete
         return $querydelete;
     }
 
+    public static function deleteRowWithField($table, $id,$field){
+       
+        $database = new Database();
+        $database->connect();
+
+        if($id == null){
+            $querydelete = "DELETE FROM $table";
+        }
+        else{
+            $querydelete = "DELETE FROM $table WHERE $field = $id ";
+
+        }
+        
+
+      
+        return $querydelete;
+    }
 
     public static function deleteTable($table){
         $database = new Database();

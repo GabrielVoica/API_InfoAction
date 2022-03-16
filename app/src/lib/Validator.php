@@ -12,9 +12,7 @@ class Validator
 
         $query = "SELECT * FROM $table WHERE $tablefield = '$value'";
         $result = $database->getConnection()->query($query);
-        
-
-        
+                
         if(mysqli_num_rows($result) == 0){
             return true;
         }

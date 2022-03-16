@@ -10,11 +10,6 @@ require_once("src/lib/Get.php");
 require_once("src/lib/Update.php");
 
 
-
-
-
-
-
 class RankingData implements Model
 {
 
@@ -115,7 +110,7 @@ class RankingData implements Model
         $query = Insert::makeInsertQuery('rankingdata', $fields, $types);
 
         $rankingstructure = array(
-            "id" => "int NOT NULL AUTO_INCREMENT PRIMARY KEY",
+            "id" => "int",
             "nick_name" => "varchar(20)",
             "name_lastname" => "varchar(40)",
             "points" => "int",

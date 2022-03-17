@@ -19,7 +19,7 @@ class RankingData implements Model
         $database->connect();
 
        
-        $query = Get::getTable('rankingdata',$id,'id');
+        $query = Get::getTableVarchar('rankingdata',$id,'code');
         
         $data = $database->getConnection()->query($query);
 
@@ -93,6 +93,11 @@ class RankingData implements Model
         }
 
 
+        if(isset($fields['code'])){
+            if($fields['code'] == 'random'){
+                $fields['code'] = Update::randomCode();
+            }               
+        }
 
        if(isset($fields['teacher_id'])){
         if(!Validator::isNumber($fields['teacher_id'])){
@@ -149,11 +154,8 @@ class RankingData implements Model
 
         }
 
-        
-
      
         $querydelete = Get::getDataField($fields[0],$fields[1],'id');
-
         $data = $database->getConnection()->query($querydelete);
         $data = mysqli_fetch_assoc($data);
 
@@ -174,6 +176,12 @@ class RankingData implements Model
 
         if ($data) {
             $querydelete = Delete::deleteTable($tableDelete);
+            $data = $database->getConnection()->query($querydelete);
+
+            $querydelete = Delete::deleteRowWithField('rankingmembers','id_ranking',$fields[1]);
+            $data = $database->getConnection()->query($querydelete);
+
+            $querydelete = Delete::deleteEventUpdatePoints($tableDelete);
             $data = $database->getConnection()->query($querydelete);
 
             return array('result' => false, 'message' => 'The insert has been made');
@@ -231,7 +239,11 @@ class RankingData implements Model
         }
 
 
-
+        if(isset($fields['code'])){
+            if($fields['code'] == 'random'){
+                $fields['code'] = Update::randomCode();
+            }               
+        }
        if(isset($fields['teacher_id'])){
         if(!Validator::isNumber($fields['teacher_id'])){
             return array('result' => false, 'message' => 'Teacher_ID : Only numbers');

@@ -17,6 +17,16 @@ class Get
         return $query;
     }
 
+    public static function getTableVarchar($table,$id,$id_field){
+        $database = new Database();
+        $database->connect();
+
+       $query = "SELECT * FROM $table WHERE $id_field = '$id'";
+
+
+        return $query;
+    }
+
 
     public static function getDataField($table,$value,$fields){
         $database = new Database();

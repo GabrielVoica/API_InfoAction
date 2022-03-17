@@ -145,6 +145,12 @@ class Ranking implements Model
         $fields = explode('-',$fields);
 
 
+        $tableExist = Delete::ExistTable($fields[0]);
+        if($tableExist > 1){
+            return array('result' => false, 'message' =>  $tableExist['message']);
+
+        }
+
 
         $queryidexist = Delete::existID($fields);
         if($queryidexist > 1){

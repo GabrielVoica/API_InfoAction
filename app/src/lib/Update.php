@@ -69,6 +69,20 @@ class Update
     }
 
 
-  
+    public static function randomCode(){
+        $lenght = 8;
+        $parameters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUWXYZ";
+        $finalResult = "";
+
+        for($i = 0; $i < $lenght; $i++){
+            $index = rand(0,strlen($parameters) - 1);
+            $finalResult .= $parameters[$index];
+        }
+
+        return $finalResult;
+        
+    }
+
+
 
     }

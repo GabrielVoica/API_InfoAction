@@ -76,8 +76,30 @@ class Delete
         
     }
 
-    public static function deleteEventUpdatePoints($EventName){
+    public static function ExistTable($table){
+        $database = new Database();
+        $database->connect();
+
+
+
+        $querydelete = "show tables like '$table'";
+        $data = $database->getConnection()->query($querydelete);
+        $data = mysqli_fetch_all($data);
+
+
+        if($data == null){
+            return array('result' => false, 'message' => 'ID not exist');
+
+        }
         
+        return true;
+    }
+
+    public static function deleteEventUpdatePoints($EventName){
+   
+        $querydelete = "DROP EVENT updatePoints_$EventName";
+
+        return $querydelete;
     }
 
     }

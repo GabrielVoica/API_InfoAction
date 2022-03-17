@@ -285,18 +285,7 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
-        $columnsRequired = Insert::showRequiredColumnsWhithID('rankingdata');
-        $columnsAll = Insert::showColumns('rankingdata');
-
-        $fieldsKeys = array_keys($fields);
-
-     
-        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
-        if($CheckFieldsInsert > 1){
-            return array('result' => false, 'message' => $CheckFieldsInsert['message']);
-
-        }
-
+       
 
         if(isset($fields['nick_name'])){
              //Works

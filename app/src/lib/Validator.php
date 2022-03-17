@@ -6,6 +6,7 @@ class Validator
 {
 
 
+    //TODO move to common.php
     public static function isExist($table,$tablefield,$value){
         $database = new Database();
         $database->connect();
@@ -22,6 +23,7 @@ class Validator
 
     }
 
+    //TODO move to common.php and combine with isExist
     public static function isExistNumber($table,$tablefield,$value){
         $database = new Database();
         $database->connect();

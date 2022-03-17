@@ -6,6 +6,8 @@ require_once("services/Database.php");
 class Insert
 {
 
+    //Function Show Columns with ID
+    //TODO move this to Common.php
     public static function showColumns($table)
     {
         $database = new Database();
@@ -20,6 +22,9 @@ class Insert
         return $types;
     }
 
+        //Function Show Columns without ID
+    //TODO combine this function with the showcolumns function, create variable ID, if variable is null put without ID
+    //TODO move this to Common.php
     public static function showColumnsWithoutID($table)
     {
         $database = new Database();
@@ -34,6 +39,7 @@ class Insert
     }
 
 
+    //TODO move to common.php
     public static function showRequiredColumns($table)
     {
         $database = new Database();
@@ -47,6 +53,8 @@ class Insert
         return $types;
     }
 
+    //TODO move to common.php
+    //Combine with showrequiredcolumns function
     public static function showRequiredColumnsWhithID($table)
     {
         $database = new Database();
@@ -62,6 +70,7 @@ class Insert
 
 
 
+    //Function create insert query structure
     public static function makeInsertQuery($table, $fields, $types)
     {
 
@@ -180,7 +189,7 @@ class Insert
 
 
 
-
+//TODO delete this function
 function map($data)
 {
     return $data[0];

@@ -5,7 +5,7 @@ require_once("services/Database.php");
 class Update
 {
 
-
+    //TODO optimize this function
     public static function updateRow($table,$fields,$types){
         $database = new Database();
         $database->connect();
@@ -48,6 +48,7 @@ class Update
     }
 
 
+    //TODO move to common.php
     public static function existID($table,$fields){
         $database = new Database();
         $database->connect();
@@ -69,6 +70,7 @@ class Update
     }
 
 
+    //TODO move to common.php
     public static function randomCode(){
         $lenght = 8;
         $parameters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUWXYZ";

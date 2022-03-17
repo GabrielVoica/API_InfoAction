@@ -5,9 +5,8 @@ require_once("services/Database.php");
 class Create
 {
 
-    public static function createTable($tablename){}
 
-
+    // Query to create Table with specific Structure
     public static function makeCreateQuery($tablename,$tablestructure){
         
             
@@ -32,6 +31,7 @@ class Create
       
 
 
+    //Create events Update Points
     public static function createEventUpdadePoints($table){
         $database = new Database();
         $database->connect();

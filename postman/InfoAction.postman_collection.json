@@ -29,16 +29,80 @@
 		{
 			"name": "POST USER",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/API_InfoAction/app/register?nick_name=gabriels&email=gabriels@gmail.com&password=Gabri1.e&name=gabiel&lastname=voica&center_id=50&user_type=0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"API_InfoAction",
+						"app",
+						"register"
+					],
+					"query": [
+						{
+							"key": "nick_name",
+							"value": "gabriels"
+						},
+						{
+							"key": "email",
+							"value": "gabriels@gmail.com"
+						},
+						{
+							"key": "password",
+							"value": "Gabri1.e"
+						},
+						{
+							"key": "name",
+							"value": "gabiel"
+						},
+						{
+							"key": "lastname",
+							"value": "voica"
+						},
+						{
+							"key": "center_id",
+							"value": "50"
+						},
+						{
+							"key": "user_type",
+							"value": "0"
+						}
+					]
+				}
 			},
 			"response": []
 		},
 		{
 			"name": "PUT USER",
 			"request": {
-				"method": "GET",
-				"header": []
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/API_InfoAction/app/user?id=430&nick_name=sergio",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"API_InfoAction",
+						"app",
+						"user"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "430"
+						},
+						{
+							"key": "nick_name",
+							"value": "sergio"
+						}
+					]
+				}
 			},
 			"response": []
 		},
@@ -48,7 +112,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost/API_InfoAction/app/user/431",
+					"raw": "http://localhost/API_InfoAction/app/user/430",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -57,7 +121,7 @@
 						"API_InfoAction",
 						"app",
 						"user",
-						"431"
+						"430"
 					]
 				}
 			},

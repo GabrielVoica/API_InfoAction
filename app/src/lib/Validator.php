@@ -42,6 +42,7 @@ class Validator
     }
 
 
+    //Function isNumber
     public static function isNumber($value)
     {
         if (preg_match('/[^a-z]+/', $value)) {
@@ -54,7 +55,7 @@ class Validator
 
 
 
-
+    //Function is Email
     public static function isEmail($value)
     {
         if (filter_var($value, FILTER_VALIDATE_EMAIL)) {
@@ -65,6 +66,7 @@ class Validator
     }
 
 
+    //Function is Text
     public static function isText($value)
     {
         if (preg_match('/[^a-z]+/', $value)) {
@@ -85,6 +87,7 @@ class Validator
     }
 
 
+    //Function lenght
     public static function isLenght($value,$table,$column,$min_lenght,$max_lenght){
 
         if($max_lenght == null){

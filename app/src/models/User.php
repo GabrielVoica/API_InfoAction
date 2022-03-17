@@ -271,7 +271,7 @@ class User implements Model
 
 
         if ($data) {
-            return array('result' => false, 'message' => 'The insert has been made');
+            return array('result' => true, 'message' => 'The insert has been made');
         } else {
             return array('result' => false, 'message' => 'The insert has not been made');
         }
@@ -435,7 +435,7 @@ class User implements Model
 
 
         if ($data) {
-            return array('result' => false, 'message' => 'The insert has been made');
+            return array('result' => true, 'message' => 'The insert has been made');
         } else {
             return array('result' => false, 'message' => 'The insert has not been made');
         }

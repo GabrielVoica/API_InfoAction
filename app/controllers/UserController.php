@@ -2,6 +2,8 @@
 
 require_once('src/models/User.php');
 require_once('services/errors/NotFoundError.php');
+require_once('services/errors/BadRequestError.php');
+
 require_once('services/responses/Response.php');
 require_once("services/Database.php");
 
@@ -55,14 +57,15 @@ class UserController implements Controller
   {
     $result = User::update($variables);
 
-    $response = Response::successful();
-    $response ['message'] = $result['message'];
 
-
-    if ($result == true) {
+    if ($result['result'] == true) {
+      $response = Response::successful();
+      $response ['message'] = $result['message'];
       return $response;
     } else {
-      return false;
+      $response = BadRequestError::throw();
+      $response ['message'] = $result['message'];
+      return $response;
     }
   }
 

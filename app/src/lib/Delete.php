@@ -75,6 +75,11 @@ class Delete
         return true;
         
     }
+
+    public static function deleteEventUpdatePoints($EventName){
+        
+    }
+
     }
 
 

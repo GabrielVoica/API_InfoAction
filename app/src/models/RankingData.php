@@ -119,13 +119,17 @@ class RankingData implements Model
         );
 
 
-        $querycreate = Create::makeCreateQuery($fields['ranking_name'],$rankingstructure);
-
+        $tablename = "R_".$fields['ranking_name'];
+        $querycreate = Create::makeCreateQuery($tablename,$rankingstructure);
 
         $data = $database->getConnection()->query($query);
         if ($data) {
-            $querycreate = Create::makeCreateQuery($fields['ranking_name'],$rankingstructure);
+            $querycreate = Create::makeCreateQuery($tablename,$rankingstructure);
             $data = $database->getConnection()->query($querycreate);
+            
+        //Create Event for table
+        $query = Create::createEventUpdadePoints($tablename);
+        $data = $database->getConnection()->query($query);
 
             return array('result' => false, 'message' => 'The insert has been made');
         } else {

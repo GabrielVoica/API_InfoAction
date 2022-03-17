@@ -10,7 +10,7 @@ class Create
 
     public static function makeCreateQuery($tablename,$tablestructure){
         
-            $tablename = "R_".$tablename;
+            
             $database = new Database();
             $database->connect();
             $querycreate = "CREATE TABLE $tablename (";
@@ -30,5 +30,15 @@ class Create
             return $querycreate;
     }
       
+
+
+    public static function createEventUpdadePoints($table){
+        $database = new Database();
+        $database->connect();
+
+        $querycreate = "CREATE EVENT updatePoints_$table ON SCHEDULE EVERY 1 WEEK STARTS '2022-02-28 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE $table set points = 1000";
+
+        return $querycreate;
+    }
 
 }

@@ -75,7 +75,7 @@ class UserController implements Controller
   {
 
 
-    $this->database->connect();
+
     $result = User::delete($variables,'user');
 
     $response = Response::successful();

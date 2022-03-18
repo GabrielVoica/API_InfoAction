@@ -239,7 +239,7 @@ class User implements Model
         $data = $database->getConnection()->query($query);
 
         if ($data) {
-            return array('result' => false, 'message' => 'The insert has been made');
+            return array('result' => true, 'message' => 'The insert has been made');
         } else {
             return array('result' => false, 'message' => 'The insert has not been made');
         }

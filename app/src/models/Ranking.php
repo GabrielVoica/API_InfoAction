@@ -40,15 +40,16 @@ class Ranking implements Model
 
 
         //Post: Ranking id Validators
-        if(!isset($fields['ranking_id'])){
-            return array('result' => false, 'message' => 'Missing ID Ranking');
+        if(!isset($fields['code'])){
+            return array('result' => false, 'message' => 'Missing Code Ranking');
         }
         else{
-            if(Validator::isText($fields['ranking_id'])){
-                return array('result' => false, 'message' => 'Ranking ID must be only numbers');
+            if(Validator::isExist('rankingdata','code',$fields['code'])){
+                return array('result' => false, 'message' => ''.$fields['code'].' not exist, use another');
             }
-            if(Validator::isExist('rankingdata','id',$fields['ranking_id'])){
-                return array('result' => false, 'message' => ''.$fields['ranking_id'].' not exist, use another');
+            $LenghtReturn = Validator::isLenght($fields['code'],'rankingdata','code',8,null);
+            if($LenghtReturn > 1){
+                return array('result' => false, 'message' => $LenghtReturn['message']);
             }
         }
 
@@ -67,10 +68,13 @@ class Ranking implements Model
         }
 
 
+
+
         //With ranking id, get ranking name and save ranking name in variable
-        $query = GET::getTable('rankingdata',$fields['ranking_id'],'id');
+        $query = GET::getTableVarchar('rankingdata',$fields['code'],'code');
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
+        $ranking_id = $data['ranking_name'];
         $ranking_name = "R_".$data['ranking_name'];
 
 
@@ -89,7 +93,7 @@ class Ranking implements Model
         $fields['level'] = 0;
 
         //Save ranking id and user id for save in ranking members, all rows
-        $rankingmembers['id_ranking'] = $fields['ranking_id'];
+        $rankingmembers['id_ranking'] = $ranking_id;
         $rankingmembers['id_user'] = $fields['id'];
 
         //If ID user exist in table user, later user exist in ranking table
@@ -104,7 +108,7 @@ class Ranking implements Model
         $columnsAll = Insert::showColumns($ranking_name);
 
         //Delete ranking_id, user_id for make insert
-        unset($fields['ranking_id']);
+        unset($fields['code']);
         unset($fields['user_id']);
 
         //Function missing NOT NULL field

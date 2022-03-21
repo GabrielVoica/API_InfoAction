@@ -4,6 +4,7 @@ require_once('src/models/User.php');
 require_once("services/errors/BadRequestError.php");
 require "services/responses/Response.php";
 require_once("services/Database.php");
+require_once("services/cookies/CookieService.php");
 
 
 class RegisterController implements Controller
@@ -38,6 +39,7 @@ class RegisterController implements Controller
 
     if ($result['result'] == true) {
       $response = Response::successful();
+      $cookie =  CookieService::createAuthCookie($variables['email'], $variables['password']);
       $response ['message'] = $result['message'];
       return $response;
     } else {

@@ -83,13 +83,17 @@ class User implements Model
     public static function insert(array $fields = null)
     {
 
-        
+        $confirmPasswd = $fields['conf_passwd'];
+        unset($fields['conf_passwd']);
+
+
         $columnsRequired = Insert::showRequiredColumns('user');
         $columnsAll = Insert::showColumnsWithoutID('user');
 
         $fieldsKeys = array_keys($fields);
 
         
+      
 
         $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
@@ -147,6 +151,11 @@ class User implements Model
             }
 
             //Works
+            if($fields['password'] != $confirmPasswd){
+                return array('result' => false, 'message' => 'Password not coincide');
+
+            }
+            //Works
             $PasswordCheck = Validator::isPassword($fields['password']);
             if ($PasswordCheck > 1) {
                 return array('result' => false, 'message' => $PasswordCheck['message']);
@@ -154,6 +163,18 @@ class User implements Model
                 $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
             
             }
+        }
+
+        if($confirmPasswd == null){
+            return array('result' => false, 'message' => 'Confirm Password not exist in petition');
+        }
+        else{
+            $nameLenghtReturn = Validator::isLenght($fields['password'],'user','password',8,null);
+            if($nameLenghtReturn > 1){
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+
+        
         }
 
 
@@ -267,8 +288,6 @@ class User implements Model
         }
 
         $data = $database->getConnection()->query($querydelete);
-
-
 
         if ($data) {
             return array('result' => true, 'message' => 'The insert has been made');

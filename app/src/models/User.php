@@ -83,8 +83,8 @@ class User implements Model
     public static function insert(array $fields = null)
     {
 
-        $confirmPasswd = $fields['conf_passwd'];
-        unset($fields['conf_passwd']);
+      /*  $confirmPasswd = $fields['conf_passwd'];
+        unset($fields['conf_passwd']);*/
 
 
         $columnsRequired = Insert::showRequiredColumns('user');
@@ -151,10 +151,10 @@ class User implements Model
             }
 
             //Works
-            if($fields['password'] != $confirmPasswd){
+       /*     if($fields['password'] != $confirmPasswd){
                 return array('result' => false, 'message' => 'Password not coincide');
 
-            }
+            }*/
             //Works
             $PasswordCheck = Validator::isPassword($fields['password']);
             if ($PasswordCheck > 1) {

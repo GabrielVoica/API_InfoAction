@@ -43,6 +43,34 @@ class Validator
 
     }
 
+        //Function exist table
+    //TODO move this function in Common.php
+    public static function isExistTable($table){
+        $database = new Database();
+        $database->connect();
+
+        $querydelete = "show tables like '$table'";
+        $data = $database->getConnection()->query($querydelete);
+        $data = mysqli_fetch_all($data);
+
+        if($data == null){
+            return array('result' => false, 'message' => 'ID not exist');
+
+        }
+        return true;
+    }
+
+
+
+    public static function isNull($value){
+        if($value[1] == null){
+            return array('result' => false, 'message' => ''.$value[1].' : is null ');
+        }
+        else{
+            return true;
+        }
+    }
+
 
     //Function isNumber
     public static function isNumber($value)

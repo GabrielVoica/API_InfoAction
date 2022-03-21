@@ -104,8 +104,8 @@ class Ranking implements Model
         }
      
         //Select required columns for ranking
-        $columnsRequired = Insert::showRequiredColumns($ranking_name);
-        $columnsAll = Insert::showColumns($ranking_name);
+        $columnsRequired = Common::showRequiredColumns($ranking_name);
+        $columnsAll = Common::showColumns($ranking_name);
 
         //Delete ranking_id, user_id for make insert
         unset($fields['code']);
@@ -113,21 +113,21 @@ class Ranking implements Model
 
         //Function missing NOT NULL field
         $fieldsKeys = array_keys($fields);
-        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
+        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
         }
 
         //Select rankingname, put insert fields and fields ranking
-        $types = Insert::showColumns($ranking_name);
+        $types = Common::showColumns($ranking_name);
         $query = Insert::makeInsertQuery($ranking_name, $fields, $types);
         $data = $database->getConnection()->query($query);
 
         if ($data) {
         //IF query is correct, insert in raking members ranking_id and user_id    
         $ranking_name = 'rankingmembers';    
-        $types = Insert::showColumns($ranking_name);
+        $types = Common::showColumns($ranking_name);
         $query = Insert::makeInsertQuery($ranking_name, $rankingmembers, $types);
         $data = $database->getConnection()->query($query);
 
@@ -149,14 +149,14 @@ class Ranking implements Model
         $fields = explode('-',$fields);
 
 
-        $tableExist = Delete::ExistTable($fields[0]);
+        $tableExist = Validator::isExistTable($fields[0]);
         if($tableExist > 1){
             return array('result' => false, 'message' =>  $tableExist['message']);
 
         }
 
 
-        $queryidexist = Delete::existID($fields);
+        $queryidexist = Validator::isExist($fields[0],'id',$fields[1]);
         if($queryidexist > 1){
             return array('result' => false, 'message' =>  $queryidexist['message']);
 

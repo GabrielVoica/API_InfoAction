@@ -50,8 +50,8 @@ class RankingData implements Model
     public static function insert(array $fields = null)
     {
 
-        $columnsRequired = Insert::showRequiredColumns('rankingdata');
-        $columnsAll = Insert::showColumnsWithoutID('rankingdata');
+        $columnsRequired =  Common::showRequiredColumns('rankingdata');
+        $columnsAll = Common::showColumnsWithoutID('rankingdata');
 
         $fieldsKeys = array_keys($fields);
 
@@ -61,7 +61,7 @@ class RankingData implements Model
             }
         }    
 
-        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
+        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
@@ -95,7 +95,7 @@ class RankingData implements Model
 
         if(isset($fields['code'])){
             if($fields['code'] == 'random'){
-                $fields['code'] = Update::randomCode();
+                $fields['code'] = Common::randomCode();
             }               
         }
 
@@ -111,7 +111,7 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-        $types = Insert::showColumns('rankingdata');
+        $types = Common::showColumns('rankingdata');
         $query = Insert::makeInsertQuery('rankingdata', $fields, $types);
 
         $rankingstructure = array(
@@ -148,7 +148,7 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-        $queryidexist = Delete::existID($fields);
+        $queryidexist = Validator::isExist($fields[0],'id',$fields[2]);
         if($queryidexist > 1){
             return array('result' => false, 'message' =>  $queryidexist['message']);
 
@@ -201,13 +201,13 @@ class RankingData implements Model
 
 
 
-        $columnsRequired = Insert::showRequiredColumnsWhithID('rankingdata');
-        $columnsAll = Insert::showColumns('rankingdata');
+        $columnsRequired = Common::showRequiredColumnsWhithID('rankingdata');
+        $columnsAll = Common::showColumns('rankingdata');
 
         $fieldsKeys = array_keys($fields);
 
      
-        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
+        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
@@ -241,7 +241,7 @@ class RankingData implements Model
 
         if(isset($fields['code'])){
             if($fields['code'] == 'random'){
-                $fields['code'] = Update::randomCode();
+                $fields['code'] = Common::randomCode();
             }               
         }
        if(isset($fields['teacher_id'])){
@@ -271,13 +271,13 @@ class RankingData implements Model
 
         }
 
-        $queryidexist = Update::existID('rankingdata',$fields['id']);
+        $queryidexist = Validator::isExist('rankingdata','id',$fields['id']);
         if($queryidexist > 1){
             return array('result' => false, 'message' =>  $queryidexist['message']);
 
         }
 
-        $types = Insert::showColumns('rankingdata');
+        $types = Common::showColumns('rankingdata');
         $querydelete = Update::updateRow('rankingdata',$fields,$types);
         $data = $database->getConnection()->query($querydelete);
 

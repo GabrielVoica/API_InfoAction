@@ -48,43 +48,5 @@ class Update
     }
 
 
-    //TODO move to common.php
-    public static function existID($table,$fields){
-        $database = new Database();
-        $database->connect();
-
-      
-
-        $querydelete = "SELECT * FROM $table WHERE id = $fields";
-        $data = $database->getConnection()->query($querydelete);
-        $data = mysqli_fetch_all($data);
-
-
-        if($data == null){
-            return array('result' => false, 'message' => 'ID not exist');
-
-        }
-        
-        return true;
-        
-    }
-
-
-    //TODO move to common.php
-    public static function randomCode(){
-        $lenght = 8;
-        $parameters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUWXYZ";
-        $finalResult = "";
-
-        for($i = 0; $i < $lenght; $i++){
-            $index = rand(0,strlen($parameters) - 1);
-            $finalResult .= $parameters[$index];
-        }
-
-        return $finalResult;
-        
-    }
-
-
 
     }

@@ -87,15 +87,15 @@ class User implements Model
         unset($fields['conf_passwd']);*/
 
 
-        $columnsRequired = Insert::showRequiredColumns('user');
-        $columnsAll = Insert::showColumnsWithoutID('user');
+        $columnsRequired = Common::showRequiredColumns('user');
+        $columnsAll = Common::showColumnsWithoutID('user');
 
         $fieldsKeys = array_keys($fields);
 
         
       
 
-        $CheckFieldsInsert = Insert::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
+        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
@@ -249,7 +249,7 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
-        $types = Insert::showColumns('user');
+        $types = Common::showColumns('user');
 
         $query = Insert::makeInsertQuery('user', $fields, $types);
 
@@ -269,7 +269,7 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
-        $queryidexist = Delete::existID($fields);
+        $queryidexist = Validator::isExist($fields[0],'id',$fields[1]);
         if($queryidexist > 1){
             return array('result' => false, 'message' =>  $queryidexist['message']);
 
@@ -438,13 +438,13 @@ class User implements Model
 
         }
 
-        $queryidexist = Update::existID('user',$fields['id']);
+        $queryidexist = Validator::isExist('user','id',$fields['id']);
         if($queryidexist > 1){
             return array('result' => false, 'message' =>  $queryidexist['message']);
 
         }
 
-        $types = Insert::showColumns('user');
+        $types = Common::showColumns('user');
         $querydelete = Update::updateRow('user',$fields,$types);
         $data = $database->getConnection()->query($querydelete);
 

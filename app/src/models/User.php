@@ -165,9 +165,6 @@ class User implements Model
             }
         }
 
-        if($confirmPasswd == null){
-            return array('result' => false, 'message' => 'Confirm Password not exist in petition');
-        }
         else{
             $nameLenghtReturn = Validator::isLenght($fields['password'],'user','password',8,null);
             if($nameLenghtReturn > 1){

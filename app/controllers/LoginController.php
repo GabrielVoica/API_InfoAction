@@ -17,9 +17,12 @@ class LoginController implements Controller
     {
         $result = User::login($variables['email'], $variables['password']);
 
-        if ($result != false) {
+        if ($result['result'] == true) {
+            $response = Response::successful();
+            $response ['message'] = Response::successful()['message'];
+            $response ['data'] = $result['data'];
             $cookie =  CookieService::createAuthCookie($variables['email'], $variables['password']);
-            return Response::successful();
+            return $response;
         } else {
             return  NotFoundError::throw();
         }

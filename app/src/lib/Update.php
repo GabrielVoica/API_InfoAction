@@ -6,7 +6,8 @@ class Update
 {
 
     //TODO optimize this function
-    public static function updateRow($table,$fields,$types){
+    public static function updateRow($table, $fields, $types)
+    {
         $database = new Database();
         $database->connect();
 
@@ -46,7 +47,4 @@ class Update
 
         return $queryupdate;
     }
-
-
-
-    }
+}

@@ -7,7 +7,8 @@ class Validator
 
 
     //TODO move to common.php
-    public static function isExist($table,$tablefield,$value){
+    public static function isExist($table, $tablefield, $value)
+    {
         $database = new Database();
         $database->connect();
 
@@ -15,37 +16,35 @@ class Validator
 
 
         $result = $database->getConnection()->query($query);
-                
-        if(mysqli_num_rows($result) == 0){
+
+        if (mysqli_num_rows($result) == 0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
-
     }
 
     //TODO move to common.php and combine with isExist
-    public static function isExistNumber($table,$tablefield,$value){
+    public static function isExistNumber($table, $tablefield, $value)
+    {
         $database = new Database();
         $database->connect();
 
         $query = "SELECT * FROM $table WHERE $tablefield = $value";
         $result = $database->getConnection()->query($query);
-        
 
-        if(mysqli_num_rows($result) == 0){
+
+        if (mysqli_num_rows($result) == 0) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
-
     }
 
-        //Function exist table
+    //Function exist table
     //TODO move this function in Common.php
-    public static function isExistTable($table){
+    public static function isExistTable($table)
+    {
         $database = new Database();
         $database->connect();
 
@@ -53,20 +52,17 @@ class Validator
         $data = $database->getConnection()->query($querydelete);
         $data = mysqli_fetch_all($data);
 
-        if($data == null){
+        if ($data == null) {
             return array('result' => false, 'message' => 'ID not exist');
-
         }
         return true;
     }
 
-
-
-    public static function isNull($value){
-        if($value[1] == null){
-            return array('result' => false, 'message' => ''.$value[1].' : is null ');
-        }
-        else{
+    public static function isNull($value)
+    {
+        if ($value[1] == null) {
+            return array('result' => false, 'message' => '' . $value[1] . ' : is null ');
+        } else {
             return true;
         }
     }
@@ -82,9 +78,6 @@ class Validator
         }
     }
 
-
-
-
     //Function is Email
     public static function isEmail($value)
     {
@@ -94,7 +87,6 @@ class Validator
             return false;
         }
     }
-
 
     //Function is Text
     public static function isText($value)
@@ -109,7 +101,7 @@ class Validator
     //Min 5 characters, max 20 characters, only numbers and letters valid
     public static function isName($value)
     {
-        if(preg_match("/[A-Za-z0-9]+/", $value)) {
+        if (preg_match("/[A-Za-z0-9]+/", $value)) {
             return true;
         } else {
             return false;
@@ -118,31 +110,30 @@ class Validator
 
 
     //Function lenght
-    public static function isLenght($value,$table,$column,$min_lenght,$max_lenght){
+    public static function isLenght($value, $table, $column, $min_lenght, $max_lenght)
+    {
 
-        if($max_lenght == null){
+        if ($max_lenght == null) {
             $database = new Database();
             $database->connect();
             $columns_show = "SHOW COLUMNS FROM $table WHERE Field = '$column'";
-    
-    
+
+
             $types = $database->getConnection()->query($columns_show);
             $types = mysqli_fetch_all($types);
-    
-            
+
+
             $max_lenght = $types[0][1];
             $max_lenght = substr($max_lenght, 0, -1);
             $max_lenght = substr($max_lenght, 8);
-    
         }
 
-       
 
-        if(strlen($value) >= $min_lenght & strlen($value) <= $max_lenght){
+
+        if (strlen($value) >= $min_lenght & strlen($value) <= $max_lenght) {
             return true;
-        }
-        else{
-            return array('result' => false, 'message' => ''.$column.' :Length must be '.$min_lenght.'-'.$max_lenght.'');
+        } else {
+            return array('result' => false, 'message' => '' . $column . ' :Length must be ' . $min_lenght . '-' . $max_lenght . '');
         }
     }
 
@@ -168,7 +159,4 @@ class Validator
             return true;
         }
     }
-
-
-
 }

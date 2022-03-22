@@ -106,13 +106,12 @@ class RankingData implements Model
         }
        }
 
-
-
         $database = new Database();
         $database->connect();
 
-        $types = Common::showColumns('rankingdata');
-        $query = Insert::makeInsertQuery('rankingdata', $fields, $types);
+        $columns = Common::showColumns('rankingdata');
+        $quotesFields = Common::makeQuotesKeys($fields,$columns);
+        $query = Insert::makeInsertQuery('rankingdata', $fields, $quotesFields);
 
         $rankingstructure = array(
             "id" => "int",

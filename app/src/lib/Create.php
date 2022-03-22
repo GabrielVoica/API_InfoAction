@@ -7,32 +7,34 @@ class Create
 
 
     // Query to create Table with specific Structure
-    public static function makeCreateQuery($tablename,$tablestructure){
-        
-            
-            $database = new Database();
-            $database->connect();
-            $querycreate = "CREATE TABLE $tablename (";
-        
-
-            $keys = array_keys($tablestructure);
-            $values = array_values($tablestructure);
+    public static function makeCreateQuery($tablename, $tablestructure)
+    {
 
 
-            for ($i = 0; $i < count($keys); $i++) {
-                $querycreate = "$querycreate $keys[$i] $values[$i],";
-            }
-            $querycreate = substr($querycreate, 0, -1);
+        $database = new Database();
+        $database->connect();
+        $querycreate = "CREATE TABLE $tablename (";
 
-            $querycreate ="$querycreate)";
-    
-            return $querycreate;
+
+        $keys = array_keys($tablestructure);
+        $values = array_values($tablestructure);
+
+
+        for ($i = 0; $i < count($keys); $i++) {
+            $querycreate = "$querycreate $keys[$i] $values[$i],";
+        }
+        $querycreate = substr($querycreate, 0, -1);
+
+        $querycreate = "$querycreate)";
+
+        return $querycreate;
     }
-      
+
 
 
     //Create events Update Points
-    public static function createEventUpdadePoints($table){
+    public static function createEventUpdadePoints($table)
+    {
         $database = new Database();
         $database->connect();
 
@@ -40,5 +42,4 @@ class Create
 
         return $querycreate;
     }
-
 }

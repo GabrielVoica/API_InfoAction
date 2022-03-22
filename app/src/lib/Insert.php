@@ -8,19 +8,19 @@ class Insert
 
 
     //Function create insert query structure
-    public static function makeInsertQuery($table, $inputFields, $columnsTable)
-    {
+    public static function makeInsertQuery($table, $fields, $values)
+    {     
+        $keys = array_keys($fields);
+
 
         $query = "INSERT INTO $table (";
 
-        if (isset($fields['password'])) {
-            $fields['password'] = $fields['password'];
+        if (isset($values['password'])) {
+            $values['password'] = $values['password'];
         }
 
-        $keys = array_keys($fields);
-        $values = array_values($fields);
 
-        for ($i = 0; $i < count($fields); $i++) {
+        for ($i = 0; $i < count($values); $i++) {
             $query = "$query$keys[$i],";
         }
 
@@ -29,18 +29,7 @@ class Insert
         $query = $query . "Values(";
 
 
-        //TODO funcion aparte
-
-        for ($x = 0; $x < count($types); $x++) {
-            for ($y = 0; $y < count($fields); $y++) {
-                if ($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int') && !str_contains($values[$y], 'CURRENT_TIMESTAMP')) {
-                    $values[$y] = "'$values[$y]'";
-                }
-            }
-        }
-
-
-        for ($i = 0; $i < count($fields); $i++) {
+        for ($i = 0; $i < count($values); $i++) {
             $query = "$query$values[$i],";
         }
 
@@ -50,9 +39,4 @@ class Insert
 
         return $query;
     }
-
-
-
-
-
 }

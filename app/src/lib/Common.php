@@ -1,20 +1,18 @@
 <?php
 
 require_once("services/Database.php");
+
 class Common
 {
 
 
-      
-  
-
     //Function Exist ID
-    //TODO move this function in Common.php
-    public static function existID($values){
+    public static function existID($values)
+    {
         $database = new Database();
         $database->connect();
 
-        if(count($values) == 1){
+        if (count($values) == 1) {
             return true;
         }
 
@@ -24,20 +22,15 @@ class Common
         $data = mysqli_fetch_all($data);
 
 
-        if($data == null){
+        if ($data == null) {
             return array('result' => false, 'message' => 'ID not exist');
-
         }
-        
+
         return true;
-        
     }
 
 
-
-
     //Function Show Columns with ID
-    //TODO move this to Common.php
     public static function showColumns($table)
     {
         $database = new Database();
@@ -52,9 +45,8 @@ class Common
         return $types;
     }
 
-        //Function Show Columns without ID
+    //Function Show Columns without ID
     //TODO combine this function with the showcolumns function, create variable ID, if variable is null put without ID
-    //TODO move this to Common.php
     public static function showColumnsWithoutID($table)
     {
         $database = new Database();
@@ -99,7 +91,8 @@ class Common
     }
 
 
-    public static function missingFieldsInsert($fieldsKeys,$requiredColumns,$allColumns){
+    public static function missingFieldsInsert($fieldsKeys, $requiredColumns, $allColumns)
+    {
 
         $allColumnsMap = array_map('map', $allColumns);
         $requiredColumnsMap = array_map('map', $requiredColumns);
@@ -115,14 +108,11 @@ class Common
                     $columnsCorrect = true;
                 }
             }
-            if($columnsCorrect == false){
-                return array('result' => false, 'message' => ''.$fieldsKeys[$x].' not exist in table');
-
+            if ($columnsCorrect == false) {
+                return array('result' => false, 'message' => '' . $fieldsKeys[$x] . ' not exist in table');
             }
             $columnsCorrect = false;
         }
-
-
 
 
         for ($x = 0; $x < count($fieldsKeys); $x++) {
@@ -131,76 +121,72 @@ class Common
                     $columnsRequired = true;
                 }
             }
-            if($columnsRequired == false){
+            if ($columnsRequired == false) {
                 unset($fieldsKeys[$x++]);
-                Sort($fieldsKeys); 
-
+                Sort($fieldsKeys);
             }
 
             $columnsRequired = false;
         }
 
 
-
-
-
         for ($x = 0; $x < count($requiredColumnsMap); $x++) {
             for ($y = 0; $y < count($fieldsKeys); $y++) {
 
-                if ($requiredColumnsMap[$x] ==$fieldsKeys[$y]) {
-                    
+                if ($requiredColumnsMap[$x] == $fieldsKeys[$y]) {
+
                     $columnsRequiredMissing++;
                 }
             }
-            if($columnsRequiredMissing == 0){
-                return array('result' => false, 'message' => 'Missing field '.$requiredColumnsMap[$x].'');
-
+            if ($columnsRequiredMissing == 0) {
+                return array('result' => false, 'message' => 'Missing field ' . $requiredColumnsMap[$x] . '');
             }
 
             $columnsRequiredMissing = 0;
         }
-       
+
 
 
         return true;
+    }
 
+    //TODO move to common.php
+    public static function randomCode()
+    {
+        $lenght = 8;
+        $parameters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUWXYZ";
+        $finalResult = "";
+
+        for ($i = 0; $i < $lenght; $i++) {
+            $index = rand(0, strlen($parameters) - 1);
+            $finalResult .= $parameters[$index];
+        }
+
+        return $finalResult;
     }
 
 
+    public static function makeQuotesKeys($fields, $columns){
 
 
+        $keys = array_keys($fields);
+        $values = array_values($fields);
 
-        //TODO move to common.php
-        public static function randomCode(){
-            $lenght = 8;
-            $parameters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUWXYZ";
-            $finalResult = "";
-    
-            for($i = 0; $i < $lenght; $i++){
-                $index = rand(0,strlen($parameters) - 1);
-                $finalResult .= $parameters[$index];
-            }
-    
-            return $finalResult;
-            
-        }
-
-
-
-        public static function makeQuotesKeys($fields,$types){
-
-            $keys = array_keys($fields);
-            $values = array_values($fields);
-            
-            for ($x = 0; $x < count($types); $x++) {
-                for ($y = 0; $y < count($fields); $y++) {
-                    if ($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int') && !str_contains($values[$y], 'CURRENT_TIMESTAMP')) {
-                        $values[$y] = "'$values[$y]'";
-                    }
+        for ($x = 0; $x < count($columns); $x++) {
+            for ($y = 0; $y < count($fields); $y++) {
+                if ($keys[$y] == $columns[$x][0] && !str_contains($columns[$x][1], 'int') && !str_contains($values[$y], 'CURRENT_TIMESTAMP')) {
+                    $values[$y] = "'$values[$y]'";
                 }
             }
-            
-            return $values;
         }
+
+        
+        return $values;
+    }
 }
 
+
+function map($data)
+{
+    return $data[0];
+}

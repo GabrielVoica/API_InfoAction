@@ -8,6 +8,7 @@ require_once("src/lib/Validator.php");
 require_once("src/lib/Delete.php");
 require_once("src/lib/Get.php");
 require_once("src/lib/Update.php");
+require_once("src/lib/Common.php");
 
 
 class RankingData implements Model
@@ -18,12 +19,14 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-       
-        $query = Get::getTableVarchar('rankingdata',$id,'code');
+        $columns = Common::showColumns('rankingdata');
+        $idData['code'] = $id;
+        $idQuotes = Common::makeQuotesKeys($idData,$columns);
+        $query = Get::getTable('rankingdata',$idQuotes[0],'code');
+
         
         $data = $database->getConnection()->query($query);
 
-       
         if ($data === false) {
             return array('result' => false, 'Error query select');
         }

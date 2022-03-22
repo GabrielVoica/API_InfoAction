@@ -168,7 +168,6 @@ class Common
 
     public static function makeQuotesKeys($fields, $columns){
 
-
         $keys = array_keys($fields);
         $values = array_values($fields);
 

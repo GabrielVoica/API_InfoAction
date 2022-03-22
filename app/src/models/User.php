@@ -26,8 +26,11 @@ class User implements Model
 
 
 
-        $query = Get::getTable('user', $id, 'id');
 
+        $columns = Common::showColumns('user');
+        $idData['id'] = $id;
+        $idQuotes = Common::makeQuotesKeys($idData,$columns);
+        $query = Get::getTable('user',$idQuotes[0],'id');
 
 
 

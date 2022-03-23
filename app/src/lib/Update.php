@@ -12,9 +12,9 @@ class Update
         $database->connect();
 
         $id = $fields['id'];
-
         unset($fields['id']);
 
+        unset($types[0]);
 
 
         $queryupdate = "UPDATE $table SET ";
@@ -24,16 +24,7 @@ class Update
         }
 
         $keys = array_keys($fields);
-        $values = array_values($fields);
-
-
-        for ($x = 0; $x < count($types); $x++) {
-            for ($y = 0; $y < count($fields); $y++) {
-                if ($keys[$y] == $types[$x][0] && !str_contains($types[$x][1], 'int')) {
-                    $values[$y] = "'$values[$y]'";
-                }
-            }
-        }
+        $values = array_values($types);
 
 
         for ($y = 0; $y < count($fields); $y++) {

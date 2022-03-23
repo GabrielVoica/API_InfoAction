@@ -171,15 +171,17 @@ class Common
         $keys = array_keys($fields);
         $values = array_values($fields);
 
+
         for ($x = 0; $x < count($columns); $x++) {
             for ($y = 0; $y < count($fields); $y++) {
                 if ($keys[$y] == $columns[$x][0] && !str_contains($columns[$x][1], 'int') && !str_contains($values[$y], 'CURRENT_TIMESTAMP')) {
+
                     $values[$y] = "'$values[$y]'";
                 }
             }
         }
 
-        
+
         return $values;
     }
 }

@@ -12,34 +12,21 @@ class Validator
         $database = new Database();
         $database->connect();
 
-        $query = "SELECT * FROM $table WHERE $tablefield = '$value'";
-
-
-        $result = $database->getConnection()->query($query);
-
-        if (mysqli_num_rows($result) == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    //TODO move to common.php and combine with isExist
-    public static function isExistNumber($table, $tablefield, $value)
-    {
-        $database = new Database();
-        $database->connect();
-
         $query = "SELECT * FROM $table WHERE $tablefield = $value";
+
+
         $result = $database->getConnection()->query($query);
 
 
+
         if (mysqli_num_rows($result) == 0) {
-            return true;
+            return array('result' => true, 'message' => 'ID not exist');
         } else {
             return false;
         }
     }
+
+ 
 
     //Function exist table
     //TODO move this function in Common.php
@@ -66,7 +53,6 @@ class Validator
             return true;
         }
     }
-
 
     //Function isNumber
     public static function isNumber($value)

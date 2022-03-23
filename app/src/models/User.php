@@ -30,7 +30,7 @@ class User implements Model
         $columns = Common::showColumns('user');
         $idData['id'] = $id;
         $idQuotes = Common::makeQuotesKeys($idData,$columns);
-        $query = Get::getTable('user',$idQuotes[0],'id');
+        $query = Get::getDataField('user',$idQuotes[0],'id');
 
 
 
@@ -41,21 +41,48 @@ class User implements Model
             return array('result' => false, 'Error query select');
         }
         if (mysqli_num_rows($data) == 0) {
-            return array('result' => false, 'message' => NotFoundError::throw()['message']);
+            return array('result' => false, 'message' => null);
         }
 
         $data = mysqli_fetch_assoc($data);
 
-        return array('result' => false, 'message' => $data);
+        return array('result' => true, 'message' => $data);
     }
 
+    public static function getAll()
+    {
+        $database = new Database();
+        $database->connect();
+        $query = Get::getAllData('user');
+
+        $data = $database->getConnection()->query($query);
+     
+
+        if ($data === false) {
+            return array('result' => false, 'Error query select');
+        }
+        if (mysqli_num_rows($data) == 0) {
+            return array('result' => false, 'message' => "0 rows");
+        }
+
+        
+        foreach ($data as $outerKey => $outerValue) {
+            foreach ($outerValue as $innerKey => $innerValue) {
+            
+                $wishlist[$innerKey][$outerKey] = $innerValue;
+            }
+        }
+
+
+        return array('result' => true, 'message' => null, 'data' => $wishlist);
+    }
 
 
 
     public static function login($email, $password)
     {
 
-        $query = Get::getTableVarchar('user', $email, 'email');
+        $query = Get::getAllData('user', $email, 'email');
 
         $database = new Database();
 
@@ -72,16 +99,7 @@ class User implements Model
         }
     }
 
-    public static function getAll()
-    {
-        $database = new Database();
-        $database->connect();
-        $data = $database->getConnection()->query('SELECT * FROM user');
-        $data = mysqli_fetch_assoc($data);
-
-        return $data;
-    }
-
+ 
 
     public static function insert(array $fields = null)
     {
@@ -255,8 +273,13 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
-        $queryidexist = Validator::isExist($fields[0], 'id', $fields[1]);
-        if ($queryidexist > 1) {
+
+        $columns = Common::showColumns('user');
+        $idData['id'] = $fields[1];
+        $idQuotes = Common::makeQuotesKeys($idData,$columns);
+
+        $queryidexist = Validator::isExist($fields[0], 'id', $idQuotes[0]);
+        if ($queryidexist >= 1) {
             return array('result' => false, 'message' =>  $queryidexist['message']);
         }
 
@@ -270,9 +293,9 @@ class User implements Model
         $data = $database->getConnection()->query($querydelete);
 
         if ($data) {
-            return array('result' => true, 'message' => 'The insert has been made');
+            return array('result' => true, 'message' => null);
         } else {
-            return array('result' => false, 'message' => 'The insert has not been made');
+            return array('result' => false, 'message' => null);
         }
     }
 
@@ -415,10 +438,12 @@ class User implements Model
             return array('result' => false, 'message' =>  $queryidexist['message']);
         }
 
-        $types = Common::showColumns('user');
-        $querydelete = Update::updateRow('user', $fields, $types);
-        $data = $database->getConnection()->query($querydelete);
 
+
+        $columns = Common::showColumns('user');
+        $quotesFields = Common::makeQuotesKeys($fields,$columns);
+        $query = Update::updateRow('user', $fields, $quotesFields);
+        $data = $database->getConnection()->query($query);
 
 
         if ($data) {

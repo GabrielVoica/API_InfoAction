@@ -31,21 +31,21 @@ class UserController implements Controller
   public function get($params)
   {
 
-   
-      $result = User::get($params[1]);
-  
-      $response = Response::successful();
-      $response ['message'] = $result['message'];
-  
-  
 
-      if ($result == true) {
-        return $response;
-      } else {
-        return false;
-      }
+    //$result = User::get($params[1]);
 
+    $result = User::getAll();
 
+     if ($result['result'] == true) {
+      $response['code'] = Response::successful()['code'];
+      $response['message'] = Response::successful()['message'];
+      $response ['data'] = $result['data'];
+      return $response;
+    } else {
+      $response['code'] = NotFoundError::throw()['code'];
+      $response['message'] = NotFoundError::throw()['message'];
+      return $response;
+    }
   }
 
   public function post($variables)
@@ -57,14 +57,13 @@ class UserController implements Controller
   {
     $result = User::update($variables);
 
-
     if ($result['result'] == true) {
-      $response = Response::successful();
-      $response ['message'] = $result['message'];
+      $response['code'] = Response::successful()['code'];
+      $response['message'] = Response::successful()['message'];
       return $response;
     } else {
       $response = BadRequestError::throw();
-      $response ['message'] = $result['message'];
+      $response['message'] = $result['message'];
       return $response;
     }
   }
@@ -74,18 +73,16 @@ class UserController implements Controller
   public function delete($variables)
   {
 
+    $result = User::delete($variables, 'user');
 
-
-    $result = User::delete($variables,'user');
-
-    $response = Response::successful();
-    $response ['message'] = $result['message'];
-
-
-    if ($result == true) {
+    if ($result['result'] == true) {
+      $response['code'] = Response::successful()['code'];
+      $response['message'] = Response::successful()['message'];
       return $response;
     } else {
-      return false;
+      $response['code'] = NotFoundError::throw()['code'];
+      $response['message'] = NotFoundError::throw()['message'];
+      return $response;
     }
   }
 }

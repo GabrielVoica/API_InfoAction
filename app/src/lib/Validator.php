@@ -15,6 +15,7 @@ class Validator
         $query = "SELECT * FROM $table WHERE $tablefield = $value";
 
 
+        print_r($query);
         $result = $database->getConnection()->query($query);
 
 
@@ -35,8 +36,9 @@ class Validator
         $database = new Database();
         $database->connect();
 
-        $querydelete = "show tables like '$table'";
-        $data = $database->getConnection()->query($querydelete);
+        $query = "show tables like '$table'";
+        $data = $database->getConnection()->query($query);
+
         $data = mysqli_fetch_all($data);
 
         if ($data == null) {

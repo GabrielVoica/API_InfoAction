@@ -107,6 +107,9 @@ class User implements Model
         /*  $confirmPasswd = $fields['conf_passwd'];
         unset($fields['conf_passwd']);*/
 
+        $columns = Common::showColumns('user');
+        $fieldsQuote = Common::makeQuotesKeys($fields,$columns);
+
 
         $columnsRequired = Common::showRequiredColumns('user');
         $columnsAll = Common::showColumnsWithoutID('user');
@@ -133,7 +136,7 @@ class User implements Model
             }
 
             //Works
-            if (!Validator::isExist('user', 'nick_name', $fields['nick_name'])) {
+            if (!Validator::isExist('user', 'nick_name', $fieldsQuote['nick_name'])) {
                 return array('result' => false, 'message' => '' . $fields['nick_name'] . ' exist, use another');
             }
         }
@@ -152,7 +155,7 @@ class User implements Model
             }
 
             //Works
-            if (!Validator::isExist('user', 'email', $fields['email'])) {
+            if (!Validator::isExist('user', 'email', $fieldsQuote['email'])) {
                 return array('result' => false, 'message' => '' . $fields['email'] . ' exist, use another');
             }
         }
@@ -254,10 +257,10 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
-        $columns = Common::showColumns('user');
-        $quotesFields = Common::makeQuotesKeys($fields,$columns);
-        $query = Insert::makeInsertQuery('user', $fields, $quotesFields);
+  
+        $query = Insert::makeInsertQuery('user', $fields, $fieldsQuote);
 
+        print_r($query);
         $data = $database->getConnection()->query($query);
 
         if ($data) {

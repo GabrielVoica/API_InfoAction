@@ -13,11 +13,7 @@ class Validator
         $database->connect();
 
         $query = "SELECT * FROM $table WHERE $tablefield = $value";
-
-
-        print_r($query);
         $result = $database->getConnection()->query($query);
-
 
 
         if (mysqli_num_rows($result) == 0) {
@@ -115,7 +111,6 @@ class Validator
             $max_lenght = substr($max_lenght, 0, -1);
             $max_lenght = substr($max_lenght, 8);
         }
-
 
 
         if (strlen($value) >= $min_lenght & strlen($value) <= $max_lenght) {

@@ -8,9 +8,12 @@ class Insert
 
 
     //Function create insert query structure
-    public static function makeInsertQuery($table, $fields, $values)
+    public static function makeInsertQuery($table, $fields)
     {     
         $keys = array_keys($fields);
+        $values = array_values($fields);
+
+        
 
 
         $query = "INSERT INTO $table (";

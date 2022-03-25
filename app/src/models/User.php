@@ -29,7 +29,7 @@ class User implements Model
 
         $columns = Common::showColumns('user');
         $idData['id'] = $id;
-        $idQuotes = Common::makeQuotesKeys($idData,$columns);
+        $idQuotes = Common::makeMarkKeys($idData,$columns);
         $query = Get::getDataField('user',$idQuotes[0],'id');
 
 
@@ -79,20 +79,20 @@ class User implements Model
 
 
 
-    public static function login($email, $password)
+    public static function login(array $fields = null)
     {
-
-        $query = Get::getAllData('user', $email, 'email');
-
         $database = new Database();
-
         $database->connect();
+
+        $columns = Common::showColumns('user');
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+
+        $query = Get::getDataField('user', $fieldsMark['email'], 'email');
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
-        
 
-        if (isset($data['password']) && password_verify($password, $data['password'])) {
+        if (isset($data['password']) && password_verify($fields['password'], $data['password'])) {
             return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id']]);        
         } else {
             return array('result' => false, 'message' => null,);        
@@ -108,7 +108,7 @@ class User implements Model
         unset($fields['conf_passwd']);*/
 
         $columns = Common::showColumns('user');
-        $fieldsQuote = Common::makeQuotesKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
 
 
         $columnsRequired = Common::showRequiredColumns('user');
@@ -136,7 +136,7 @@ class User implements Model
             }
 
             //Works
-            if (!Validator::isExist('user', 'nick_name', $fieldsQuote['nick_name'])) {
+            if (!Validator::isExist('user', 'nick_name', $fieldsMark['nick_name'])) {
                 return array('result' => false, 'message' => '' . $fields['nick_name'] . ' exist, use another');
             }
         }
@@ -155,7 +155,7 @@ class User implements Model
             }
 
             //Works
-            if (!Validator::isExist('user', 'email', $fieldsQuote['email'])) {
+            if (!Validator::isExist('user', 'email', $fieldsMark['email'])) {
                 return array('result' => false, 'message' => '' . $fields['email'] . ' exist, use another');
             }
         }
@@ -258,9 +258,7 @@ class User implements Model
         $database->connect();
 
   
-        $query = Insert::makeInsertQuery('user', $fields, $fieldsQuote);
-
-        print_r($query);
+        $query = Insert::makeInsertQuery('user', $fieldsMark);
         $data = $database->getConnection()->query($query);
 
         if ($data) {
@@ -273,27 +271,41 @@ class User implements Model
 
     public static function delete($fields)
     {
+
         $database = new Database();
         $database->connect();
 
 
-        $columns = Common::showColumns('user');
-        $idData['id'] = $fields[1];
-        $idQuotes = Common::makeQuotesKeys($idData,$columns);
-
-        $queryidexist = Validator::isExist($fields[0], 'id', $idQuotes[0]);
-        if ($queryidexist >= 1) {
-            return array('result' => false, 'message' =>  $queryidexist['message']);
-        }
+        $query = Delete::deleteRow('cookies', null);
+        $data = $database->getConnection()->query($query);
 
 
         if (count($fields) == 1) {
-            $querydelete = Delete::deleteRow($fields[0], null);
+            $query = Delete::deleteRow($fields[0], null);
         } else {
-            $querydelete = Delete::deleteRow($fields[0], $fields[1]);
+            $columns = Common::showColumns('user');
+            $idData['id'] = $fields[1];
+            $fieldsMark = Common::makeMarkKeys($idData,$columns);
+    
+    
+            /*if (!Validator::isNumber($fieldsMark['id'])) {
+                return array('result' => false, 'message' => 'Only numbers');
+            }*/
+    
+            $nameLenghtReturn = Validator::isLenght($fieldsMark['id'], 'user', 'id', 1, 5);
+            if ($nameLenghtReturn > 1) {
+                return array('result' => false, 'message' => $nameLenghtReturn['message']);
+            }
+    
+    
+            $queryidexist = Validator::isExist($fields[0], 'id', $fieldsMark['id']);
+            if ($queryidexist >= 1) {
+                return array('result' => false, 'message' =>  $queryidexist['message']);
+            }
+            $query = Delete::deleteRow($fields[0], $fields[1]);
         }
 
-        $data = $database->getConnection()->query($querydelete);
+        $data = $database->getConnection()->query($query);
 
         if ($data) {
             return array('result' => true, 'message' => null);
@@ -301,7 +313,6 @@ class User implements Model
             return array('result' => false, 'message' => null);
         }
     }
-
 
 
     public static function update(array $fields = null)
@@ -444,7 +455,7 @@ class User implements Model
 
 
         $columns = Common::showColumns('user');
-        $quotesFields = Common::makeQuotesKeys($fields,$columns);
+        $quotesFields = Common::makeMarkKeys($fields,$columns);
         $query = Update::updateRow('user', $fields, $quotesFields);
         $data = $database->getConnection()->query($query);
 

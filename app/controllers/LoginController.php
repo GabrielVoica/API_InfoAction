@@ -15,7 +15,7 @@ class LoginController implements Controller
 
     public function post($variables)
     {
-        $result = User::login($variables['email'], $variables['password']);
+        $result = User::login($variables);
 
         if ($result['result'] == true) {
             $response['code'] = Response::successful()['code'];

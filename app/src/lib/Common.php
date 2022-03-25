@@ -166,11 +166,11 @@ class Common
     }
 
 
-    public static function makeQuotesKeys($fields, $columns){
+    public static function makeMarkKeys($fields, $columns){
 
         $keys = array_keys($fields);
         $values = array_values($fields);
-        $result = [];
+        $result = $fields;
 
         for ($x = 0; $x < count($columns); $x++) {
             for ($y = 0; $y < count($fields); $y++) {

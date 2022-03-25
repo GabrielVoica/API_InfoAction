@@ -91,9 +91,8 @@ class User implements Model
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
-        //if (isset($data['password']) && password_verify($fields['password'], $data['password'])) {
-            if (isset($data['password']) && $fields['password'] == $data['password']) {
-
+        if(isset($data['password']) && password_verify($fields['password'], $data['password'])) {
+            echo "paco";
             return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id']]);        
         } else {
             return array('result' => false, 'message' => null,);        
@@ -104,6 +103,8 @@ class User implements Model
 
     public static function insert(array $fields = null)
     {
+        $database = new Database();
+        $database->connect();
 
         /*  $confirmPasswd = $fields['conf_passwd'];
         unset($fields['conf_passwd']);*/
@@ -122,6 +123,7 @@ class User implements Model
         if ($CheckFieldsInsert > 1) {
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
         }
+
 
 
         if (isset($fields['nick_name'])) {
@@ -164,9 +166,8 @@ class User implements Model
 
         if (isset($fields['password'])) {
 
-
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['password'], 'user', 'password', 8, null);
+            $nameLenghtReturn = Validator::isLenght($fields['password'], 'user', 'password', 8, 30);
             if ($nameLenghtReturn > 1) {
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
@@ -255,10 +256,13 @@ class User implements Model
         }
 
 
-        $database = new Database();
-        $database->connect();
+      
 
   
+        $columns = Common::showColumns('user');
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+
+
         $query = Insert::makeInsertQuery('user', $fieldsMark);
         $data = $database->getConnection()->query($query);
 

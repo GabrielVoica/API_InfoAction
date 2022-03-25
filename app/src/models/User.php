@@ -91,8 +91,9 @@ class User implements Model
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
+        //if (isset($data['password']) && password_verify($fields['password'], $data['password'])) {
+            if (isset($data['password']) && $fields['password'] == $data['password']) {
 
-        if (isset($data['password']) && password_verify($fields['password'], $data['password'])) {
             return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id']]);        
         } else {
             return array('result' => false, 'message' => null,);        

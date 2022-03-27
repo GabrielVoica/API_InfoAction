@@ -5,6 +5,8 @@ require_once("src/lib//Validator.php");
 require_once("services/errors/NotFoundError.php");
 require_once("src/lib/Insert.php");
 require_once("src/lib/Get.php");
+require_once("src/lib/Common.php");
+
 require_once("src/lib/Delete.php");
 
 
@@ -13,21 +15,75 @@ require_once("src/lib/Delete.php");
 class Ranking implements Model
 {
 
-    public static function get($id = null, array $fields = null)
+    public static function get($id = null,array $fields = null)
     {
+        $database = new Database();
+        $database->connect();
+
+
+        $queryRanking = Get::getDataField('rankingdata',$id['id-ranking'],'id');
+        $dataRanking = $database->getConnection()->query($queryRanking);
+        $dataRanking = mysqli_fetch_assoc($dataRanking);
+
+        $rankingName = 'R_'.$dataRanking['ranking_name'];
+
+
+        $columns = Common::showColumns($rankingName);
+        $idMark = Common::makeMarkKeys($id,$columns);
+        $query = Get::getDataField( $rankingName,$idMark['id-user'],'id');
+        $data = $database->getConnection()->query($query);
+
+
+
+        if ($data === false) {
+            return array('result' => false, 'Error query select');
+        }
+        if (mysqli_num_rows($data) == 0) {
+            return array('result' => false, 'message' => null);
+        }
+
+        $data = mysqli_fetch_assoc($data);
+
+        return array('result' => true, 'message' => null, 'data' => $data);
 
     }
 
 
-
-    public static function getField($id, $field)
-    {
-      
-    }
   
 
-    public static function getAll()
+    public static function getAll($id = null)
     {
+
+        print_r($id);
+        $database = new Database();
+        $database->connect();
+
+
+
+        $queryRanking = Get::getDataField('rankingdata',$id['id-ranking'],'id');
+        $dataRanking = $database->getConnection()->query($queryRanking);
+        $dataRanking = mysqli_fetch_assoc($dataRanking);
+        $rankingName = 'R_'.$dataRanking['ranking_name'];
+
+
+        $query = Get::getAllData($rankingName);
+
+        $data = $database->getConnection()->query($query);
+     
+
+        if ($data === false) {
+            return array('result' => false, 'Error query select');
+        }
+        if (mysqli_num_rows($data) == 0) {
+            return array('result' => false, 'message' => "0 rows");
+        }
+
+        while($array = mysqli_fetch_assoc($data)){
+            $wishlist[] = $array;
+        }
+ 
+
+        return array('result' => true, 'message' => null, 'data' => $wishlist);
      
     }
 
@@ -71,7 +127,7 @@ class Ranking implements Model
 
 
         //With ranking id, get ranking name and save ranking name in variable
-        $query = GET::getTableVarchar('rankingdata',$fields['code'],'code');
+        $query = GET::getDataField('rankingdata',$fields['code'],'code');
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
         $ranking_id = $data['ranking_name'];
@@ -79,7 +135,7 @@ class Ranking implements Model
 
 
         //With user id, get user data and save in fields to make inserts
-        $query = GET::getTable('user',$fields['user_id'],'id');
+        $query = GET::getDataField('user',$fields['user_id'],'id');
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 

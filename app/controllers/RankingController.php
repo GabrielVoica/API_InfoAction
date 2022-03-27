@@ -23,8 +23,35 @@ class RankingController implements Controller
     }
 
     public function get($params)
+
     {
-       return 'Welcome to our api!'; 
+
+
+
+      $paramsinput['id-ranking'] = $params[1];
+      if(count($params) > 2){
+      $paramsinput['id-user'] = $params[2];
+      }
+
+      if(count($params) > 2){
+        $result = Ranking::get($paramsinput);
+  
+      }
+      else{
+        $result = Ranking::getAll($paramsinput);
+      }
+  
+  
+       if ($result['result'] == true) {
+        $response['code'] = Response::successful()['code'];
+        $response['message'] = Response::successful()['message'];
+        $response ['data'] = $result['data'];
+        return $response;
+      } else {
+        $response['code'] = NotFoundError::throw()['code'];
+        $response['message'] = NotFoundError::throw()['message'];
+        return $response;
+      }
     }
 
     public function post($variables)

@@ -27,8 +27,8 @@ class User implements Model
         $columns = Common::showColumns('user');
         $idData['id'] = $id;
 
-        $idQuotes = Common::makeMarkKeys($idData,$columns);
-        $query = Get::getDataField('user',$idQuotes['id'],'id');
+        $idMark = Common::makeMarkKeys($idData,$columns);
+        $query = Get::getDataField('user',$idMark['id'],'id');
         $data = $database->getConnection()->query($query);
 
 

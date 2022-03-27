@@ -31,8 +31,6 @@ class UserController implements Controller
   public function get($params)
   {
 
-
-
     if(count($params) > 1){
       $result = User::get($params[1]);
 

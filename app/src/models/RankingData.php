@@ -19,34 +19,49 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-        $columns = Common::showColumns('rankingdata');
-        $idData['code'] = $id;
-        $idQuotes = Common::makeQuotesKeys($idData,$columns);
-        $query = Get::getTable('rankingdata',$idQuotes[0],'code');
+        $columns = Common::showColumns('user');
+        $idData['id'] = $id;
 
-        
+        $idMark = Common::makeMarkKeys($idData,$columns);
+        $query = Get::getDataField('rankingdata',$idMark['id'],'id');
         $data = $database->getConnection()->query($query);
+
+
 
         if ($data === false) {
             return array('result' => false, 'Error query select');
         }
         if (mysqli_num_rows($data) == 0) {
-            return array('result' => false, 'message' => NotFoundError::throw()['message']);
+            return array('result' => false, 'message' => null);
         }
 
         $data = mysqli_fetch_assoc($data);
 
-        return array('result' => false, 'message' => $data);
+        return array('result' => true, 'message' => null, 'data' => $data);
     }
 
     public static function getAll()
     {
         $database = new Database();
         $database->connect();
-        $data = $database->getConnection()->query('SELECT * FROM user');
-        $data = mysqli_fetch_assoc($data);
+        $query = Get::getAllData('rankingdata');
 
-        return $data;
+        $data = $database->getConnection()->query($query);
+     
+
+        if ($data === false) {
+            return array('result' => false, 'Error query select');
+        }
+        if (mysqli_num_rows($data) == 0) {
+            return array('result' => false, 'message' => "0 rows");
+        }
+
+        while($array = mysqli_fetch_assoc($data)){
+            $wishlist[] = $array;
+        }
+ 
+
+        return array('result' => true, 'message' => null, 'data' => $wishlist);
     }
 
 
@@ -113,7 +128,7 @@ class RankingData implements Model
         $database->connect();
 
         $columns = Common::showColumns('rankingdata');
-        $quotesFields = Common::makeQuotesKeys($fields,$columns);
+        $quotesFields = Common::makeMarkKeys($fields,$columns);
         $query = Insert::makeInsertQuery('rankingdata', $fields, $quotesFields);
 
         $rankingstructure = array(

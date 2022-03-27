@@ -26,17 +26,24 @@ class RankingDataController implements Controller
     
     public function get($params)
     {
-      $result = RankingData::get($params[1]);
+      if(count($params) > 1){
+        $result = RankingData::get($params[1]);
   
-      $response = Response::successful();
-      $response ['message'] = $result['message'];
+      }
+      else{
+        $result = RankingData::getAll();
+      }
   
   
-
-      if ($result == true) {
+       if ($result['result'] == true) {
+        $response['code'] = Response::successful()['code'];
+        $response['message'] = Response::successful()['message'];
+        $response ['data'] = $result['data'];
         return $response;
       } else {
-        return false;
+        $response['code'] = NotFoundError::throw()['code'];
+        $response['message'] = NotFoundError::throw()['message'];
+        return $response;
       }
     }
 

@@ -32,9 +32,15 @@ class UserController implements Controller
   {
 
 
-    //$result = User::get($params[1]);
 
-    $result = User::getAll();
+    if(count($params) > 1){
+      $result = User::get($params[1]);
+
+    }
+    else{
+      $result = User::getAll();
+    }
+
 
      if ($result['result'] == true) {
       $response['code'] = Response::successful()['code'];

@@ -24,17 +24,13 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
-
-
-
         $columns = Common::showColumns('user');
         $idData['id'] = $id;
+
         $idQuotes = Common::makeMarkKeys($idData,$columns);
-        $query = Get::getDataField('user',$idQuotes[0],'id');
-
-
-
+        $query = Get::getDataField('user',$idQuotes['id'],'id');
         $data = $database->getConnection()->query($query);
+
 
 
         if ($data === false) {
@@ -46,8 +42,9 @@ class User implements Model
 
         $data = mysqli_fetch_assoc($data);
 
-        return array('result' => true, 'message' => $data);
+        return array('result' => true, 'message' => null, 'data' => $data);
     }
+
 
     public static function getAll()
     {
@@ -65,14 +62,10 @@ class User implements Model
             return array('result' => false, 'message' => "0 rows");
         }
 
-        
-        foreach ($data as $outerKey => $outerValue) {
-            foreach ($outerValue as $innerKey => $innerValue) {
-            
-                $wishlist[$innerKey][$outerKey] = $innerValue;
-            }
+        while($array = mysqli_fetch_assoc($data)){
+            $wishlist[] = $array;
         }
-
+ 
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
     }

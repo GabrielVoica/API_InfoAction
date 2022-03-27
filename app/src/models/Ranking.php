@@ -6,7 +6,6 @@ require_once("services/errors/NotFoundError.php");
 require_once("src/lib/Insert.php");
 require_once("src/lib/Get.php");
 require_once("src/lib/Common.php");
-
 require_once("src/lib/Delete.php");
 
 
@@ -54,9 +53,15 @@ class Ranking implements Model
     public static function getAll($id = null)
     {
 
-        print_r($id);
         $database = new Database();
         $database->connect();
+
+
+      
+
+        if(Validator::isExist('rankingdata','id',$id['id-ranking'])){
+            return array('result' => false, 'message' => null);
+        }
 
 
 
@@ -67,6 +72,8 @@ class Ranking implements Model
 
 
         $query = Get::getAllData($rankingName);
+
+        print_r($query);
 
         $data = $database->getConnection()->query($query);
      

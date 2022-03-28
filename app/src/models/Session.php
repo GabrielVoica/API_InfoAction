@@ -6,6 +6,8 @@ require_once("services/errors/NotFoundError.php");
 
 require_once("src/lib/Insert.php");
 require_once("src/lib/Validator.php");
+require_once("src/lib/Common.php");
+
 
 
 
@@ -22,9 +24,14 @@ class Session implements Model
     public static function getField($id)
     {
    
+       
+        $columns = Common::showColumns('user');
+        $idSession['email'] = $id[1];
+        $fieldsMark = Common::makeMarkKeys($idSession ,$columns);
 
-        if(Validator::isExist('user','email',$id[1])){
-            return array('result' => false, 'message' => ''.$id[1].' not exist, try another');
+
+        if(Validator::isExist('user','email',$fieldsMark['email'])){
+            return array('result' => false, 'message' => ''.$fieldsMark['email'].' not exist, try another');
         }
 
 
@@ -32,6 +39,7 @@ class Session implements Model
          
         $query = "SELECT b.id FROM user a, cookies b WHERE email = '$id[1]' AND a.id = b.user_id";
 
+        
 
         $database = new Database();
         $database->connect();

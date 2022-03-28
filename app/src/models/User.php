@@ -85,7 +85,6 @@ class User implements Model
         $data = mysqli_fetch_assoc($data);
 
         if(isset($data['password']) && password_verify($fields['password'], $data['password'])) {
-            echo "paco";
             return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id']]);        
         } else {
             return array('result' => false, 'message' => null,);        

@@ -19,8 +19,12 @@ class Ranking implements Model
         $database = new Database();
         $database->connect();
 
+        $columns = Common::showColumns('rankingdata');
+        $idData['code'] = $id['id-ranking'];
+        $idMark = Common::makeMarkKeys($idData,$columns);
 
-        $queryRanking = Get::getDataField('rankingdata',$id['id-ranking'],'id');
+
+        $queryRanking = Get::getDataField('rankingdata',$idMark['code'],'code');
         $dataRanking = $database->getConnection()->query($queryRanking);
         $dataRanking = mysqli_fetch_assoc($dataRanking);
 
@@ -56,24 +60,25 @@ class Ranking implements Model
         $database = new Database();
         $database->connect();
 
+        
+        $columns = Common::showColumns('rankingdata');
+        $idData['code'] = $id['id-ranking'];
+        $idMark = Common::makeMarkKeys($idData,$columns);
 
       
 
-        if(Validator::isExist('rankingdata','id',$id['id-ranking'])){
+        /*if(Validator::isExist('rankingdata','code',$id['id-ranking'])){
             return array('result' => false, 'message' => null);
-        }
+        }*/
 
 
-
-        $queryRanking = Get::getDataField('rankingdata',$id['id-ranking'],'id');
+        $queryRanking = Get::getDataField('rankingdata',$idMark['code'],'code');
         $dataRanking = $database->getConnection()->query($queryRanking);
         $dataRanking = mysqli_fetch_assoc($dataRanking);
         $rankingName = 'R_'.$dataRanking['ranking_name'];
 
 
         $query = Get::getAllData($rankingName);
-
-        print_r($query);
 
         $data = $database->getConnection()->query($query);
      

@@ -19,11 +19,12 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-        $columns = Common::showColumns('user');
-        $idData['id'] = $id;
-
+        $columns = Common::showColumns('rankingdata');
+        $idData['code'] = $id;
         $idMark = Common::makeMarkKeys($idData,$columns);
-        $query = Get::getDataField('rankingdata',$idMark['id'],'id');
+
+
+        $query = Get::getDataField('rankingdata',$idMark['code'],'code');
         $data = $database->getConnection()->query($query);
 
 

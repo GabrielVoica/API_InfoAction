@@ -343,7 +343,7 @@ class User implements Model
             }
 
             //Works
-            if (!Validator::isExist('user', 'nick_name', $fields['nick_name'])) {
+            if (!Validator::isExist('user', 'nick_name', $fieldsMark['nick_name'])) {
                 return array('result' => false, 'message' => '' . $fields['nick_name'] . ' exist, use another');
             }
         }
@@ -362,7 +362,7 @@ class User implements Model
             }
 
             //Works
-            if (!Validator::isExist('user', 'email', $fields['email'])) {
+            if (!Validator::isExist('user', 'email', $fieldsMark['email'])) {
                 return array('result' => false, 'message' => '' . $fields['email'] . ' exist, use another');
             }
         }
@@ -453,18 +453,29 @@ class User implements Model
 
         if (!isset($fields['id'])) {
             return array('result' => false, 'message' =>  'ID field not exist');
+         
         }
+    
 
         $queryidexist = Validator::isExist('user', 'id', $fields['id']);
         if ($queryidexist > 1) {
             return array('result' => false, 'message' =>  $queryidexist['message']);
         }
+   
 
-
+        if (isset($fields['user_type'])) {
+            if (!Validator::isNumber($fields['user_type'])) {
+                return array('result' => false, 'message' => 'User Type : Only numbers');
+            }
+            if ($fields['user_type'] != 0 && $fields['user_type'] != 1) {
+                return array('result' => false, 'message' => 'Bad type user, 0 for User, 1 for Teacher');
+            }
+        }
 
         $columns = Common::showColumns('user');
-        $quotesFields = Common::makeMarkKeys($fields,$columns);
-        $query = Update::updateRow('user', $fields, $quotesFields);
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+
+        $query = Update::updateRow('user',$fieldsMark);
         $data = $database->getConnection()->query($query);
 
 

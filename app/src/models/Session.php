@@ -34,12 +34,9 @@ class Session implements Model
             return array('result' => false, 'message' => ''.$fieldsMark['email'].' not exist, try another');
         }
 
-
-
          
         $query = "SELECT b.id FROM user a, cookies b WHERE email = '$id[1]' AND a.id = b.user_id";
 
-        
 
         $database = new Database();
         $database->connect();

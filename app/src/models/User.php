@@ -98,8 +98,8 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
-        /*  $confirmPasswd = $fields['conf_passwd'];
-        unset($fields['conf_passwd']);*/
+        $confirmPasswd = $fields['conf_passwd'];
+        unset($fields['conf_passwd']);
 
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields,$columns);
@@ -165,10 +165,10 @@ class User implements Model
             }
 
             //Works
-            /*     if($fields['password'] != $confirmPasswd){
+                if($fields['password'] != $confirmPasswd){
                 return array('result' => false, 'message' => 'Password not coincide');
 
-            }*/
+            }
             //Works
             $PasswordCheck = Validator::isPassword($fields['password']);
             if ($PasswordCheck > 1) {
@@ -176,7 +176,8 @@ class User implements Model
             } else {
                 $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
             }
-        } else {
+        } 
+        else {
             $nameLenghtReturn = Validator::isLenght($fields['password'], 'user', 'password', 8, null);
             if ($nameLenghtReturn > 1) {
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
@@ -248,9 +249,15 @@ class User implements Model
         }
 
 
-      
-
-  
+        if (isset($fields['user_type'])) {
+            if (!Validator::isNumber($fields['user_type'])) {
+                return array('result' => false, 'message' => 'User Type : Only numbers');
+            }
+            if ($fields['user_type'] != 0 && $fields['user_type'] != 1) {
+                return array('result' => false, 'message' => 'Bad type user, 0 for User, 1 for Teacher');
+            }
+        }
+    
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields,$columns);
 

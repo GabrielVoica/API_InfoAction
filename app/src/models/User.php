@@ -85,7 +85,7 @@ class User implements Model
         $data = mysqli_fetch_assoc($data);
 
         if(isset($data['password']) && password_verify($fields['password'], $data['password'])) {
-            return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id']]);        
+            return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id'], 'type' => $data['user_type']]);        
         } else {
             return array('result' => false, 'message' => null,);        
         }
@@ -324,6 +324,10 @@ class User implements Model
         $database = new Database();
         $database->connect();
 
+
+
+        $columns = Common::showColumns('user');
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
 
 
         if (isset($fields['nick_name'])) {

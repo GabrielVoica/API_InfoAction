@@ -280,21 +280,22 @@ class User implements Model
         $database->connect();
 
 
-        $query = Delete::deleteRow('cookies', null);
+        $query = Delete::deleteRow('cookies', $fields[1], 'user_id');
         $data = $database->getConnection()->query($query);
 
 
         if (count($fields) == 1) {
-            $query = Delete::deleteRow($fields[0], null);
+            $query = Delete::deleteRow($fields[0], null,null);
         } else {
             $columns = Common::showColumns('user');
             $idData['id'] = $fields[1];
             $fieldsMark = Common::makeMarkKeys($idData,$columns);
     
     
-            /*if (!Validator::isNumber($fieldsMark['id'])) {
-                return array('result' => false, 'message' => 'Only numbers');
-            }*/
+           
+            if (!Validator::isNumber($fields[1])) {
+                return array('result' => false, 'message' => 'User Type : Only numbers');
+            }
     
             $nameLenghtReturn = Validator::isLenght($fieldsMark['id'], 'user', 'id', 1, 5);
             if ($nameLenghtReturn > 1) {
@@ -306,7 +307,7 @@ class User implements Model
             if ($queryidexist >= 1) {
                 return array('result' => false, 'message' =>  $queryidexist['message']);
             }
-            $query = Delete::deleteRow($fields[0], $fields[1]);
+            $query = Delete::deleteRow($fields[0], $fields[1],'id');
         }
 
         $data = $database->getConnection()->query($query);

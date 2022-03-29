@@ -16,36 +16,20 @@ class Delete
         return $querydelete;
     }
 
-    //Delete row from specific table
-    //TODO Delete this function and replace with deleteRowWithField
-    public static function deleteRow($table, $id)
-    {
-
-        $database = new Database();
-        $database->connect();
-
-        //IF if is null, delete all rows
-        if ($id == null) {
-            $querydelete = "DELETE FROM $table";
-        } else {
-            $querydelete = "DELETE FROM $table WHERE id = $id ";
-        }
-
-        return $querydelete;
-    }
+  
 
 
     //Delete row from specefic table, but with specific field in where
-    public static function deleteRowWithField($table, $id, $field)
+    public static function deleteRow($table, $value, $field)
     {
 
         $database = new Database();
         $database->connect();
 
-        if ($id == null) {
+        if ($value == null) {
             $querydelete = "DELETE FROM $table";
         } else {
-            $querydelete = "DELETE FROM $table WHERE $field = $id ";
+            $querydelete = "DELETE FROM $table WHERE $field = $value";
         }
 
         return $querydelete;

@@ -315,7 +315,7 @@ class User implements Model
         if ($data) {
             return array('result' => true, 'message' => null);
         } else {
-            return array('result' => false, 'message' => null);
+            return array('result' => false, 'message' => "Error Query");
         }
     }
 
@@ -388,12 +388,6 @@ class User implements Model
         }
 
 
-
-        if(isset($fields['image'])){
-            if($fields['image'] == 'image'){
-                $fields['image'] = Common::getLink();
-            }               
-        }
 
         if (isset($fields['name'])) {
             //Works

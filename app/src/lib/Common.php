@@ -166,38 +166,6 @@ class Common
     }
 
 
-    public static function getLink()
-    {
-
-
-        $lenght = 30;
-        $parameters = "0123456789abcdefghijklmnopqrstuvwxyz";
-        $finalResult = "";
-        
-        for($i = 0; $i < $lenght; $i++){
-            $index = rand(0,strlen($parameters) - 1);
-            $finalResult .= $parameters[$index];
-        }
-        
-        $folderPath = "C:/xampp/htdocs/API_InfoAction/app/src/lib/user_pictures/";
-        $postdata = file_get_contents("php://input");
-        if (!empty($postdata)) {
-            $request = json_decode($postdata);
-            $image_parts = explode(";base64,", $request->image);
-            $image_type_aux = explode("image/", $image_parts[0]);
-            $image_base64 = base64_decode($image_parts[1]);
-            $file = $folderPath . $finalResult . '.webp';
-            if (file_put_contents($file, $image_base64)) {
-                $response[] = array('sts' => true, 'msg' => 'Successfully uploaded');
-            }else{
-                $response[] = array('sts' => false, 'msg' => 'error');
-            }
-        }
-
-        $path = "http://localhost/API_InfoAction/app/src/lib/user_pictures/".$finalResult .'.webp';
-        return $path;
-    }
-
     public static function makeMarkKeys($fields, $columns){
 
         $keys = array_keys($fields);

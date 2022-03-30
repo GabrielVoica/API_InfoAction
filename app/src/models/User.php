@@ -389,6 +389,12 @@ class User implements Model
 
 
 
+        if(isset($fields['image'])){
+            if($fields['image'] == 'image'){
+                $fields['image'] = Common::getLink();
+            }               
+        }
+
         if (isset($fields['name'])) {
             //Works
             if (!Validator::isText($fields['name'])) {

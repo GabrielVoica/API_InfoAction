@@ -37,3 +37,7 @@ rankingdata:
 session:
   route: "session"
   controller: "SessionController"
+ 
+badge: 
+ route: 'badge'
+ controller: 'BadgeController'

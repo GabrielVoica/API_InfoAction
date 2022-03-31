@@ -185,50 +185,52 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-        $queryidexist = Validator::isExist($fields[0],'id',$fields[2]);
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark['table'] = $fields[0];
+        $fieldsVal['code'] = $fields[1];
+        $fieldsMark = Common::makeMarkKeys($fieldsVal,$columns);
+        $fieldsMark['table'] = $fields[0];
+
+
+        $queryidexist = Validator::isExist($fieldsMark['table'],'code',$fieldsMark['code']);
         if($queryidexist > 1){
-            return array('result' => false, 'message' =>  $queryidexist['message']);
+            return array('result' => false, 'message' =>  'Code not exist');
 
         }
 
      
-        $querydelete = Get::getDataField($fields[0],$fields[1],'id');
-        $data = $database->getConnection()->query($querydelete);
+        $query = Get::getDataField($fieldsMark['table'],$fieldsMark['code'],'code');
+        $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
 
-        $tableDelete = "R_".$data['ranking_name'];
+        $table = "R_".$data['ranking_name'];
 
-
-
-        if(count($fields) == 1){
-            $querydelete = Delete::deleteRow($fields[0],null);
-        }
-        else{
-            $querydelete = Delete::deleteRow($fields[0],$fields[1]);
-
-        $data = $database->getConnection()->query($querydelete);
+        $query = Delete::deleteRow('rankingdata',$fieldsMark['code'],'code');
+        $data = $database->getConnection()->query($query);
 
 
 
         if ($data) {
-            $querydelete = Delete::deleteTable($tableDelete);
-            $data = $database->getConnection()->query($querydelete);
+            $query = Delete::deleteTable($table);
+            $data = $database->getConnection()->query($query);
 
-            $querydelete = Delete::deleteRowWithField('rankingmembers','id_ranking',$fields[1]);
-            $data = $database->getConnection()->query($querydelete);
+            $query = Delete::deleteRow('rankingmembers',$fieldsMark['code'],'code_ranking');
+            $data = $database->getConnection()->query($query);
 
-            $querydelete = Delete::deleteEventUpdatePoints($tableDelete);
-            $data = $database->getConnection()->query($querydelete);
+            $query = Delete::deleteEventUpdatePoints($table);
+            $data = $database->getConnection()->query($query);
 
-            return array('result' => false, 'message' => 'The insert has been made');
+
+            return array('result' => true, 'message' => null);
 
         } else {
-            return array('result' => false, 'message' => 'The insert has not been made');
+            return array('result' => false, 'message' => null);
         }
     }
 
-}
+
    
     public static function update(array $fields = null)
     {

@@ -36,4 +36,9 @@ rankingdata:
 # GET POST Session
 session:
   route: "session"
-  controller: "SessionController"  
+  controller: "SessionController"
+ 
+testing: 
+ route: 'testing'
+ controller: 'TestingController'
+ 

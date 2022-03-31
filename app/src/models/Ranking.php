@@ -9,8 +9,6 @@ require_once("src/lib/Common.php");
 require_once("src/lib/Delete.php");
 
 
-
-
 class Ranking implements Model
 {
 

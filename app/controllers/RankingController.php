@@ -37,7 +37,6 @@ class RankingController implements Controller
 
       if(count($params) > 2){
         $result = Ranking::get($paramsinput);
-  
       }
       else{
         $result = Ranking::getAll($paramsinput);

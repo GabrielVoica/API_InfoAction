@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '../../../vendor/autoload.php';
+require_once __DIR__ . '../../src/console/CreateRouteCommand.php';
+
+use Console\App\Commands\CreateRouteCommand;
+use Symfony\Component\Console\Application;
+ 
+$app = new Application();
+$app->add(new CreateRouteCommand());
+$app->run();

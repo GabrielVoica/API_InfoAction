@@ -26,7 +26,9 @@ class RankingController implements Controller
 
     {
 
-
+      if(count($params) < 2){
+        return BadRequestError::throw();
+      }
 
       $paramsinput['id-ranking'] = $params[1];
       if(count($params) > 2){

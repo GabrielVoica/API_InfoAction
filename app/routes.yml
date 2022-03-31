@@ -38,3 +38,16 @@ session:
   route: "session"
   controller: "SessionController"
  
+
+ 
+insignias: 
+ route: 'insignias'
+ controller: 'InsigniasController'
+ 
+insignias: 
+ route: 'insignias'
+ controller: 'InsigniasController'
+ 
+insignias: 
+ route: 'insignias'
+ controller: 'InsigniasController'

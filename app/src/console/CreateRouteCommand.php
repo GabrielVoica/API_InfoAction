@@ -38,23 +38,29 @@ class CreateRouteCommand extends Command
 
     public function returnControllerText($className)
     {
-        return 
-        "<?php\n\nrequire_once('services/responses/Response.php');
-        \nclass " . ucfirst($className) . "Controller implements Controller \n{
-        public function __construct(){\n
-        }\n
-
-        public function get(\$params){\n
-        }\n
+    return 
+    "<?php\n\nrequire_once('services/responses/Response.php');
+    \n// Happy coding :)
+    \nclass " . ucfirst($className) . "Controller implements Controller \n{
+    public function __construct(){\n
         
-        public function post(\$variables){\n
-        }\n
+    }\n
 
-        public function put(\$variables){\n
-        }\n
+    public function get(\$params){
+        return 'get';
+    }\n
+        
+    public function post(\$variables){
+        return 'post';
+    }\n
 
-        public function delete(\$variables){\n
-        }
+    public function put(\$variables){
+        return 'get';
+    }\n
+
+    public function delete(\$variables){
+        return 'delete';
+    }
         \n} 
         ";
     }

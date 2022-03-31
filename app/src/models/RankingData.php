@@ -84,15 +84,7 @@ class RankingData implements Model
         $fieldsKeys = array_keys($fields);
 
 
-        /*if(isset($fields['creationdate'])){
-            if($fields['creationdate'] == null){
-                $fields['creationdate'] = "CURRENT_TIMESTAMP";
-            }
-            else{
-                return array('result' => false, 'message' => 'Creation Date: put CURRENT_TIMESTAMP in value ');
-            }
-        }*/    
-
+     
         $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys, $columnsRequired, $columnsAll);
         if ($CheckFieldsInsert > 1) {
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
@@ -121,6 +113,14 @@ class RankingData implements Model
 
         if(isset($fields['description'])){
             $fields['description'] = str_replace("-"," ",$fields['description']);
+               
+        }
+
+        if(isset($fields['creationdate'])){
+            if($fields['creationdate'] != 'CURRENT_TIMESTAMP'){
+                return array('result' => false, 'message' => 'Creation Date: Put CURRENT_TIMESTAMP in variable');
+
+            }
                
         }
 

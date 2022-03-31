@@ -2,13 +2,17 @@
 
 require_once("services/Database.php");
 require_once("services/errors/NotFoundError.php");
-require_once("src/lib/Insert.php");
+
+
+require_once("src/lib/Common.php");
 require_once("src/lib/Create.php");
-require_once("src/lib/Validator.php");
 require_once("src/lib/Delete.php");
 require_once("src/lib/Get.php");
+require_once("src/lib/Insert.php");
 require_once("src/lib/Update.php");
-require_once("src/lib/Common.php");
+require_once("src/lib/Validator.php");
+
+
 
 
 class RankingData implements Model
@@ -68,25 +72,34 @@ class RankingData implements Model
 
     public static function insert(array $fields = null)
     {
+        $database = new Database();
+        $database->connect();
 
-        $columnsRequired =  Common::showRequiredColumns('rankingdata');
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+
+
+        $columnsRequired = Common::showRequiredColumns('rankingdata');
         $columnsAll = Common::showColumnsWithoutID('rankingdata');
-
         $fieldsKeys = array_keys($fields);
 
-        if(isset($fields['creationdate'])){
+
+        /*if(isset($fields['creationdate'])){
             if($fields['creationdate'] == null){
                 $fields['creationdate'] = "CURRENT_TIMESTAMP";
             }
-        }    
+            else{
+                return array('result' => false, 'message' => 'Creation Date: put CURRENT_TIMESTAMP in value ');
+            }
+        }*/    
 
-        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
-        if($CheckFieldsInsert > 1){
+        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys, $columnsRequired, $columnsAll);
+        if ($CheckFieldsInsert > 1) {
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
-
         }
 
-    
+
+
         if(isset($fields['ranking_name'])){
             //Works
            if (!Validator::isText($fields['ranking_name'])) {
@@ -100,7 +113,7 @@ class RankingData implements Model
            }
    
            //Works
-           if(!Validator::isExist('rankingdata','ranking_name',$fields['ranking_name'])){
+           if(!Validator::isExist('rankingdata','ranking_name',$fieldsMark['ranking_name'])){
                return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
            }
 
@@ -115,6 +128,10 @@ class RankingData implements Model
         if(isset($fields['code'])){
             if($fields['code'] == 'random'){
                 $fields['code'] = Common::randomCode();
+            }
+            else{
+                return array('result' => false, 'message' => 'Code: Put random in value');
+
             }               
         }
 
@@ -125,12 +142,14 @@ class RankingData implements Model
         }
        }
 
-        $database = new Database();
-        $database->connect();
 
         $columns = Common::showColumns('rankingdata');
-        $quotesFields = Common::makeMarkKeys($fields,$columns);
-        $query = Insert::makeInsertQuery('rankingdata', $fields, $quotesFields);
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $query = Insert::makeInsertQuery('rankingdata',$fieldsMark);
+        $data = $database->getConnection()->query($query);
+
+
+        $tablename = "R_".$fields['ranking_name'];
 
         $rankingstructure = array(
             "id" => "int",
@@ -142,22 +161,22 @@ class RankingData implements Model
         );
 
 
-        $tablename = "R_".$fields['ranking_name'];
-        $querycreate = Create::makeCreateQuery($tablename,$rankingstructure);
-
-        $data = $database->getConnection()->query($query);
         if ($data) {
-            $querycreate = Create::makeCreateQuery($tablename,$rankingstructure);
-            $data = $database->getConnection()->query($querycreate);
-            
-        //Create Event for table
+        $query = Create::makeCreateQuery($tablename,$rankingstructure);
+        $data = $database->getConnection()->query($query);
+             //Create Event for table
         $query = Create::createEventUpdadePoints($tablename);
         $data = $database->getConnection()->query($query);
+        return array('result' => true, 'message' => null);
 
-            return array('result' => false, 'message' => 'The insert has been made');
-        } else {
+        }
+        else {
             return array('result' => false, 'message' => 'The insert has not been made');
         }
+
+
+         
+      
     }
 
 
@@ -211,7 +230,6 @@ class RankingData implements Model
 
 }
    
-
     public static function update(array $fields = null)
     {
         $database = new Database();

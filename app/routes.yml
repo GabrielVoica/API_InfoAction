@@ -38,7 +38,3 @@ session:
   route: "session"
   controller: "SessionController"
  
-testing: 
- route: 'testing'
- controller: 'TestingController'
- 

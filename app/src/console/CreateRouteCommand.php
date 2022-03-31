@@ -23,7 +23,7 @@ class CreateRouteCommand extends Command
         $routes .= $this->returnRouteText($input->getArgument('routeName'));
         file_put_contents("app/routes.yml", $routes);
 
-        file_put_contents('app/controllers/' . ucfirst($input->getArgument('routeName') . 'Controller.php'), $this->returnControllerText());
+        file_put_contents('app/controllers/' . ucfirst($input->getArgument('routeName') . 'Controller.php'), $this->returnControllerText($input->getArgument('routeName')));
 
         return 1;
     }
@@ -36,9 +36,26 @@ class CreateRouteCommand extends Command
         return $text;
     }
 
-    public function returnControllerText()
+    public function returnControllerText($className)
     {
-        //TODO
-        return '';
+        return 
+        "<?php\n\nrequire_once('services/responses/Response.php');
+        \nclass " . ucfirst($className) . "Controller implements Controller \n{
+        public function __construct(){\n
+        }\n
+
+        public function get(\$params){\n
+        }\n
+        
+        public function post(\$variables){\n
+        }\n
+
+        public function put(\$variables){\n
+        }\n
+
+        public function delete(\$variables){\n
+        }
+        \n} 
+        ";
     }
 }

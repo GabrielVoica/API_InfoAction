@@ -28,8 +28,8 @@ class User implements Model
         $columns = Common::showColumns('user');
         $idData['id'] = $id;
 
-        $idMark = Common::makeMarkKeys($idData,$columns);
-        $query = Get::getDataField('user',$idMark['id'],'id');
+        $idMark = Common::makeMarkKeys($idData, $columns);
+        $query = Get::getDataField('user', $idMark['id'], 'id');
         $data = $database->getConnection()->query($query);
 
 
@@ -54,7 +54,7 @@ class User implements Model
         $query = Get::getAllData('user');
 
         $data = $database->getConnection()->query($query);
-     
+
 
         if ($data === false) {
             return array('result' => false, 'Error query select');
@@ -63,10 +63,10 @@ class User implements Model
             return array('result' => false, 'message' => "0 rows");
         }
 
-        while($array = mysqli_fetch_assoc($data)){
+        while ($array = mysqli_fetch_assoc($data)) {
             $wishlist[] = $array;
         }
- 
+
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
     }
@@ -79,20 +79,20 @@ class User implements Model
         $database->connect();
 
         $columns = Common::showColumns('user');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
         $query = Get::getDataField('user', $fieldsMark['email'], 'email');
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
-        if(isset($data['password']) && password_verify($fields['password'], $data['password'])) {
-            return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id'], 'type' => $data['user_type']]);        
+        if (isset($data['password']) && password_verify($fields['password'], $data['password'])) {
+            return array('result' => true, 'message' => null, 'data' =>   ['id' => $data['id'], 'type' => $data['user_type']]);
         } else {
-            return array('result' => false, 'message' => null,);        
+            return array('result' => false, 'message' => null,);
         }
     }
 
- 
+
 
     public static function insert(array $fields = null)
     {
@@ -103,7 +103,7 @@ class User implements Model
         unset($fields['conf_passwd']);
 
         $columns = Common::showColumns('user');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
 
         $columnsRequired = Common::showRequiredColumns('user');
@@ -137,6 +137,15 @@ class User implements Model
             }
         }
 
+        if(isset($fields['image'])){
+            if($fields['image'] == 'image'){
+                $fields['image'] = Common::getLink();
+            }
+            else{
+                return array('result' => false, 'message' => 'Code: Put random in value');
+
+            }               
+        }
 
         if (isset($fields['email'])) {
             //Works
@@ -166,9 +175,8 @@ class User implements Model
             }
 
             //Works
-                if($fields['password'] != $confirmPasswd){
+            if ($fields['password'] != $confirmPasswd) {
                 return array('result' => false, 'message' => 'Password not coincide');
-
             }
             //Works
             $PasswordCheck = Validator::isPassword($fields['password']);
@@ -177,8 +185,7 @@ class User implements Model
             } else {
                 $fields['password'] = password_hash($fields['password'], PASSWORD_DEFAULT);
             }
-        } 
-        else {
+        } else {
             $nameLenghtReturn = Validator::isLenght($fields['password'], 'user', 'password', 8, null);
             if ($nameLenghtReturn > 1) {
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
@@ -258,9 +265,9 @@ class User implements Model
                 return array('result' => false, 'message' => 'Bad type user, 0 for User, 1 for Teacher');
             }
         }
-    
+
         $columns = Common::showColumns('user');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
 
         $query = Insert::makeInsertQuery('user', $fieldsMark);
@@ -286,29 +293,29 @@ class User implements Model
 
 
         if (count($fields) == 1) {
-            $query = Delete::deleteRow($fields[0], null,null);
+            $query = Delete::deleteRow($fields[0], null, null);
         } else {
             $columns = Common::showColumns('user');
             $idData['id'] = $fields[1];
-            $fieldsMark = Common::makeMarkKeys($idData,$columns);
-    
-    
-           
+            $fieldsMark = Common::makeMarkKeys($idData, $columns);
+
+
+
             if (!Validator::isNumber($fields[1])) {
                 return array('result' => false, 'message' => 'User Type : Only numbers');
             }
-    
+
             $nameLenghtReturn = Validator::isLenght($fieldsMark['id'], 'user', 'id', 1, 5);
             if ($nameLenghtReturn > 1) {
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
-    
-    
+
+
             $queryidexist = Validator::isExist($fields[0], 'id', $fieldsMark['id']);
             if ($queryidexist >= 1) {
                 return array('result' => false, 'message' =>  $queryidexist['message']);
             }
-            $query = Delete::deleteRow($fields[0], $fields[1],'id');
+            $query = Delete::deleteRow($fields[0], $fields[1], 'id');
         }
 
         $data = $database->getConnection()->query($query);
@@ -329,7 +336,7 @@ class User implements Model
 
 
         $columns = Common::showColumns('user');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
 
         if (isset($fields['nick_name'])) {
@@ -390,10 +397,20 @@ class User implements Model
 
 
 
-        if(isset($fields['image'])){
-            if($fields['image'] == 'image'){
+        if (isset($fields['image'])) {
+
+            $query = GET::getDataField('user', $fieldsMark['id'], 'id');
+            $data = $database->getConnection()->query($query);
+            $data =  mysqli_fetch_assoc($data);
+            $image = $data['image'];
+            $imageFinal = substr($image, -35);
+            $ruta = __DIR__ . "\..\user_pictures/";
+            $delete = Delete::deleteFile($ruta, $imageFinal);
+
+
+            if ($fields['image'] == 'image') {
                 $fields['image'] = Common::getLink();
-            }               
+            }
         }
 
         if (isset($fields['name'])) {
@@ -461,15 +478,14 @@ class User implements Model
 
         if (!isset($fields['id'])) {
             return array('result' => false, 'message' =>  'ID field not exist');
-         
         }
-    
+
 
         $queryidexist = Validator::isExist('user', 'id', $fields['id']);
         if ($queryidexist > 1) {
             return array('result' => false, 'message' =>  $queryidexist['message']);
         }
-   
+
 
         if (isset($fields['user_type'])) {
             if (!Validator::isNumber($fields['user_type'])) {
@@ -481,9 +497,9 @@ class User implements Model
         }
 
         $columns = Common::showColumns('user');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
-        $query = Update::updateRow('user',$fieldsMark);
+        $query = Update::updateRow('user', $fieldsMark);
         $data = $database->getConnection()->query($query);
 
 

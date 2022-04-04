@@ -102,12 +102,21 @@ class Ranking implements Model
         $database->connect();
 
 
+        
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $columns = Common::showColumns('user');
+        $fieldsMark += Common::makeMarkKeys($fields,$columns);
+
+       
+
+
         //Post: Ranking id Validators
         if(!isset($fields['code'])){
             return array('result' => false, 'message' => 'Missing Code Ranking');
         }
         else{
-            if(Validator::isExist('rankingdata','code',$fields['code'])){
+            if(Validator::isExist('rankingdata','code',$fieldsMark['code'])){
                 return array('result' => false, 'message' => ''.$fields['code'].' not exist, use another');
             }
             $LenghtReturn = Validator::isLenght($fields['code'],'rankingdata','code',8,null);
@@ -118,31 +127,30 @@ class Ranking implements Model
 
 
         //POST: User id validators
-        if(!isset($fields['user_id'])){
+        if(!isset($fields['id'])){
             return array('result' => false, 'message' => 'Missing ID User');
         }
         else{
-            if(Validator::isText($fields['user_id'])){
+            if(Validator::isText($fields['id'])){
                 return array('result' => false, 'message' => 'User ID must be only numbers');
             }
-            if(Validator::isExist('user','id',$fields['user_id'])){
-                return array('result' => false, 'message' => ''.$fields['user_id'].' not exist, use another');
+            if(Validator::isExist('user','id',$fieldsMark['id'])){
+                return array('result' => false, 'message' => ''.$fields['id'].' not exist, use another');
             }
         }
 
 
 
 
-        //With ranking id, get ranking name and save ranking name in variable
-        $query = GET::getDataField('rankingdata',$fields['code'],'code');
+        //With ranking code, get ranking name and save ranking name in variable
+        $query = GET::getDataField('rankingdata',$fieldsMark['code'],'code');
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
-        $ranking_id = $data['ranking_name'];
         $ranking_name = "R_".$data['ranking_name'];
 
 
         //With user id, get user data and save in fields to make inserts
-        $query = GET::getDataField('user',$fields['user_id'],'id');
+        $query = GET::getDataField('user',$fieldsMark['id'],'id');
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
@@ -156,23 +164,30 @@ class Ranking implements Model
         $fields['level'] = 0;
 
         //Save ranking id and user id for save in ranking members, all rows
-        $rankingmembers['id_ranking'] = $ranking_id;
-        $rankingmembers['id_user'] = $fields['id'];
+        $rankingmembers['code_ranking'] = $fieldsMark['code'];
+        $rankingmembers['id_user'] = $fieldsMark['id'];
+
+
+        $columns = Common::showColumns($ranking_name);
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+
 
         //If ID user exist in table user, later user exist in ranking table
-        if(isset($fields['nick_name'])){
-            if(!Validator::isExist($ranking_name,'nick_name',$fields['nick_name'])){
-                return array('result' => false, 'message' => ''.$fields['nick_name'].' exist, use another');
+        if(isset($fields['id'])){
+            if(!Validator::isExist($ranking_name,'id',$fieldsMark['id'])){
+                return array('result' => false, 'message' => ''.$fields['id'].' exist, use another');
             }        
         }
      
+
         //Select required columns for ranking
         $columnsRequired = Common::showRequiredColumns($ranking_name);
         $columnsAll = Common::showColumns($ranking_name);
 
         //Delete ranking_id, user_id for make insert
         unset($fields['code']);
-        unset($fields['user_id']);
+        unset($fields['id']);
+        unset($fieldsMark['code']);
 
         //Function missing NOT NULL field
         $fieldsKeys = array_keys($fields);
@@ -184,7 +199,7 @@ class Ranking implements Model
 
         //Select rankingname, put insert fields and fields ranking
         $types = Common::showColumns($ranking_name);
-        $query = Insert::makeInsertQuery($ranking_name, $fields, $types);
+        $query = Insert::makeInsertQuery($ranking_name, $fieldsMark, $types);
         $data = $database->getConnection()->query($query);
 
         if ($data) {

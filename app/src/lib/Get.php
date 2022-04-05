@@ -46,6 +46,7 @@ class Get
             }
             $selectInnerFieldsFinal = substr($selectInnerFieldsFinal, 0, -1);
 
+            
 
             $query = "SELECT $selectFieldsFinal,$selectInnerFieldsFinal FROM $table ";
 

@@ -91,7 +91,15 @@ class Ranking implements Model
         while($array = mysqli_fetch_assoc($data)){
             $wishlist[] = $array;
         }
- 
+
+
+        
+        
+        foreach($wishlist as $imagenull){
+            $imagenull["image"] = "paco";
+        }
+
+        
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
      

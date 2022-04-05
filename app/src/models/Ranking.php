@@ -78,7 +78,6 @@ class Ranking implements Model
         $selectInnerFields = array( 0 => 'image');
         $query = Get::getAllData($rankingName,'id',$selectFields,'INNER JOIN','user','id',$selectInnerFields);
 
-        print_r($query);
         $data = $database->getConnection()->query($query);
      
 

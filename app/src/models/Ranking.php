@@ -73,8 +73,12 @@ class Ranking implements Model
         $dataRanking = mysqli_fetch_assoc($dataRanking);
         $rankingName = 'R_'.$dataRanking['ranking_name'];
 
-        $query = Get::getAllData($rankingName);
 
+        $selectFields = array( 0 => '*');
+        $selectInnerFields = array( 0 => 'image');
+        $query = Get::getAllData($rankingName,'id',$selectFields,'INNER JOIN','user','id',$selectInnerFields);
+
+        print_r($query);
         $data = $database->getConnection()->query($query);
      
 

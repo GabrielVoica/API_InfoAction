@@ -31,8 +31,6 @@ class Session implements Model
         $idSession['email'] = $id[1];
         $fieldsMark = Common::makeMarkKeys($idSession ,$columns);   
 
-        print_r($fieldsMark);
-
 
         if(Validator::isExist('user','email',$fieldsMark['email'])){
             return array('result' => false, 'message' => ''.$fieldsMark['email'].' not exist, try another');

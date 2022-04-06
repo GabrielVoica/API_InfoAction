@@ -341,7 +341,18 @@ class User implements Model
         $data =  mysqli_fetch_assoc($data);
 
 
-        $image = $data['image'];
+
+        if (!isset($fields['id'])) {
+            return array('result' => false, 'message' =>  'ID field not exist');
+        }
+
+
+        $queryidexist = Validator::isExist('user', 'id', $fields['id']);
+        if ($queryidexist > 1) {
+            return array('result' => false, 'message' =>  $queryidexist['message']);
+        }
+
+
         if (isset($fields['nick_name'])) {
             //Works
             if (!Validator::isText($fields['nick_name'])) {
@@ -403,8 +414,6 @@ class User implements Model
         if (isset($fields['image'])) {
 
           
-
-
             if ($fields['image'] == 'image') {
                 $query = GET::getDataField('user', $fieldsMark['id'], 'id');
                 $data = $database->getConnection()->query($query);
@@ -484,15 +493,6 @@ class User implements Model
         }
 
 
-        if (!isset($fields['id'])) {
-            return array('result' => false, 'message' =>  'ID field not exist');
-        }
-
-
-        $queryidexist = Validator::isExist('user', 'id', $fields['id']);
-        if ($queryidexist > 1) {
-            return array('result' => false, 'message' =>  $queryidexist['message']);
-        }
 
 
         if (isset($fields['user_type'])) {

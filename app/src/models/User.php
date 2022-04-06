@@ -141,10 +141,9 @@ class User implements Model
             if($fields['image'] == 'image'){
                 $fields['image'] = Common::getLink();
             }
-            else{
-                return array('result' => false, 'message' => 'Code: Put random in value');
-
-            }               
+            if($fields['image'] = "null"){
+                $fields['image'] = "https://avatars.dicebear.com/api/bottts/".$fields['nick_name'].".svg";
+            }            
         }
 
         if (isset($fields['email'])) {
@@ -334,11 +333,15 @@ class User implements Model
         $database->connect();
 
 
-
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
+        $query = Get::getDataField('user',$fields['id'],'id');
+        $data = $database->getConnection()->query($query);
+        $data =  mysqli_fetch_assoc($data);
 
+
+        $image = $data['image'];
         if (isset($fields['nick_name'])) {
             //Works
             if (!Validator::isText($fields['nick_name'])) {
@@ -399,18 +402,23 @@ class User implements Model
 
         if (isset($fields['image'])) {
 
-            $query = GET::getDataField('user', $fieldsMark['id'], 'id');
-            $data = $database->getConnection()->query($query);
-            $data =  mysqli_fetch_assoc($data);
-            $image = $data['image'];
-            $imageFinal = substr($image, -35);
-            $ruta = __DIR__ . "\..\user_pictures/";
-            $delete = Delete::deleteFile($ruta, $imageFinal);
+          
 
 
             if ($fields['image'] == 'image') {
+                $query = GET::getDataField('user', $fieldsMark['id'], 'id');
+                $data = $database->getConnection()->query($query);
+                $data =  mysqli_fetch_assoc($data);
+                $image = $data['image'];
+                $imageFinal = substr($image, -35);
+                $ruta = __DIR__ . "\..\user_pictures/";
+                $delete = Delete::deleteFile($ruta, $imageFinal);
                 $fields['image'] = Common::getLink();
             }
+
+            if($fields['image'] = "null"){
+                $fields['image'] = "https://avatars.dicebear.com/api/bottts/".$data['nick_name'].".svg";
+            }   
         }
 
         if (isset($fields['name'])) {

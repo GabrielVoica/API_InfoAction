@@ -48,13 +48,14 @@ class Delete
 
 
     public static function deleteFile($route, $file){
+
         $delete = unlink( $route.''.$file);
         
         if(!$delete){
             return array('result' => false, 'message' => 'File not exist');
         }
 
-        
+        return array('result' => true, 'message' => null);
 
     }
 }

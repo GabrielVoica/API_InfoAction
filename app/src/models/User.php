@@ -425,7 +425,7 @@ class User implements Model
                 $fields['image'] = Common::getLink();
             }
 
-            if($fields['image'] = "null"){
+            if($fields['image'] == "null"){
                 $fields['image'] = "https://avatars.dicebear.com/api/bottts/".$data['nick_name'].".svg";
             }   
         }

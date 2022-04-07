@@ -141,7 +141,7 @@ class User implements Model
             if($fields['image'] == 'image'){
                 $fields['image'] = Common::getLink();
             }
-            if($fields['image'] = 'null'){
+            if($fields['image'] == 'null'){
                 $fields['image'] = "https://avatars.dicebear.com/api/bottts/".$fields['nick_name'].".svg";
             }            
         }
@@ -287,17 +287,20 @@ class User implements Model
         $database->connect();
 
 
-        $query = Delete::deleteRow('cookies', $fields[1], 'user_id');
-        $data = $database->getConnection()->query($query);
-
 
         if (count($fields) == 1) {
+            $query = Delete::deleteRow('cookies', null,null);
+            $data = $database->getConnection()->query($query);
+
             $query = Delete::deleteRow($fields[0], null, null);
+
         } else {
+            
+            $query = Delete::deleteRow('cookies', $fields[1], 'user_id');
+            $data = $database->getConnection()->query($query);
             $columns = Common::showColumns('user');
             $idData['id'] = $fields[1];
             $fieldsMark = Common::makeMarkKeys($idData, $columns);
-
 
 
             if (!Validator::isNumber($fields[1])) {

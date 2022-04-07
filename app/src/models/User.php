@@ -413,15 +413,15 @@ class User implements Model
 
         if (isset($fields['image'])) {
 
-          
+            $query = GET::getDataField('user', $fieldsMark['id'], 'id');
+            $data = $database->getConnection()->query($query);
+            $data =  mysqli_fetch_assoc($data);
+            $image = $data['image'];
+            $imageFinal = substr($image, -35);
+            $ruta = __DIR__ . "\..\user_pictures/";
+            $delete = Delete::deleteFile($ruta, $imageFinal);
+
             if ($fields['image'] == 'image') {
-                $query = GET::getDataField('user', $fieldsMark['id'], 'id');
-                $data = $database->getConnection()->query($query);
-                $data =  mysqli_fetch_assoc($data);
-                $image = $data['image'];
-                $imageFinal = substr($image, -35);
-                $ruta = __DIR__ . "\..\user_pictures/";
-                $delete = Delete::deleteFile($ruta, $imageFinal);
                 $fields['image'] = Common::getLink();
             }
 

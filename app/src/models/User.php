@@ -138,10 +138,11 @@ class User implements Model
         }
 
         if(isset($fields['image'])){
+
             if($fields['image'] == 'image'){
                 $fields['image'] = Common::getLink();
             }
-            if($fields['image'] = 'null'){
+            if($fields['image'] == 'null'){
                 $fields['image'] = "https://avatars.dicebear.com/api/bottts/".$fields['nick_name'].".svg";
             }            
         }
@@ -418,8 +419,13 @@ class User implements Model
             $data =  mysqli_fetch_assoc($data);
             $image = $data['image'];
             $imageFinal = substr($image, -35);
-            $ruta = __DIR__ . "\..\user_pictures/";
-            $delete = Delete::deleteFile($ruta, $imageFinal);
+            $imageBot = substr($image, -4);
+           
+
+            if($imageBot != ".svg"){
+                $ruta = __DIR__ . "\..\user_pictures/";
+                $delete = Delete::deleteFile($ruta, $imageFinal);
+            }
 
             if ($fields['image'] == 'image') {
                 $fields['image'] = Common::getLink();

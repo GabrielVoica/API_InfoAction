@@ -49,6 +49,7 @@ class Delete
 
     public static function deleteFile($route, $file){
 
+
         $delete = unlink( $route.''.$file);
         
         if(!$delete){

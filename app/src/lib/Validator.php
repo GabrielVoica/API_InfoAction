@@ -106,7 +106,6 @@ class Validator
             $types = $database->getConnection()->query($columns_show);
             $types = mysqli_fetch_all($types);
 
-
             $max_lenght = $types[0][1];
             $max_lenght = substr($max_lenght, 0, -1);
             $max_lenght = substr($max_lenght, 8);

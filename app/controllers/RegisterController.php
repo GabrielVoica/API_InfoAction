@@ -39,7 +39,6 @@ class RegisterController implements Controller
 
     if ($result['result'] == true) {
       $response = Response::successful();
-      $cookie =  CookieService::createAuthCookie($variables['email'], $variables['password']);
       $response ['message'] = Response::successful()['message'];
       $cookie =  CookieService::createAuthCookie($variables['email'], $variables['password']);
       return $response;

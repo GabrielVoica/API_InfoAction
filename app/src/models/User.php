@@ -40,10 +40,36 @@ class User implements Model
         if (mysqli_num_rows($data) == 0) {
             return array('result' => false, 'message' => null);
         }
-
         $data = mysqli_fetch_assoc($data);
 
-        return array('result' => true, 'message' => null, 'data' => $data);
+
+        $query = Get::getDataField('rankingmembers', $idMark['id'], 'id');
+        $dataranking = $database->getConnection()->query($query);
+        while ($array = mysqli_fetch_assoc($dataranking)) {
+            $wishlist[] = $array;
+        }
+
+        $columns = Common::showColumns('rankingdata');
+
+        foreach($wishlist as $key){
+            print_r(Common::makeMarkKeys($key, $columns));
+            $idMark[] += Common::makeMarkKeys($key, $columns);
+        }
+
+
+        // print_r($idMark['ranking_name']);
+
+
+
+
+        /*foreach($dataranking as $dat){
+            $query = Get::getDataField('ranking', $dat, 'id_user');
+            $dataranking = $database->getConnection()->query($query);
+            $dataranking = mysqli_fetch_assoc($dataranking);
+        }*/
+
+
+        return array('result' => true, 'message' => null, 'data' => array($data,$wishlist));
     }
 
 

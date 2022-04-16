@@ -1,5 +1,7 @@
 <?php
 
+use Dotenv\Parser\Value;
+
 require_once("services/Database.php");
 require_once("services/errors/NotFoundError.php");
 
@@ -49,27 +51,31 @@ class User implements Model
             $wishlist[] = $array;
         }
 
+
         $columns = Common::showColumns('rankingdata');
 
+
+
+        $dataFinal = array();
         foreach($wishlist as $key){
-            print_r(Common::makeMarkKeys($key, $columns));
-            $idMark[] += Common::makeMarkKeys($key, $columns);
+            array_push($dataFinal,Common::makeMarkKeys($key, $columns));
         }
 
 
-        // print_r($idMark['ranking_name']);
 
-
-
-
-        /*foreach($dataranking as $dat){
-            $query = Get::getDataField('ranking', $dat, 'id_user');
+        $number = 0;
+        $finalwhitlist = array();
+        foreach($dataFinal as $dat){
+            $query = Get::getDataField('rankingdata', $dataFinal[$number]['ranking_name'], 'code');
             $dataranking = $database->getConnection()->query($query);
             $dataranking = mysqli_fetch_assoc($dataranking);
-        }*/
+            array_push($finalwhitlist,$dataranking);
+            $number++;
+
+        }
 
 
-        return array('result' => true, 'message' => null, 'data' => array($data,$wishlist));
+        return array('result' => true, 'message' => null, 'data' => array($data,$finalwhitlist));
     }
 
 

@@ -47,35 +47,36 @@ class User implements Model
 
         $query = Get::getDataField('rankingmembers', $idMark['id'], 'id');
         $dataranking = $database->getConnection()->query($query);
+
+
         while ($array = mysqli_fetch_assoc($dataranking)) {
-            $wishlist[] = $array;
+            $data['ranking_name'][] = $array['ranking_name'];
         }
 
-
-        $columns = Common::showColumns('rankingdata');
-
-
-
-        $dataFinal = array();
-        foreach($wishlist as $key){
-            array_push($dataFinal,Common::makeMarkKeys($key, $columns));
-        }
+        // $columns = Common::showColumns('rankingdata');
 
 
 
-        $number = 0;
-        $finalwhitlist = array();
-        foreach($dataFinal as $dat){
-            $query = Get::getDataField('rankingdata', $dataFinal[$number]['ranking_name'], 'code');
-            $dataranking = $database->getConnection()->query($query);
-            $dataranking = mysqli_fetch_assoc($dataranking);
-            array_push($finalwhitlist,$dataranking);
-            $number++;
-
-        }
+        // $dataFinal = array();
+        // foreach($wishlist as $key){
+        //     array_push($dataFinal,Common::makeMarkKeys($key, $columns));
+        // }
 
 
-        return array('result' => true, 'message' => null, 'data' => array($data,$finalwhitlist));
+
+        // $number = 0;
+        // $finalwhitlist = array();
+        // foreach($dataFinal as $dat){
+        //     $query = Get::getDataField('rankingdata', $dataFinal[$number]['ranking_name'], 'code');
+        //     $dataranking = $database->getConnection()->query($query);
+        //     $dataranking = mysqli_fetch_assoc($dataranking);
+        //     array_push($finalwhitlist,$dataranking);
+        //     $number++;
+
+        // }
+
+
+        return array('result' => true, 'message' => null, 'data' => $data);
     }
 
 

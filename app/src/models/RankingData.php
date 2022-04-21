@@ -11,6 +11,8 @@ require_once("src/lib/Get.php");
 require_once("src/lib/Insert.php");
 require_once("src/lib/Update.php");
 require_once("src/lib/Validator.php");
+require_once("src/models/Ranking.php");
+
 
 
 
@@ -167,6 +169,11 @@ class RankingData implements Model
              //Create Event for table
         $query = Create::createEventUpdadePoints($tablename);
         $data = $database->getConnection()->query($query);
+
+        $datainput['id'] = $fields['teacher_id'];
+        $datainput['code'] = $fields['code'];        
+        $query = Ranking::insert($datainput);
+        print_r($query);
         return array('result' => true, 'message' => null);
 
         }

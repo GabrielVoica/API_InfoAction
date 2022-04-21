@@ -113,13 +113,10 @@ class Ranking implements Model
         $database->connect();
 
 
-        
         $columns = Common::showColumns('rankingdata');
         $fieldsMark = Common::makeMarkKeys($fields,$columns);
         $columns = Common::showColumns('user');
         $fieldsMark += Common::makeMarkKeys($fields,$columns);
-
-       
 
 
         //Post: Ranking id Validators
@@ -165,7 +162,6 @@ class Ranking implements Model
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
-
         //Fields to make insert in Ranking Rows
         $fields['id'] = $data['id'];
         $fields['nick_name'] = $data['nick_name'];
@@ -174,13 +170,16 @@ class Ranking implements Model
         $fields['status'] = 0;
         $fields['level'] = 0;
 
+
         //Save ranking id and user id for save in ranking members, all rows
-        $rankingmembers['code_ranking'] = $fieldsMark['code'];
-        $rankingmembers['id_user'] = $fieldsMark['id'];
+        $rankingmembers['ranking_name'] = $fieldsMark['code'];
+        $rankingmembers['id'] = $fieldsMark['id'];
+
 
 
         $columns = Common::showColumns($ranking_name);
         $fieldsMark = Common::makeMarkKeys($fields,$columns);
+
 
 
         //If ID user exist in table user, later user exist in ranking table
@@ -189,16 +188,18 @@ class Ranking implements Model
                 return array('result' => false, 'message' => ''.$fields['id'].' exist, use another');
             }        
         }
+
      
 
         //Select required columns for ranking
         $columnsRequired = Common::showRequiredColumns($ranking_name);
         $columnsAll = Common::showColumns($ranking_name);
 
+
         //Delete ranking_id, user_id for make insert
         unset($fields['code']);
-        unset($fields['id']);
         unset($fieldsMark['code']);
+
 
         //Function missing NOT NULL field
         $fieldsKeys = array_keys($fields);
@@ -208,16 +209,15 @@ class Ranking implements Model
 
         }
 
-        //Select rankingname, put insert fields and fields ranking
-        $types = Common::showColumns($ranking_name);
-        $query = Insert::makeInsertQuery($ranking_name, $fieldsMark, $types);
+        $query = Insert::makeInsertQuery($ranking_name, $fieldsMark);
         $data = $database->getConnection()->query($query);
+
 
         if ($data) {
         //IF query is correct, insert in raking members ranking_id and user_id    
         $ranking_name = 'rankingmembers';    
         $types = Common::showColumns($ranking_name);
-        $query = Insert::makeInsertQuery($ranking_name, $rankingmembers, $types);
+        $query = Insert::makeInsertQuery($ranking_name, $rankingmembers);
         $data = $database->getConnection()->query($query);
 
             return array('result' => false, 'message' => 'The insert has been made');

@@ -53,28 +53,6 @@ class User implements Model
             $data['ranking_name'][] = $array['ranking_name'];
         }
 
-        // $columns = Common::showColumns('rankingdata');
-
-
-
-        // $dataFinal = array();
-        // foreach($wishlist as $key){
-        //     array_push($dataFinal,Common::makeMarkKeys($key, $columns));
-        // }
-
-
-
-        // $number = 0;
-        // $finalwhitlist = array();
-        // foreach($dataFinal as $dat){
-        //     $query = Get::getDataField('rankingdata', $dataFinal[$number]['ranking_name'], 'code');
-        //     $dataranking = $database->getConnection()->query($query);
-        //     $dataranking = mysqli_fetch_assoc($dataranking);
-        //     array_push($finalwhitlist,$dataranking);
-        //     $number++;
-
-        // }
-
 
         return array('result' => true, 'message' => null, 'data' => $data);
     }
@@ -104,8 +82,6 @@ class User implements Model
         return array('result' => true, 'message' => null, 'data' => $wishlist);
     }
 
-
-
     public static function login(array $fields = null)
     {
         $database = new Database();
@@ -124,8 +100,6 @@ class User implements Model
             return array('result' => false, 'message' => null,);
         }
     }
-
-
 
     public static function insert(array $fields = null)
     {
@@ -313,7 +287,6 @@ class User implements Model
         }
     }
 
-
     public static function delete($fields)
     {
 
@@ -362,7 +335,6 @@ class User implements Model
             return array('result' => false, 'message' => null);
         }
     }
-
 
     public static function update(array $fields = null)
     {
@@ -550,13 +522,46 @@ class User implements Model
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
         $query = Update::updateRow('user', $fieldsMark);
-        $data = $database->getConnection()->query($query);
+        $dat = User::get($fields['id']);
 
+        $number = 0;
 
-        if ($data) {
-            return array('result' => true, 'message' => 'The insert has been made');
-        } else {
-            return array('result' => false, 'message' => 'The insert has not been made');
+        $dataTable = array();
+        foreach($dat as $dap) {
+        $columns = Common::showColumns('rankingmembers');
+        $ranking_name['ranking_name'] = $dat['data']['ranking_name'][$number];
+        $fieldsMark = Common::makeMarkKeys($ranking_name, $columns);
+        $query = Get::getDataField('rankingmembers', $fieldsMark['ranking_name'], 'ranking_name');
+        print_r($query);
+        $dataranking = $database->getConnection()->query($query);
+        while ($array = mysqli_fetch_assoc($dataranking)) {
+            $wishlist[] = $array;
         }
+        $number++;
+        }
+        
+      
+        // while ($array = $dataranking) {
+        //     print_r($array);
+        // }
+
+        
+
+
+        // while ($array = mysqli_fetch_assoc($dataranking)) {
+        //     $data['ranking_name'][] = $array['ranking_name'];
+        // }
+
+        // print_r($data);
+        
+        // $data = $database->getConnection()->query($query);
+
+
+        // if ($data) {
+
+        //     return array('result' => true, 'message' => 'The insert has been made');
+        // } else {
+        //     return array('result' => false, 'message' => 'The insert has not been made');
+        // }
     }
 }

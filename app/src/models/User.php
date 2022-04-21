@@ -144,14 +144,14 @@ class User implements Model
             }
         }
 
-        if(isset($fields['image'])){
+        if (isset($fields['image'])) {
 
-            if($fields['image'] == 'image'){
+            if ($fields['image'] == 'image') {
                 $fields['image'] = Common::getLink();
             }
-            if($fields['image'] == 'null'){
-                $fields['image'] = "https://avatars.dicebear.com/api/bottts/".$fields['nick_name'].".svg";
-            }            
+            if ($fields['image'] == 'null') {
+                $fields['image'] = "https://avatars.dicebear.com/api/bottts/" . $fields['nick_name'] . ".svg";
+            }
         }
 
         if (isset($fields['email'])) {
@@ -296,13 +296,12 @@ class User implements Model
 
 
         if (count($fields) == 1) {
-            $query = Delete::deleteRow('cookies', null,null);
+            $query = Delete::deleteRow('cookies', null, null);
             $data = $database->getConnection()->query($query);
 
             $query = Delete::deleteRow($fields[0], null, null);
-
         } else {
-            
+
             $query = Delete::deleteRow('cookies', $fields[1], 'user_id');
             $data = $database->getConnection()->query($query);
             $columns = Common::showColumns('user');
@@ -345,7 +344,7 @@ class User implements Model
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
-        $query = Get::getDataField('user',$fields['id'],'id');
+        $query = Get::getDataField('user', $fields['id'], 'id');
         $data = $database->getConnection()->query($query);
         $data =  mysqli_fetch_assoc($data);
 
@@ -428,9 +427,9 @@ class User implements Model
             $image = $data['image'];
             $imageFinal = substr($image, -35);
             $imageBot = substr($image, -4);
-           
 
-            if($imageBot != ".svg"){
+
+            if ($imageBot != ".svg") {
                 $ruta = __DIR__ . "\..\user_pictures/";
                 $delete = Delete::deleteFile($ruta, $imageFinal);
             }
@@ -439,9 +438,9 @@ class User implements Model
                 $fields['image'] = Common::getLink();
             }
 
-            if($fields['image'] == "null"){
-                $fields['image'] = "https://avatars.dicebear.com/api/bottts/".$data['nick_name'].".svg";
-            }   
+            if ($fields['image'] == "null") {
+                $fields['image'] = "https://avatars.dicebear.com/api/bottts/" . $data['nick_name'] . ".svg";
+            }
         }
 
         if (isset($fields['name'])) {
@@ -520,48 +519,46 @@ class User implements Model
 
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
-
         $query = Update::updateRow('user', $fieldsMark);
-        $dat = User::get($fields['id']);
+        $data = $database->getConnection()->query($query);
 
-        $number = 0;
 
-        $dataTable = array();
-        foreach($dat as $dap) {
-        $columns = Common::showColumns('rankingmembers');
-        $ranking_name['ranking_name'] = $dat['data']['ranking_name'][$number];
-        $fieldsMark = Common::makeMarkKeys($ranking_name, $columns);
-        $query = Get::getDataField('rankingmembers', $fieldsMark['ranking_name'], 'ranking_name');
-        print_r($query);
-        $dataranking = $database->getConnection()->query($query);
-        while ($array = mysqli_fetch_assoc($dataranking)) {
-            $wishlist[] = $array;
+
+
+        if ($data) {
+            $dat = User::get($fields['id']);
+
+            for ($x = 0; $x < count($dat['data']['ranking_name']); $x++) {
+                $columns = Common::showColumns('rankingmembers');
+                $ranking_name['ranking_name'] = $dat['data']['ranking_name'][$x];
+                $fieldsMark = Common::makeMarkKeys($ranking_name, $columns);
+                $query = Get::getDataField('rankingdata', $fieldsMark['ranking_name'], 'code');
+                $dataranking = $database->getConnection()->query($query);
+                while ($array = mysqli_fetch_assoc($dataranking)) {
+                    $wishlist[] = $array;
+                }
+            }
+
+
+            if (isset($fields['lastname']) && isset($fields['lastname'])) {
+                $fieldsRankingUpdate['name_lastname'] = $fields['name'] . ' ' . $fields['lastname'];
+            }
+
+            $fieldsRankingUpdate['nick_name'] = $fields['nick_name'];
+            $fieldsRankingUpdate['id'] = $fields['id'];
+
+
+            for ($x = 0; $x < count($dat['data']['ranking_name']); $x++) {
+
+                $ranking_name = "R_" . $wishlist[$x]['ranking_name'];
+                $columns = Common::showColumns($ranking_name);
+                $fieldsUpdateRanking =  Common::makeMarkKeys($fieldsRankingUpdate, $columns);
+                $query = Update::updateRow($ranking_name, $fieldsUpdateRanking);
+                $data = $database->getConnection()->query($query);
+            }
+            return array('result' => true, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
         }
-        $number++;
-        }
-        
-      
-        // while ($array = $dataranking) {
-        //     print_r($array);
-        // }
-
-        
-
-
-        // while ($array = mysqli_fetch_assoc($dataranking)) {
-        //     $data['ranking_name'][] = $array['ranking_name'];
-        // }
-
-        // print_r($data);
-        
-        // $data = $database->getConnection()->query($query);
-
-
-        // if ($data) {
-
-        //     return array('result' => true, 'message' => 'The insert has been made');
-        // } else {
-        //     return array('result' => false, 'message' => 'The insert has not been made');
-        // }
     }
 }

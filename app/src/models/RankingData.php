@@ -246,19 +246,34 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-
+        if(isset($fields['actualcode'])){
+            $columns = Common::showColumns('rankingdata');
+            $wherevalue['code'] = $fields['actualcode'];
+            $fieldsMark = Common::makeMarkKeys($wherevalue, $columns);
+            $wherevalue = $fieldsMark['code'];
+            unset($fields['actualcode']);
+        }
+        else{
+            $columns = Common::showColumns('rankingdata');
+            $wherevalue['code'] = $fields['code'];
+            $fieldsMark = Common::makeMarkKeys($wherevalue, $columns);
+            $wherevalue = $fieldsMark['code'];
+            unset($fields['code']);
+        }
+      
 
         $columnsRequired = Common::showRequiredColumnsWhithID('rankingdata');
         $columnsAll = Common::showColumns('rankingdata');
-
         $fieldsKeys = array_keys($fields);
 
-     
         $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
         if($CheckFieldsInsert > 1){
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
         }
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
     
         if(isset($fields['ranking_name'])){
@@ -274,7 +289,7 @@ class RankingData implements Model
            }
    
            //Works
-           if(!Validator::isExist('rankingdata','ranking_name',$fields['ranking_name'])){
+           if(!Validator::isExist('rankingdata','ranking_name',$fieldsMark['ranking_name'])){
                return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
            }
 
@@ -313,22 +328,21 @@ class RankingData implements Model
        }
 
 
-        if(!isset($fields['id'])){
-            return array('result' => false, 'message' =>  'ID field not exist');
+        // if(!isset($fields['id'])){
+        //     return array('result' => false, 'message' =>  'ID field not exist');
 
-        }
+        // }
 
-        $queryidexist = Validator::isExist('rankingdata','id',$fields['id']);
-        if($queryidexist > 1){
-            return array('result' => false, 'message' =>  $queryidexist['message']);
+        // $queryidexist = Validator::isExist('rankingdata','id',$fields['id']);
+        // if($queryidexist > 1){
+        //     return array('result' => false, 'message' =>  $queryidexist['message']);
 
-        }
+        // }
 
-        $types = Common::showColumns('rankingdata');
-        print_r($fields);
-        $querydelete = Update::updateRow('rankingdata',$fields);
-        $data = $database->getConnection()->query($querydelete);
-
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        $query = Update::updateRow('rankingdata',$fieldsMark,'code',$wherevalue);
+        $data = $database->getConnection()->query($query);
 
 
         if ($data) {

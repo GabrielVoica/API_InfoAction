@@ -249,6 +249,7 @@ class Ranking implements Model
         if($queryidexist > 1){
             return array('result' => false, 'message' =>  $queryidexist['message']);
 
+
         }
 
         
@@ -260,17 +261,17 @@ class Ranking implements Model
 
         }
 
-        $data = $database->getConnection()->query($querydelete);
+        // $data = $database->getConnection()->query($querydelete);
 
-        if ($data) {
-            $fields[0] = 'rankingmembers';
-            $querydelete = Delete::deleteRowWithField($fields[0],$fields[1],'id_user');
-            $data = $database->getConnection()->query($querydelete);
+        // if ($data) {
+        //     $fields[0] = 'rankingmembers';
+        //     $querydelete = Delete::deleteRowWithField($fields[0],$fields[1],'id_user');
+        //     $data = $database->getConnection()->query($querydelete);
 
-            return array('result' => false, 'message' => 'The insert has been made');
-        } else {
-            return array('result' => false, 'message' => 'The insert has not been made');
-        }
+        //     return array('result' => false, 'message' => 'The insert has been made');
+        // } else {
+        //     return array('result' => false, 'message' => 'The insert has not been made');
+        // }
     }
 
     public static function deleteAll()

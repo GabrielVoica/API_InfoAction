@@ -171,9 +171,12 @@ class RankingData implements Model
         $data = $database->getConnection()->query($query);
 
         $datainput['id'] = $fields['teacher_id'];
-        $datainput['code'] = $fields['code'];        
-        $query = Ranking::insert($datainput);
-        print_r($query);
+        $datainput['ranking_name'] = $fields['code'];
+        
+        $columns = Common::showColumns('rankingmembers');
+        $fieldsMark = Common::makeMarkKeys($datainput,$columns);
+        $query = Insert::makeInsertQuery('rankingmembers',$ $fieldsMark);        
+        $data = $database->getConnection()->query($query);
         return array('result' => true, 'message' => null);
 
         }
@@ -217,13 +220,12 @@ class RankingData implements Model
         $query = Delete::deleteRow('rankingdata',$fieldsMark['code'],'code');
         $data = $database->getConnection()->query($query);
 
-
-
         if ($data) {
+
             $query = Delete::deleteTable($table);
             $data = $database->getConnection()->query($query);
 
-            $query = Delete::deleteRow('rankingmembers',$fieldsMark['code'],'code_ranking');
+            $query = Delete::deleteRow('rankingmembers',$fieldsMark['code'],'ranking_name');
             $data = $database->getConnection()->query($query);
 
             $query = Delete::deleteEventUpdatePoints($table);

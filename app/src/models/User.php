@@ -517,9 +517,12 @@ class User implements Model
             }
         }
 
+        $wherevalue = $fieldsMark['id'];
+        unset($fieldsMark['id']);
+        
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
-        $query = Update::updateRow('user', $fieldsMark);
+        $query = Update::updateRow('user', $fieldsMark,'id',$wherevalue);
         $data = $database->getConnection()->query($query);
 
 
@@ -553,7 +556,10 @@ class User implements Model
                 $ranking_name = "R_" . $wishlist[$x]['ranking_name'];
                 $columns = Common::showColumns($ranking_name);
                 $fieldsUpdateRanking =  Common::makeMarkKeys($fieldsRankingUpdate, $columns);
-                $query = Update::updateRow($ranking_name, $fieldsUpdateRanking);
+                $wherevalue = $fieldsUpdateRanking['id'];
+                unset($fieldsUpdateRanking['id']);
+    
+                $query = Update::updateRow($ranking_name, $fieldsUpdateRanking,'id',$wherevalue);
                 $data = $database->getConnection()->query($query);
             }
             return array('result' => true, 'message' => 'The insert has been made');

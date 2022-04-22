@@ -6,20 +6,14 @@ class Update
 {
 
     //TODO optimize this function
-    public static function updateRow($table, $fields)
+    public static function updateRow($table, $fields,$wherefield, $wherevalue)
     {
         $database = new Database();
         $database->connect();
 
-        $id = $fields['id'];
-        unset($fields['id']);
-
-
-
         $queryupdate = "UPDATE $table SET ";
 
-      
-
+    
         $keys = array_keys($fields);
         $values = array_values($fields);
 
@@ -30,7 +24,7 @@ class Update
 
         $queryupdate = substr($queryupdate, 0, -1);
 
-        $queryupdate = "$queryupdate WHERE id = $id";
+        $queryupdate = "$queryupdate WHERE $wherefield = $wherevalue";
 
 
         return $queryupdate;

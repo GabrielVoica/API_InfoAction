@@ -325,7 +325,8 @@ class RankingData implements Model
         }
 
         $types = Common::showColumns('rankingdata');
-        $querydelete = Update::updateRow('rankingdata',$fields,$types);
+        print_r($fields);
+        $querydelete = Update::updateRow('rankingdata',$fields);
         $data = $database->getConnection()->query($querydelete);
 
 

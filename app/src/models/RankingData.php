@@ -246,22 +246,21 @@ class RankingData implements Model
         $database = new Database();
         $database->connect();
 
-        if(isset($fields['actualcode'])){
-            $columns = Common::showColumns('rankingdata');
-            $wherevalue['code'] = $fields['actualcode'];
-            $fieldsMark = Common::makeMarkKeys($wherevalue, $columns);
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+
+        if(isset($fields['coderandom'])){
             $wherevalue = $fieldsMark['code'];
-            unset($fields['actualcode']);
-        }
-        else{
-            $columns = Common::showColumns('rankingdata');
-            $wherevalue['code'] = $fields['code'];
-            $fieldsMark = Common::makeMarkKeys($wherevalue, $columns);
+            if($fields['coderandom'] == 'random'){
+                $fields['code'] = Common::randomCode();
+            }
+            unset($fields['coderandom']);
+                      
+        }else{
             $wherevalue = $fieldsMark['code'];
             unset($fields['code']);
         }
-      
-
+        
         $columnsRequired = Common::showRequiredColumnsWhithID('rankingdata');
         $columnsAll = Common::showColumns('rankingdata');
         $fieldsKeys = array_keys($fields);
@@ -271,9 +270,7 @@ class RankingData implements Model
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
 
         }
-
-        $columns = Common::showColumns('rankingdata');
-        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+     
 
     
         if(isset($fields['ranking_name'])){
@@ -301,11 +298,6 @@ class RankingData implements Model
         }
 
 
-        if(isset($fields['code'])){
-            if($fields['code'] == 'random'){
-                $fields['code'] = Common::randomCode();
-            }               
-        }
        if(isset($fields['teacher_id'])){
         if(!Validator::isNumber($fields['teacher_id'])){
             return array('result' => false, 'message' => 'Teacher_ID : Only numbers');

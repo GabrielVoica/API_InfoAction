@@ -96,6 +96,9 @@ class RankingData implements Model
 
         if(isset($fields['ranking_name'])){
             //Works
+            $fields['ranking_name'] = str_replace("%20"," ",$fields['ranking_name']);
+
+            
            if (!Validator::isText($fields['ranking_name'])) {
                return array('result' => false, 'message' => 'Ranking Name must include only letters');
            }
@@ -111,10 +114,18 @@ class RankingData implements Model
                return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
            }
 
+           
+
        }
 
         if(isset($fields['description'])){
-            $fields['description'] = str_replace("-"," ",$fields['description']);
+            $fields['description'] = str_replace("%20"," ",$fields['description']);
+
+            $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','description',5,null);
+            if($LenghtReturn > 1){
+                return array('result' => false, 'message' => $LenghtReturn['message']);
+            }
+    
                
         }
 
@@ -176,7 +187,7 @@ class RankingData implements Model
         
         $columns = Common::showColumns('rankingmembers');
         $fieldsMark = Common::makeMarkKeys($datainput,$columns);
-        $query = Insert::makeInsertQuery('rankingmembers',$ $fieldsMark);        
+        $query = Insert::makeInsertQuery('rankingmembers',$fieldsMark);        
         $data = $database->getConnection()->query($query);
         return array('result' => true, 'message' => null);
 
@@ -254,6 +265,8 @@ class RankingData implements Model
             $wherevalue = $fieldsMark['code'];
             if($fields['coderandom'] == 'random'){
                 $fields['code'] = Common::randomCode();
+                $codernadom['ranking_name'] = $fields['code'];
+
             }
             unset($fields['coderandom']);
                       
@@ -338,7 +351,16 @@ class RankingData implements Model
         $data = $database->getConnection()->query($query);
 
 
+  
+
         if ($data) {
+            if(isset($codernadom['ranking_name'])){
+                $columns = Common::showColumns('rankingmembers');
+                $fieldsMembers['ranking_name'] = $wherevalue;
+                $coderandomMark = Common::makeMarkKeys($codernadom, $columns);
+                $query = Update::updateRow('rankingmembers',$coderandomMark,'ranking_name',$fieldsMembers['ranking_name']);
+                $data = $database->getConnection()->query($query);
+                }
             return array('result' => false, 'message' => 'The insert has been made');
         } else {
             return array('result' => false, 'message' => 'The insert has not been made');

@@ -289,6 +289,8 @@ class RankingData implements Model
     
         if(isset($fields['ranking_name'])){
             //Works
+            $fields['ranking_name'] = str_replace("%20"," ",$fields['ranking_name']);
+
            if (!Validator::isText($fields['ranking_name'])) {
                return array('result' => false, 'message' => 'Ranking Name must include only letters');
            }
@@ -304,11 +306,16 @@ class RankingData implements Model
                return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
            }
 
+
        }
 
         if(isset($fields['description'])){
-            $fields['description'] = str_replace("-"," ",$fields['description']);
-               
+            $fields['description'] = str_replace("%20"," ",$fields['description']);
+
+            $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','description',5,null);
+            if($LenghtReturn > 1){
+                return array('result' => false, 'message' => $LenghtReturn['message']);
+            }               
         }
 
 

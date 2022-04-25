@@ -313,7 +313,7 @@ class RankingData implements Model
         if(isset($fields['description'])){
             $fields['description'] = str_replace("%20"," ",$fields['description']);
 
-            $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','description',5,null);
+            $LenghtReturn = Validator::isLenght($fields['description'],'rankingdata','description',5,null);
             if($LenghtReturn > 1){
                 return array('result' => false, 'message' => $LenghtReturn['message']);
             }               

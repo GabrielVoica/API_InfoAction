@@ -543,11 +543,23 @@ class User implements Model
             }
 
 
-            if (isset($fields['lastname']) && isset($fields['lastname'])) {
+
+            if (!isset($fields['name']) && isset($fields['lastname'])) {
+                $fieldsRankingUpdate['name_lastname'] = $dat['name'] . ' ' . $fields['lastname'];
+            }
+            if (isset($fields['name']) && !isset($fields['lastname'])) {
+                $fieldsRankingUpdate['name_lastname'] = $fields['name'] . ' ' . $dat['lastname'];
+                print_r($fieldsRankingUpdate);
+
+            }
+            if (isset($fields['name']) && isset($fields['lastname'])) {
                 $fieldsRankingUpdate['name_lastname'] = $fields['name'] . ' ' . $fields['lastname'];
             }
 
+
+            if (isset($fields['nick_name'])){
             $fieldsRankingUpdate['nick_name'] = $fields['nick_name'];
+         }
             $fieldsRankingUpdate['id'] = $fields['id'];
 
 

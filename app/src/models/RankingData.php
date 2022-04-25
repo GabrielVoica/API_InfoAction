@@ -98,7 +98,7 @@ class RankingData implements Model
             //Works
             $fields['ranking_name'] = str_replace("%20"," ",$fields['ranking_name']);
 
-            
+
            if (!Validator::isText($fields['ranking_name'])) {
                return array('result' => false, 'message' => 'Ranking Name must include only letters');
            }
@@ -155,7 +155,7 @@ class RankingData implements Model
         }
        }
 
-
+        $fields['members'] = 0;
         $columns = Common::showColumns('rankingdata');
         $fieldsMark = Common::makeMarkKeys($fields,$columns);
         $query = Insert::makeInsertQuery('rankingdata',$fieldsMark);
@@ -170,7 +170,8 @@ class RankingData implements Model
             "name_lastname" => "varchar(40)",
             "points" => "int",
             "level" => 'int',
-            "status" => "int"
+            "status" => "int",
+            
 
         );
 

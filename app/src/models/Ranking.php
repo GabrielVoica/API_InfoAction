@@ -167,7 +167,7 @@ class Ranking implements Model
 
 
         //Save ranking id and user id for save in ranking members, all rows
-        $rankingmembers['ranking_name'] = $fieldsMark['code'];
+        $rankingmembers['code'] = $fieldsMark['code'];
         $rankingmembers['id'] = $fieldsMark['id'];
 
 

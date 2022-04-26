@@ -238,7 +238,7 @@ class RankingData implements Model
             $query = Delete::deleteTable($table);
             $data = $database->getConnection()->query($query);
 
-            $query = Delete::deleteRow('rankingmembers',$fieldsMark['code'],'ranking_name');
+            $query = Delete::deleteRow('rankingmembers',$fieldsMark['code'],'code');
             $data = $database->getConnection()->query($query);
 
             $query = Delete::deleteEventUpdatePoints($table);
@@ -366,7 +366,7 @@ class RankingData implements Model
                 $columns = Common::showColumns('rankingmembers');
                 $fieldsMembers['ranking_name'] = $wherevalue;
                 $coderandomMark = Common::makeMarkKeys($codernadom, $columns);
-                $query = Update::updateRow('rankingmembers',$coderandomMark,'ranking_name',$fieldsMembers['ranking_name']);
+                $query = Update::updateRow('rankingmembers',$coderandomMark,'ranking_name',$fieldsMembers['code']);
                 $data = $database->getConnection()->query($query);
                 }
             return array('result' => false, 'message' => 'The insert has been made');

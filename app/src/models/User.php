@@ -296,13 +296,15 @@ class User implements Model
 
 
         if (count($fields) == 1) {
-            $query = Delete::deleteRow('cookies', null, null);
-            $data = $database->getConnection()->query($query);
 
-            $query = Delete::deleteRow($fields[0], null, null);
+            // $query = Delete::deleteRow('cookies', null);
+            // $data = $database->getConnection()->query($query);
+
+            // $query = Delete::deleteRow($fields[0], null, null);
         } else {
 
-            $query = Delete::deleteRow('cookies', $fields[1], 'user_id');
+            $fieldsInput = ['user_id' => $fields[1]];
+            $query = Delete::deleteRow('cookies', $fieldsInput);
             $data = $database->getConnection()->query($query);
             $columns = Common::showColumns('user');
             $idData['id'] = $fields[1];
@@ -323,7 +325,9 @@ class User implements Model
             if ($queryidexist >= 1) {
                 return array('result' => false, 'message' =>  $queryidexist['message']);
             }
-            $query = Delete::deleteRow($fields[0], $fields[1], 'id');
+
+            $fieldsInput = ['id' => $fields[1]];
+            $query = Delete::deleteRow($fields[0], $fieldsInput);
         }
 
         $data = $database->getConnection()->query($query);

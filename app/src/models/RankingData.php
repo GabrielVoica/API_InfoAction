@@ -235,7 +235,8 @@ class RankingData implements Model
 
         $table = "R_".$data['ranking_name'];
 
-        $query = Delete::deleteRow('rankingdata',$fieldsMark['code'],'code');
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $query = Delete::deleteRow('rankingdata',$fieldsInput);
         $data = $database->getConnection()->query($query);
 
         if ($data) {
@@ -243,7 +244,8 @@ class RankingData implements Model
             $query = Delete::deleteTable($table);
             $data = $database->getConnection()->query($query);
 
-            $query = Delete::deleteRow('rankingmembers',$fieldsMark['code'],'code');
+            $fieldsInput = ['code' => $fieldsMark['code']];
+            $query = Delete::deleteRow('rankingmembers',$fieldsInput);
             $data = $database->getConnection()->query($query);
 
             $query = Delete::deleteEventUpdatePoints($table);

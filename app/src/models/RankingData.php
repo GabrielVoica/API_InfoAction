@@ -121,6 +121,11 @@ class RankingData implements Model
         if(isset($fields['description'])){
             $fields['description'] = str_replace("%20"," ",$fields['description']);
 
+            if (!Validator::isText($fields['description'])) {
+                return array('result' => false, 'message' => 'Description must include only letters');
+            }
+            
+
             $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','description',5,null);
             if($LenghtReturn > 1){
                 return array('result' => false, 'message' => $LenghtReturn['message']);
@@ -184,11 +189,11 @@ class RankingData implements Model
         $data = $database->getConnection()->query($query);
 
         $datainput['id'] = $fields['teacher_id'];
-        $datainput['ranking_name'] = $fields['code'];
+        $datainput['code'] = $fields['code'];
         
         $columns = Common::showColumns('rankingmembers');
         $fieldsMark = Common::makeMarkKeys($datainput,$columns);
-        $query = Insert::makeInsertQuery('rankingmembers',$fieldsMark);        
+        $query = Insert::makeInsertQuery('rankingmembers',$fieldsMark);
         $data = $database->getConnection()->query($query);
         return array('result' => true, 'message' => null);
 

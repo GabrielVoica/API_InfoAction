@@ -11,6 +11,7 @@ require_once("src/lib/Update.php");
 
 
 
+
 class Ranking implements Model
 {
 
@@ -215,7 +216,7 @@ class Ranking implements Model
 
 
             $fieldsUpdate['members'] = 'members + 1';
-            $query = Update::updateRow('rankingdata', $fieldsUpdate,'code',$rankingmembers['ranking_name']);
+            $query = Update::updateRow('rankingdata', $fieldsUpdate,'code',$rankingmembers['code']);
             $data = $database->getConnection()->query($query);
 
 
@@ -233,39 +234,52 @@ class Ranking implements Model
         $database = new Database();
         $database->connect();
 
-        $fields = $fields[1];
-        $fields = explode('-', $fields);
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+
+        $columns = Common::showColumns('user');
+        $fieldsMark += Common::makeMarkKeys($fields,$columns);
 
 
-        $tableExist = Validator::isExistTable($fields[0]);
+        $query = GET::getDataField('rankingdata',$fieldsMark['code'],'code');
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+
+        $rankingName = "R_".$data['ranking_name'];
+
+
+        $tableExist = Validator::isExistTable($rankingName);
         if ($tableExist > 1) {
             return array('result' => false, 'message' =>  $tableExist['message']);
         }
 
 
-        $queryidexist = Validator::isExist($fields[0], 'id', $fields[1]);
+        $queryidexist = Validator::isExist($rankingName, 'id', $fields['id']);
         if ($queryidexist > 1) {
             return array('result' => false, 'message' =>  $queryidexist['message']);
         }
 
 
-        if (count($fields) == 1) {
-            $querydelete = Delete::deleteRow($fields[0], null);
-        } else {
-            $querydelete = Delete::deleteRow($fields[0], $fields[1]);
-        }
-
-        // $data = $database->getConnection()->query($querydelete);
-
-        // if ($data) {
-        //     $fields[0] = 'rankingmembers';
-        //     $querydelete = Delete::deleteRowWithField($fields[0],$fields[1],'id_user');
-        //     $data = $database->getConnection()->query($querydelete);
-
-        //     return array('result' => false, 'message' => 'The insert has been made');
+        // if (count($fields) == 1) {
+        //     $querydelete = Delete::deleteRow($fields[0], null);
         // } else {
-        //     return array('result' => false, 'message' => 'The insert has not been made');
+        //     $querydelete = Delete::deleteRow($fields[0], $fields[1]);
         // }
+
+        $fieldsInput = ['id' => $fieldsMark['id']];
+        $query = Delete::deleteRow($rankingName,$fieldsInput);
+        $data = $database->getConnection()->query($query);
+        
+        if ($data) {
+            $fieldsInput = ['id' => $fieldsMark['id'], 'code' => $fieldsMark['code']];        
+            $query = Delete::deleteRow('rankingmembers',$fieldsInput);
+            $data = $database->getConnection()->query($query);
+
+            return array('result' => false, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
     }
 
     public static function deleteAll()

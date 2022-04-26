@@ -20,19 +20,26 @@ class Delete
 
 
     //Delete row from specefic table, but with specific field in where
-    public static function deleteRow($table, $value, $field)
+    public static function deleteRow($table, $value)
     {
+        $keys = array_keys($value);
+        $values = array_values($value);
 
         $database = new Database();
         $database->connect();
 
         if ($value == null) {
-            $querydelete = "DELETE FROM $table";
+            $query = "DELETE FROM $table";
         } else {
-            $querydelete = "DELETE FROM $table WHERE $field = $value";
+            $query = "DELETE FROM $table WHERE "; 
+            
+            for ($x = 0; $x < count($keys); $x++) {
+                $query .= "$keys[$x] = $values[$x] AND ";
+            }
+            $query = substr($query, 0, -4);
         }
 
-        return $querydelete;
+        return $query;
     }
 
 

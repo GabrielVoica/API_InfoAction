@@ -80,8 +80,12 @@ class RankingController implements Controller
 
     public function delete($variables)
     {
-      $this->database->connect();
-      $result = Ranking::delete($variables,'user');
+
+      $paramsinput['code'] = $variables[1];
+      $paramsinput['id'] = $variables[2];
+
+      
+      $result = Ranking::delete($paramsinput,'user');
   
       $response = Response::successful();
       $response ['message'] = $result['message'];

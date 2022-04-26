@@ -50,7 +50,7 @@ class User implements Model
 
 
         while ($array = mysqli_fetch_assoc($dataranking)) {
-            $data['ranking_name'][] = $array['ranking_name'];
+            $data['code'][] = $array['code'];
         }
 
 

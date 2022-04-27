@@ -166,8 +166,14 @@ class Ranking implements Model
         $fields['nick_name'] = $data['nick_name'];
         $fields['name_lastname'] = $data['name'] . ' ' . $data['lastname'];
         $fields['points'] = 0;
+        $fields['pointsSpend'] = 1000;
         $fields['status'] = 0;
         $fields['level'] = 0;
+        $fields['responsabilidad'] = 0;
+        $fields['cooperacion'] = 0;
+        $fields['autonomia_e_iniciativa'] = 0;
+        $fields['gestion_emocional'] = 0;
+        $fields['habilidades_de_pensamiento'] = 0;
 
 
         //Save ranking id and user id for save in ranking members, all rows

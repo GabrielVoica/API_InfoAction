@@ -28,7 +28,8 @@ class Badge implements Model
         $idData['id'] = $id;
 
         $idMark = Common::makeMarkKeys($idData, $columns);
-        $query = Get::getDataField('badge', $idMark['id'], 'id');
+        $fieldsInput = ['id' => $idMark['id']];
+        $query = Get::getDataField('badge', $fieldsInput);
         $data = $database->getConnection()->query($query);
 
 
@@ -191,8 +192,8 @@ class Badge implements Model
         $columns = Common::showColumns('badge');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
-
-        $query = Get::getDataField('badge',$fields['id'],'id');
+        $fieldsInput = ['id' => $fields['id']];
+        $query = Get::getDataField('badge',$fieldsInput);
         $data = $database->getConnection()->query($query);
         $data =  mysqli_fetch_assoc($data);
 
@@ -236,7 +237,7 @@ class Badge implements Model
         $columns = Common::showColumns('badge');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
-        $query = Update::updateRow('badge', $fieldsMark);
+        $query = Update::updateRow('badge', $fieldsMark,null,null);
         $data = $database->getConnection()->query($query);
 
 

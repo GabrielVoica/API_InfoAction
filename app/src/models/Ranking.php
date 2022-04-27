@@ -24,8 +24,8 @@ class Ranking implements Model
         $idData['code'] = $id['id-ranking'];
         $idMark = Common::makeMarkKeys($idData, $columns);
 
-
-        $queryRanking = Get::getDataField('rankingdata', $idMark['code'], 'code');
+        $fieldsInput = ['code' => $idMark['code']];
+        $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
         $dataRanking = $database->getConnection()->query($queryRanking);
         $dataRanking = mysqli_fetch_assoc($dataRanking);
 
@@ -33,7 +33,8 @@ class Ranking implements Model
 
         $columns = Common::showColumns($rankingName);
         $idMark = Common::makeMarkKeys($id, $columns);
-        $query = Get::getDataField($rankingName, $idMark['id-user'], 'id');
+        $fieldsInput = ['id' => $idMark['id-user']];
+        $query = Get::getDataField($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
 
 
@@ -64,8 +65,8 @@ class Ranking implements Model
         $idData['code'] = $id['id-ranking'];
         $idMark = Common::makeMarkKeys($idData, $columns);
 
-
-        $queryRanking = Get::getDataField('rankingdata', $idMark['code'], 'code');
+        $fieldsInput = ['code' => $idMark['code']];
+        $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
         $dataRanking = $database->getConnection()->query($queryRanking);
 
         if (mysqli_num_rows($dataRanking) == 0) {
@@ -147,14 +148,16 @@ class Ranking implements Model
         }
 
         //With ranking code, get ranking name and save ranking name in variable
-        $query = GET::getDataField('rankingdata', $fieldsMark['code'], 'code');
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $query = GET::getDataField('rankingdata', $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
         $ranking_name = "R_" . $data['ranking_name'];
 
 
         //With user id, get user data and save in fields to make inserts
-        $query = GET::getDataField('user', $fieldsMark['id'], 'id');
+        $fieldsInput = ['id' => $fieldsMark['id']];
+        $query = GET::getDataField('user', $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
@@ -241,8 +244,8 @@ class Ranking implements Model
         $columns = Common::showColumns('user');
         $fieldsMark += Common::makeMarkKeys($fields,$columns);
 
-
-        $query = GET::getDataField('rankingdata',$fieldsMark['code'],'code');
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $query = GET::getDataField('rankingdata',$fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 

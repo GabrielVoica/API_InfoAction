@@ -30,7 +30,8 @@ class RankingData implements Model
         $idMark = Common::makeMarkKeys($idData,$columns);
 
 
-        $query = Get::getDataField('rankingdata',$idMark['code'],'code');
+        $fieldsInput = ['code' => $idMark['code']];
+        $query = Get::getDataField('rankingdata',$fieldsInput);
         $data = $database->getConnection()->query($query);
 
 
@@ -227,8 +228,8 @@ class RankingData implements Model
 
         }
 
-     
-        $query = Get::getDataField($fieldsMark['table'],$fieldsMark['code'],'code');
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $query = Get::getDataField($fieldsMark['table'],$fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 

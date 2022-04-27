@@ -36,14 +36,14 @@ class Session implements Model
             return array('result' => false, 'message' => ''.$fieldsMark['email'].' not exist, try another');
         }
 
-        
-        $query = Get::getDataField('user', $fieldsMark['email'],'email');
+        $fieldsInput = ['email' => $fieldsMark['email']];
+        $query = Get::getDataField('user', $fieldsInput);
 
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
     
-
-        $query = Get::getDataField('cookies', $data['id'],'user_id');
+        $fieldsInput = ['user_id' => $data['id']];
+        $query = Get::getDataField('cookies', $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 

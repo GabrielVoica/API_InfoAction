@@ -31,7 +31,8 @@ class User implements Model
         $idData['id'] = $id;
 
         $idMark = Common::makeMarkKeys($idData, $columns);
-        $query = Get::getDataField('user', $idMark['id'], 'id');
+        $fieldsInput = ['id' => $idMark['id']];
+        $query = Get::getDataField('user', $fieldsInput);
         $data = $database->getConnection()->query($query);
 
 
@@ -44,8 +45,8 @@ class User implements Model
         }
         $data = mysqli_fetch_assoc($data);
 
-
-        $query = Get::getDataField('rankingmembers', $idMark['id'], 'id');
+        $fieldsInput = ['id' => $idMark['id']];
+        $query = Get::getDataField('rankingmembers', $fieldsInput);
         $dataranking = $database->getConnection()->query($query);
 
 
@@ -90,7 +91,8 @@ class User implements Model
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
-        $query = Get::getDataField('user', $fieldsMark['email'], 'email');
+        $fieldsInput = ['email' => $fieldsMark['email']];
+        $query = Get::getDataField('user', $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
@@ -348,7 +350,8 @@ class User implements Model
         $columns = Common::showColumns('user');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
-        $query = Get::getDataField('user', $fields['id'], 'id');
+        $fieldsInput = ['id' => $fields['id']];
+        $query = Get::getDataField('user', $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data =  mysqli_fetch_assoc($data);
 
@@ -425,7 +428,8 @@ class User implements Model
 
         if (isset($fields['image'])) {
 
-            $query = GET::getDataField('user', $fieldsMark['id'], 'id');
+            $fieldsInput = ['id' => $fields['id']];
+            $query = GET::getDataField('user', $fieldsInput);
             $data = $database->getConnection()->query($query);
             $data =  mysqli_fetch_assoc($data);
             $image = $data['image'];

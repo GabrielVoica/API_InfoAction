@@ -38,7 +38,7 @@ class Create
         $database = new Database();
         $database->connect();
 
-        $querycreate = "CREATE EVENT updatePoints_$table ON SCHEDULE EVERY 1 WEEK STARTS '2022-02-28 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE $table set points = 1000";
+        $querycreate = "CREATE EVENT updatePoints_$table ON SCHEDULE EVERY 1 WEEK STARTS '2022-02-28 00:00:00' ON COMPLETION NOT PRESERVE ENABLE DO UPDATE $table set pointsSpend = 1000";
 
         return $querycreate;
     }

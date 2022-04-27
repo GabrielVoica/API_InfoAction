@@ -177,7 +177,11 @@ class RankingData implements Model
             "points" => "int",
             "level" => 'int',
             "status" => "int",
-            
+            "Responsabilidad" => 'int',
+            "Cooperación" => 'int',
+            "Autonomía e iniciativa" => 'int',
+            "Gestión emocional" => 'int',
+            "Habilidades de pensamiento" => 'int'
 
         );
 

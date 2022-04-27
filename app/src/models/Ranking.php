@@ -313,6 +313,14 @@ class Ranking implements Model
         unset($fields['code']);
         unset($fields['id']);
 
+        $fieldsInput = ['id' => $fieldsMark['id']];
+        $query = Get::getDataField($rankingName, $fieldsInput);
+        $data = $database->getConnection()->query($query);
+        $data =  mysqli_fetch_assoc($data);
+
+        $fields['points'] = $fields['points'] + $data['points']; 
+
+
 
         $columns = Common::showColumns($rankingName);
         $fieldsMark = Common::makeMarkKeys($fields, $columns);

@@ -75,7 +75,17 @@ class RankingController implements Controller
 
     public function put($variables)
     {
-        
+      $result = Ranking::update($variables);
+
+      if ($result['result'] == true) {
+        $response['code'] = Response::successful()['code'];
+        $response['message'] = Response::successful()['message'];
+        return $response;
+      } else {
+        $response = BadRequestError::throw();
+        $response['message'] = $result['message'];
+        return $response;
+      }
     }
 
     public function delete($variables)

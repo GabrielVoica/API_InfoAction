@@ -25,8 +25,6 @@ class Delete
         $keys = array_keys($value);
         $values = array_values($value);
 
-        $database = new Database();
-        $database->connect();
 
         if ($value == null) {
             $query = "DELETE FROM $table";

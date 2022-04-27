@@ -288,5 +288,41 @@ class Ranking implements Model
 
     public static function update(array $fields = null)
     {
+        $database = new Database();
+        $database->connect();
+
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        
+        $columns = Common::showColumns('user');
+        $fieldsMark += Common::makeMarkKeys($fields, $columns);
+
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $query = Get::getDataField('rankingdata', $fieldsInput);
+        $data = $database->getConnection()->query($query);
+        $data =  mysqli_fetch_assoc($data);
+
+        $rankingName = "R_".$data['ranking_name'];
+
+
+        $wherevalue = $fields['id'];
+        unset($fields['code']);
+        unset($fields['id']);
+
+
+        $columns = Common::showColumns($rankingName);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        $query = Update::updateRow($rankingName, $fieldsMark,'id',$wherevalue);
+        print_r($query);
+        $data = $database->getConnection()->query($query);
+
+        
+        if ($data) {
+            return array('result' => true, 'message' => null);
+        } else {
+            return array('result' => false, 'message' => null);
+        }
+
     }
 }

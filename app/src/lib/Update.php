@@ -19,7 +19,7 @@ class Update
 
 
         for ($y = 0; $y < count($fields); $y++) {
-            $queryupdate = "$queryupdate$keys[$y]=$values[$y],";
+            $queryupdate = "$queryupdate$keys[$y] = $values[$y],";
         }
 
         $queryupdate = substr($queryupdate, 0, -1);

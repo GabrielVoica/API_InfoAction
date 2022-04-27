@@ -80,7 +80,7 @@ class Ranking implements Model
         $selectFields = array(0 => '*');
         $selectInnerFields = array(0 => 'image');
         $query = Get::getAllData($rankingName, 'id', $selectFields, 'INNER JOIN', 'user', 'id', $selectInnerFields);
-
+        $query = $query.' ORDER BY points DESC';
         $data = $database->getConnection()->query($query);
 
 

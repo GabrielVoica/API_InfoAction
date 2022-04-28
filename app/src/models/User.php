@@ -232,19 +232,15 @@ class User implements Model
 
 
 
-        if (isset($fields['center_id'])) {
+        if (isset($fields['center'])) {
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['center_id'], 'user', 'center_id', 1, 5);
+            $nameLenghtReturn = Validator::isLenght($fields['center'], 'user', 'center', 5, null);
             if ($nameLenghtReturn > 1) {
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
-            //Works
-            if ($fields['center_id'] < 0) {
-                return array('result' => false, 'message' => 'No negative numbers');
-            }
-            //Works
-            if (!Validator::isNumber($fields['center_id'])) {
-                return array('result' => false, 'message' => 'Center ID : Only numbers');
+         
+            if (!Validator::isText($fields['center'])) {
+                return array('result' => false, 'message' => 'Lastname must include only letters');
             }
         }
 
@@ -480,20 +476,17 @@ class User implements Model
 
 
 
-        if (isset($fields['center_id'])) {
+        if (isset($fields['center'])) {
             //Works
-            $nameLenghtReturn = Validator::isLenght($fields['center_id'], 'user', 'center_id', 1, 5);
+            $nameLenghtReturn = Validator::isLenght($fields['center'], 'user', 'center', 5, null);
             if ($nameLenghtReturn > 1) {
                 return array('result' => false, 'message' => $nameLenghtReturn['message']);
             }
-            //Works
-            if ($fields['center_id'] < 0) {
-                return array('result' => false, 'message' => 'No negative numbers');
+            
+            if (!Validator::isText($fields['center'])) {
+                return array('result' => false, 'message' => 'Lastname must include only letters');
             }
-            //Works
-            if (!Validator::isNumber($fields['center_id'])) {
-                return array('result' => false, 'message' => 'Center ID : Only numbers');
-            }
+            
         }
 
         if (isset($fields['rol'])) {

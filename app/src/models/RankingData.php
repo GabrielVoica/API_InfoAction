@@ -186,6 +186,22 @@ class RankingData implements Model
 
         );
 
+        $rankingstructure2 = array(
+            "id" => "int",
+            "task_name" => "varchar(20)",
+            "description" => "varchar(40)",
+            "creationdate" => "int",
+            "pointsSpend" => "int",
+            "level" => 'int',
+            "status" => "int",
+            "responsabilidad" => 'int',
+            "cooperacion" => 'int',
+            "autonomia_e_iniciativa" => 'int',
+            "gestion_emocional" => 'int',
+            "habilidades_de_pensamiento" => 'int'
+
+        );
+
 
         if ($data) {
         $query = Create::makeCreateQuery($tablename,$rankingstructure);

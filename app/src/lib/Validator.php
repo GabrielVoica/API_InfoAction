@@ -75,7 +75,7 @@ class Validator
     //Function is Text
     public static function isText($value)
     {
-        if (preg_match('/[^a-z ]+/', $value)) {
+        if (preg_match('/[^a-zA-Z ]+/', $value)) {
             return false;
         } else {
             return true;

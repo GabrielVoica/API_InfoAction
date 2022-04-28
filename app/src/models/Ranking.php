@@ -80,7 +80,7 @@ class Ranking implements Model
         $selectFields = array(0 => '*');
         $selectInnerFields = array(0 => 'image');
         $query = Get::getAllData($rankingName, 'id', $selectFields, 'INNER JOIN', 'user', 'id', $selectInnerFields);
-        $query = $query.' ORDER BY points DESC';
+        $query = $query . ' ORDER BY points DESC';
         $data = $database->getConnection()->query($query);
 
 
@@ -225,7 +225,7 @@ class Ranking implements Model
 
 
             $fieldsUpdate['members'] = 'members + 1';
-            $query = Update::updateRow('rankingdata', $fieldsUpdate,'code',$rankingmembers['code']);
+            $query = Update::updateRow('rankingdata', $fieldsUpdate, 'code', $rankingmembers['code']);
             $data = $database->getConnection()->query($query);
 
 
@@ -245,17 +245,17 @@ class Ranking implements Model
 
 
         $columns = Common::showColumns('rankingdata');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
         $columns = Common::showColumns('user');
-        $fieldsMark += Common::makeMarkKeys($fields,$columns);
+        $fieldsMark += Common::makeMarkKeys($fields, $columns);
 
         $fieldsInput = ['code' => $fieldsMark['code']];
-        $query = GET::getDataField('rankingdata',$fieldsInput);
+        $query = GET::getDataField('rankingdata', $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
-        $rankingName = "R_".$data['ranking_name'];
+        $rankingName = "R_" . $data['ranking_name'];
 
 
         $tableExist = Validator::isExistTable($rankingName);
@@ -277,13 +277,19 @@ class Ranking implements Model
         // }
 
         $fieldsInput = ['id' => $fieldsMark['id']];
-        $query = Delete::deleteRow($rankingName,$fieldsInput);
+        $query = Delete::deleteRow($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
-        
+
         if ($data) {
-            $fieldsInput = ['id' => $fieldsMark['id'], 'code' => $fieldsMark['code']];        
-            $query = Delete::deleteRow('rankingmembers',$fieldsInput);
+            $fieldsInput = ['id' => $fieldsMark['id'], 'code' => $fieldsMark['code']];
+            $query = Delete::deleteRow('rankingmembers', $fieldsInput);
             $data = $database->getConnection()->query($query);
+
+
+            $fieldsUpdate['members'] = 'members - 1';
+            $query = Update::updateRow('rankingdata', $fieldsUpdate, 'code', $fieldsMark['code']);
+            $data = $database->getConnection()->query($query);
+
 
             return array('result' => false, 'message' => 'The insert has been made');
         } else {
@@ -303,7 +309,7 @@ class Ranking implements Model
 
         $columns = Common::showColumns('rankingdata');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
-        
+
         $columns = Common::showColumns('user');
         $fieldsMark += Common::makeMarkKeys($fields, $columns);
 
@@ -312,7 +318,7 @@ class Ranking implements Model
         $data = $database->getConnection()->query($query);
         $data =  mysqli_fetch_assoc($data);
 
-        $rankingName = "R_".$data['ranking_name'];
+        $rankingName = "R_" . $data['ranking_name'];
 
 
         $wherevalue = $fields['id'];
@@ -324,21 +330,38 @@ class Ranking implements Model
         $data = $database->getConnection()->query($query);
         $data =  mysqli_fetch_assoc($data);
 
-        $fields['points'] = $fields['points'] + $data['points']; 
 
-
+        switch ($fields) {
+            case isset($fields['points']):
+                $fields['points'] = $fields['points'] + $data['points'];
+                break;
+            case isset($fields['responsabilidad']):
+                $fields['responsabilidad'] = $fields['responsabilidad'] + $data['responsabilidad'];
+                break;
+            case isset($fields['cooperacion']):
+                $fields['cooperacion'] = $fields['cooperacion'] + $data['cooperacion'];
+                break;
+            case isset($fields['autonomia_e_iniciativa']):
+                $fields['autonomia_e_iniciativa'] = $fields['autonomia_e_iniciativa'] + $data['autonomia_e_iniciativa'];
+                break;
+            case isset($fields['gestion_emocional']):
+                $fields['gestion_emocional'] = $fields['gestion_emocional'] + $data['gestion_emocional'];
+                break;
+            case isset($fields['habilidades_de_pensamiento']):
+                $fields['habilidades_de_pensamiento'] = $fields['habilidades_de_pensamiento'] + $data['habilidades_de_pensamiento'];
+                break;
+        }
 
         $columns = Common::showColumns($rankingName);
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
-        $query = Update::updateRow($rankingName, $fieldsMark,'id',$wherevalue);
+        $query = Update::updateRow($rankingName, $fieldsMark, 'id', $wherevalue);
         $data = $database->getConnection()->query($query);
 
-        
+
         if ($data) {
             return array('result' => true, 'message' => null);
         } else {
             return array('result' => false, 'message' => null);
         }
-
     }
 }

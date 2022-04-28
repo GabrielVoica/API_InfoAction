@@ -532,11 +532,13 @@ class User implements Model
         if ($data) {
             $dat = User::get($fields['id']);
 
-            for ($x = 0; $x < count($dat['data']['ranking_name']); $x++) {
+
+            for ($x = 0; $x < count($dat['data']['code']); $x++) {
                 $columns = Common::showColumns('rankingmembers');
-                $ranking_name['ranking_name'] = $dat['data']['ranking_name'][$x];
+                $ranking_name['code'] = $dat['data']['code'][$x];
                 $fieldsMark = Common::makeMarkKeys($ranking_name, $columns);
-                $query = Get::getDataField('rankingdata', $fieldsMark['ranking_name'], 'code');
+                $fieldsInput = ['code' => $fieldsMark['code']];
+                $query = Get::getDataField('rankingdata', $fieldsInput);
                 $dataranking = $database->getConnection()->query($query);
                 while ($array = mysqli_fetch_assoc($dataranking)) {
                     $wishlist[] = $array;
@@ -564,7 +566,8 @@ class User implements Model
             $fieldsRankingUpdate['id'] = $fields['id'];
 
 
-            for ($x = 0; $x < count($dat['data']['ranking_name']); $x++) {
+
+            for ($x = 0; $x < count($dat['data']['code']); $x++) {
 
                 $ranking_name = "R_" . $wishlist[$x]['ranking_name'];
                 $columns = Common::showColumns($ranking_name);

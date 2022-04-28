@@ -94,9 +94,11 @@ class Badge implements Model
         }
 
         if (isset($fields['name'])) {
-            //Works
+
+            $fields['name'] = str_replace("%20"," ",$fields['name']);
+
             if (!Validator::isText($fields['name'])) {
-                return array('result' => false, 'message' => 'Ranking Name must include only letters');
+                return array('result' => false, 'message' => 'Name badge must include only letters');
             }
 
             //Works
@@ -112,6 +114,12 @@ class Badge implements Model
         }
 
         if (isset($fields['description'])) {
+            $fields['description'] = str_replace("%20"," ",$fields['description']);
+
+            if (!Validator::isText($fields['description'])) {
+                return array('result' => false, 'message' => 'Description badge must include only letters');
+            }
+
             //Works
             $LenghtReturn = Validator::isLenght($fields['description'], 'badge', 'description', 4, null);
             if ($LenghtReturn > 1) {
@@ -168,7 +176,8 @@ class Badge implements Model
             }
 
 
-            $query = Delete::deleteRow($fields[0], $fields[1], 'id');
+            $fieldsInput = ['id' => $fields[1]];
+            $query = Delete::deleteRow($fields[0], $fieldsInput);
         }
 
 

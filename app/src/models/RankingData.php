@@ -168,6 +168,10 @@ class RankingData implements Model
 
 
         $tablename = "R_" . $fields['ranking_name'];
+        $tablenameTask = "R_" . $fields['ranking_name']."_Task";
+        $tablenameHistory = "R_" . $fields['ranking_name']."_History";
+
+
 
         $rankingstructure = array(
             "id" => "int",
@@ -185,25 +189,20 @@ class RankingData implements Model
 
         );
 
-        $rankingstructure2 = array(
+        $rankingstructureTask = array(
             "id" => "int",
             "task_name" => "varchar(20)",
             "description" => "varchar(40)",
-            "creationdate" => "int",
-            "pointsSpend" => "int",
-            "level" => 'int',
-            "status" => "int",
-            "responsabilidad" => 'int',
-            "cooperacion" => 'int',
-            "autonomia_e_iniciativa" => 'int',
-            "gestion_emocional" => 'int',
-            "habilidades_de_pensamiento" => 'int'
+            "creationdate" => "int"
 
         );
 
 
         if ($data) {
             $query = Create::makeCreateQuery($tablename, $rankingstructure);
+            $data = $database->getConnection()->query($query);
+
+            $query = Create::makeCreateQuery($tablenameTask, $rankingstructureTask);
             $data = $database->getConnection()->query($query);
             //Create Event for table
             $query = Create::createEventUpdadePoints($tablename);

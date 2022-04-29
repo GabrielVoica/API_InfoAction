@@ -27,12 +27,13 @@ class RankingData implements Model
 
         $columns = Common::showColumns('rankingdata');
         $idData['code'] = $id;
-        $idMark = Common::makeMarkKeys($idData,$columns);
+        $idMark = Common::makeMarkKeys($idData, $columns);
 
 
         $fieldsInput = ['code' => $idMark['code']];
-        $query = Get::getDataField('rankingdata',$fieldsInput);
+        $query = Get::getDataField('rankingdata', $fieldsInput);
         $data = $database->getConnection()->query($query);
+
 
 
 
@@ -55,7 +56,7 @@ class RankingData implements Model
         $query = Get::getAllData('rankingdata');
 
         $data = $database->getConnection()->query($query);
-     
+
 
         if ($data === false) {
             return array('result' => false, 'Error query select');
@@ -64,10 +65,10 @@ class RankingData implements Model
             return array('result' => false, 'message' => "0 rows");
         }
 
-        while($array = mysqli_fetch_assoc($data)){
+        while ($array = mysqli_fetch_assoc($data)) {
             $wishlist[] = $array;
         }
- 
+
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
     }
@@ -79,7 +80,7 @@ class RankingData implements Model
         $database->connect();
 
         $columns = Common::showColumns('rankingdata');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
 
         $columnsRequired = Common::showRequiredColumns('rankingdata');
@@ -87,7 +88,7 @@ class RankingData implements Model
         $fieldsKeys = array_keys($fields);
 
 
-     
+
         $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys, $columnsRequired, $columnsAll);
         if ($CheckFieldsInsert > 1) {
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
@@ -95,80 +96,70 @@ class RankingData implements Model
 
 
 
-        if(isset($fields['ranking_name'])){
+        if (isset($fields['ranking_name'])) {
             //Works
-            $fields['ranking_name'] = str_replace("%20"," ",$fields['ranking_name']);
+            $fields['ranking_name'] = str_replace("%20", " ", $fields['ranking_name']);
 
 
-           if (!Validator::isText($fields['ranking_name'])) {
-               return array('result' => false, 'message' => 'Ranking Name must include only letters');
-           }
-           
-           //Works
-           $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','ranking_name',4,null);
-           if($LenghtReturn > 1){
-               return array('result' => false, 'message' => $LenghtReturn['message']);
-           }
-   
-           //Works
-           if(!Validator::isExist('rankingdata','ranking_name',$fieldsMark['ranking_name'])){
-               return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
-           }
+            if (!Validator::isText($fields['ranking_name'])) {
+                return array('result' => false, 'message' => 'Ranking Name must include only letters');
+            }
 
-           
+            //Works
+            $LenghtReturn = Validator::isLenght($fields['ranking_name'], 'rankingdata', 'ranking_name', 4, null);
+            if ($LenghtReturn > 1) {
+                return array('result' => false, 'message' => $LenghtReturn['message']);
+            }
 
-       }
+            //Works
+            if (!Validator::isExist('rankingdata', 'ranking_name', $fieldsMark['ranking_name'])) {
+                return array('result' => false, 'message' => '' . $fields['ranking_name'] . ' exist, use another');
+            }
+        }
 
-        if(isset($fields['description'])){
-            $fields['description'] = str_replace("%20"," ",$fields['description']);
+        if (isset($fields['description'])) {
+            $fields['description'] = str_replace("%20", " ", $fields['description']);
 
             if (!Validator::isText($fields['description'])) {
                 return array('result' => false, 'message' => 'Description must include only letters');
             }
-            
 
-            $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','description',5,null);
-            if($LenghtReturn > 1){
+
+            $LenghtReturn = Validator::isLenght($fields['ranking_name'], 'rankingdata', 'description', 5, null);
+            if ($LenghtReturn > 1) {
                 return array('result' => false, 'message' => $LenghtReturn['message']);
             }
-    
-               
         }
 
-        if(isset($fields['creationdate'])){
-            if($fields['creationdate'] != 'CURRENT_TIMESTAMP'){
+        if (isset($fields['creationdate'])) {
+            if ($fields['creationdate'] != 'CURRENT_TIMESTAMP') {
                 return array('result' => false, 'message' => 'Creation Date: Put CURRENT_TIMESTAMP in variable');
-
             }
-               
         }
 
 
-        if(isset($fields['code'])){
-            if($fields['code'] == 'random'){
+        if (isset($fields['code'])) {
+            if ($fields['code'] == 'random') {
                 $fields['code'] = Common::randomCode();
-            }
-            else{
+            } else {
                 return array('result' => false, 'message' => 'Code: Put random in value');
-
-            }               
+            }
         }
 
-       if(isset($fields['teacher_id'])){
-        if(!Validator::isNumber($fields['teacher_id'])){
-            return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
-
+        if (isset($fields['teacher_id'])) {
+            if (!Validator::isNumber($fields['teacher_id'])) {
+                return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
+            }
         }
-       }
 
         $fields['members'] = 0;
         $columns = Common::showColumns('rankingdata');
-        $fieldsMark = Common::makeMarkKeys($fields,$columns);
-        $query = Insert::makeInsertQuery('rankingdata',$fieldsMark);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        $query = Insert::makeInsertQuery('rankingdata', $fieldsMark);
         $data = $database->getConnection()->query($query);
 
 
-        $tablename = "R_".$fields['ranking_name'];
+        $tablename = "R_" . $fields['ranking_name'];
 
         $rankingstructure = array(
             "id" => "int",
@@ -204,29 +195,23 @@ class RankingData implements Model
 
 
         if ($data) {
-        $query = Create::makeCreateQuery($tablename,$rankingstructure);
-        $data = $database->getConnection()->query($query);
-             //Create Event for table
-        $query = Create::createEventUpdadePoints($tablename);
-        $data = $database->getConnection()->query($query);
+            $query = Create::makeCreateQuery($tablename, $rankingstructure);
+            $data = $database->getConnection()->query($query);
+            //Create Event for table
+            $query = Create::createEventUpdadePoints($tablename);
+            $data = $database->getConnection()->query($query);
 
-        $datainput['id'] = $fields['teacher_id'];
-        $datainput['code'] = $fields['code'];
-        
-        $columns = Common::showColumns('rankingmembers');
-        $fieldsMark = Common::makeMarkKeys($datainput,$columns);
-        $query = Insert::makeInsertQuery('rankingmembers',$fieldsMark);
-        $data = $database->getConnection()->query($query);
-        return array('result' => true, 'message' => null);
+            $datainput['id'] = $fields['teacher_id'];
+            $datainput['code'] = $fields['code'];
 
-        }
-        else {
+            $columns = Common::showColumns('rankingmembers');
+            $fieldsMark = Common::makeMarkKeys($datainput, $columns);
+            $query = Insert::makeInsertQuery('rankingmembers', $fieldsMark);
+            $data = $database->getConnection()->query($query);
+            return array('result' => true, 'message' => null);
+        } else {
             return array('result' => false, 'message' => 'The insert has not been made');
         }
-
-
-         
-      
     }
 
 
@@ -239,26 +224,25 @@ class RankingData implements Model
         $columns = Common::showColumns('rankingdata');
         $fieldsMark['table'] = $fields[0];
         $fieldsVal['code'] = $fields[1];
-        $fieldsMark = Common::makeMarkKeys($fieldsVal,$columns);
+        $fieldsMark = Common::makeMarkKeys($fieldsVal, $columns);
         $fieldsMark['table'] = $fields[0];
 
 
-        $queryidexist = Validator::isExist($fieldsMark['table'],'code',$fieldsMark['code']);
-        if($queryidexist > 1){
+        $queryidexist = Validator::isExist($fieldsMark['table'], 'code', $fieldsMark['code']);
+        if ($queryidexist > 1) {
             return array('result' => false, 'message' =>  'Code not exist');
-
         }
 
         $fieldsInput = ['code' => $fieldsMark['code']];
-        $query = Get::getDataField($fieldsMark['table'],$fieldsInput);
+        $query = Get::getDataField($fieldsMark['table'], $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
 
-        $table = "R_".$data['ranking_name'];
+        $table = "R_" . $data['ranking_name'];
 
         $fieldsInput = ['code' => $fieldsMark['code']];
-        $query = Delete::deleteRow('rankingdata',$fieldsInput);
+        $query = Delete::deleteRow('rankingdata', $fieldsInput);
         $data = $database->getConnection()->query($query);
 
         if ($data) {
@@ -267,7 +251,7 @@ class RankingData implements Model
             $data = $database->getConnection()->query($query);
 
             $fieldsInput = ['code' => $fieldsMark['code']];
-            $query = Delete::deleteRow('rankingmembers',$fieldsInput);
+            $query = Delete::deleteRow('rankingmembers', $fieldsInput);
             $data = $database->getConnection()->query($query);
 
             $query = Delete::deleteEventUpdatePoints($table);
@@ -275,14 +259,13 @@ class RankingData implements Model
 
 
             return array('result' => true, 'message' => null);
-
         } else {
             return array('result' => false, 'message' => null);
         }
     }
 
 
-   
+
     public static function update(array $fields = null)
     {
         $database = new Database();
@@ -291,84 +274,84 @@ class RankingData implements Model
         $columns = Common::showColumns('rankingdata');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
-        if(isset($fields['coderandom'])){
+
+        if (isset($fields['code'])) {
+            if (Validator::isExist('rankingdata', 'code', $fieldsMark['code'])) {
+                return array('result' => false, 'message' => '' . $fields['code'] . ' not exist, use another');
+            }
+        }
+
+
+        if (isset($fields['coderandom'])) {
             $wherevalue = $fieldsMark['code'];
-            if($fields['coderandom'] == 'random'){
+            if ($fields['coderandom'] == 'random') {
                 $fields['code'] = Common::randomCode();
                 $codernadom['ranking_name'] = $fields['code'];
-
             }
             unset($fields['coderandom']);
-                      
-        }else{
+        } else {
             $wherevalue = $fieldsMark['code'];
             unset($fields['code']);
         }
-        
+
         $columnsRequired = Common::showRequiredColumnsWhithID('rankingdata');
         $columnsAll = Common::showColumns('rankingdata');
         $fieldsKeys = array_keys($fields);
 
-        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys,$columnsRequired,$columnsAll);
-        if($CheckFieldsInsert > 1){
+        $CheckFieldsInsert = Common::missingFieldsInsert($fieldsKeys, $columnsRequired, $columnsAll);
+        if ($CheckFieldsInsert > 1) {
             return array('result' => false, 'message' => $CheckFieldsInsert['message']);
-
         }
-     
 
-    
-        if(isset($fields['ranking_name'])){
+
+
+        if (isset($fields['ranking_name'])) {
             //Works
-            $fields['ranking_name'] = str_replace("%20"," ",$fields['ranking_name']);
+            $fields['ranking_name'] = str_replace("%20", " ", $fields['ranking_name']);
 
-           if (!Validator::isText($fields['ranking_name'])) {
-               return array('result' => false, 'message' => 'Ranking Name must include only letters');
-           }
-           
-           //Works
-           $LenghtReturn = Validator::isLenght($fields['ranking_name'],'rankingdata','ranking_name',4,null);
-           if($LenghtReturn > 1){
-               return array('result' => false, 'message' => $LenghtReturn['message']);
-           }
-   
-           //Works
-           if(!Validator::isExist('rankingdata','ranking_name',$fieldsMark['ranking_name'])){
-               return array('result' => false, 'message' => ''.$fields['ranking_name'].' exist, use another');
-           }
+            if (!Validator::isText($fields['ranking_name'])) {
+                return array('result' => false, 'message' => 'Ranking Name must include only letters');
+            }
 
-
-       }
-
-        if(isset($fields['description'])){
-            $fields['description'] = str_replace("%20"," ",$fields['description']);
-
-            $LenghtReturn = Validator::isLenght($fields['description'],'rankingdata','description',5,null);
-            if($LenghtReturn > 1){
+            //Works
+            $LenghtReturn = Validator::isLenght($fields['ranking_name'], 'rankingdata', 'ranking_name', 4, null);
+            if ($LenghtReturn > 1) {
                 return array('result' => false, 'message' => $LenghtReturn['message']);
-            }               
+            }
+
+            //Works
+            if (!Validator::isExist('rankingdata', 'ranking_name', $fieldsMark['ranking_name'])) {
+                return array('result' => false, 'message' => '' . $fields['ranking_name'] . ' exist, use another');
+            }
+        }
+
+        if (isset($fields['description'])) {
+            $fields['description'] = str_replace("%20", " ", $fields['description']);
+
+            $LenghtReturn = Validator::isLenght($fields['description'], 'rankingdata', 'description', 5, null);
+            if ($LenghtReturn > 1) {
+                return array('result' => false, 'message' => $LenghtReturn['message']);
+            }
         }
 
 
-       if(isset($fields['teacher_id'])){
-        if(!Validator::isNumber($fields['teacher_id'])){
-            return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
-
+        if (isset($fields['teacher_id'])) {
+            if (!Validator::isNumber($fields['teacher_id'])) {
+                return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
+            }
         }
-       }
 
-       if(isset($fields['teacher_id'])){
-        if(!Validator::isNumber($fields['teacher_id'])){
-            return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
-
+        if (isset($fields['teacher_id'])) {
+            if (!Validator::isNumber($fields['teacher_id'])) {
+                return array('result' => false, 'message' => 'Teacher_ID : Only numbers');
+            }
         }
-       }
 
-       if(isset($fields['members'])){
-        if(!Validator::isNumber($fields['members'])){
-            return array('result' => false, 'message' => 'Members : Only numbers');
-
+        if (isset($fields['members'])) {
+            if (!Validator::isNumber($fields['members'])) {
+                return array('result' => false, 'message' => 'Members : Only numbers');
+            }
         }
-       }
 
 
         // if(!isset($fields['id'])){
@@ -382,22 +365,46 @@ class RankingData implements Model
 
         // }
 
+
+        $fieldsInput = ['code' => $wherevalue];
+        $query = Get::getDataField('rankingdata', $fieldsInput);
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+        $oldTableName = $data['ranking_name'];
+
         $columns = Common::showColumns('rankingdata');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
-        $query = Update::updateRow('rankingdata',$fieldsMark,'code',$wherevalue);
+        $query = Update::updateRow('rankingdata', $fieldsMark, 'code', $wherevalue);
         $data = $database->getConnection()->query($query);
 
 
-  
+
 
         if ($data) {
-            if(isset($codernadom['ranking_name'])){
+            if (isset($codernadom['ranking_name'])) {
                 $columns = Common::showColumns('rankingmembers');
                 $fieldsMembers['ranking_name'] = $wherevalue;
                 $coderandomMark = Common::makeMarkKeys($codernadom, $columns);
-                $query = Update::updateRow('rankingmembers',$coderandomMark,'ranking_name',$fieldsMembers['code']);
+                $query = Update::updateRow('rankingmembers', $coderandomMark, 'ranking_name', $fieldsMembers['code']);
                 $data = $database->getConnection()->query($query);
-                }
+            }
+
+
+
+            if (isset($fields['ranking_name'])) {
+
+                $query = 'RENAME TABLE `R_' . $oldTableName . '` TO `R_' . $fields['ranking_name'] . '`';
+                $data = $database->getConnection()->query($query);
+
+
+                $query = Delete::deleteEventUpdatePoints('R_' . $oldTableName);
+                $data = $database->getConnection()->query($query);
+
+                
+                $query = Create::createEventUpdadePoints('R_' . $fields['ranking_name']);
+                $data = $database->getConnection()->query($query);
+            }
+
             return array('result' => false, 'message' => 'The insert has been made');
         } else {
             return array('result' => false, 'message' => 'The insert has not been made');

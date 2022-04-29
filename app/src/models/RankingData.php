@@ -46,6 +46,14 @@ class RankingData implements Model
 
         $data = mysqli_fetch_assoc($data);
 
+
+        $fieldsInput = ['id' => $data['teacher_id']];
+        $query = Get::getDataField('user', $fieldsInput);
+        $datauser = $database->getConnection()->query($query);
+        $datauser = mysqli_fetch_assoc($datauser);
+
+        $data['nick_name'] = $datauser['nick_name'];
+
         return array('result' => true, 'message' => null, 'data' => $data);
     }
 

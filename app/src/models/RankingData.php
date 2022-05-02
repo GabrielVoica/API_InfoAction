@@ -169,7 +169,7 @@ class RankingData implements Model
 
         $tablename = "R_" . $fields['ranking_name'];
         $tablenameTask = "R_" . $fields['ranking_name']."_Task";
-        $tablenameHistory = "R_" . $fields['ranking_name']."_History";
+        $tablenameHistory = "R_" . $fields['ranking_name']."_Notes";
 
 
 
@@ -193,7 +193,7 @@ class RankingData implements Model
             "id" => "int",
             "task_name" => "varchar(20)",
             "description" => "varchar(40)",
-            "creationdate" => "int"
+            "creationdate" => "datetime"
 
         );
 

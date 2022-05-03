@@ -35,7 +35,7 @@ class RankingTask implements Model
         $dataRanking = $database->getConnection()->query($queryRanking);
         $dataRanking = mysqli_fetch_assoc($dataRanking);
 
-        $rankingName = 'R_' . $dataRanking['ranking_name']. '_Task';
+        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Task';
 
         $columns = Common::showColumns($rankingName);
         $idMark = Common::makeMarkKeys($id, $columns);
@@ -55,7 +55,6 @@ class RankingTask implements Model
         $data = mysqli_fetch_assoc($data);
 
         return array('result' => true, 'message' => null, 'data' => $data);
-    
     }
 
 
@@ -78,7 +77,7 @@ class RankingTask implements Model
         }
 
         $dataRanking = mysqli_fetch_assoc($dataRanking);
-        $rankingName = 'R_' . $dataRanking['ranking_name'].'_History';
+        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_History';
 
 
         $selectFields = array(0 => '*');
@@ -105,23 +104,28 @@ class RankingTask implements Model
 
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
-        
     }
 
     public static function insert(array $fields = null)
     {
-        
+        $database = new Database();
+        $database->connect();
+
+        $columns = Common::showColumns('rankingdata');
+        $idMark = Common::makeMarkKeys($fields['code'], $columns);
+
+        $fieldsInput = ['code' => $fields['code']];
+        $query = GET::getDataField('rankingdata', $fieldsInput);
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+        $ranking_name = "R_" . $data['ranking_name'].'_Task';
     }
 
     public static function delete($fields)
     {
-
     }
 
     public static function update(array $fields = null)
     {
-        
     }
-        
-    
 }

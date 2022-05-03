@@ -203,6 +203,7 @@ class RankingData implements Model
             "id" => "int",
             "id_valued" => "int",
             "id_evaluator" => "int",
+            "task" => "int",
             "amount" => "int",
             "creationdate" => "datetime",
 
@@ -215,7 +216,6 @@ class RankingData implements Model
             $data = $database->getConnection()->query($query);
 
             $query = Create::makeCreateQuery($tablenameTask, $rankingstructureTask);
-            print_r($query);
             $data = $database->getConnection()->query($query);
 
             $query = Create::makeCreateQuery($tablenameNotes, $rankingstructureNotes);
@@ -319,7 +319,7 @@ class RankingData implements Model
             $wherevalue = $fieldsMark['code'];
             if ($fields['coderandom'] == 'random') {
                 $fields['code'] = Common::randomCode();
-                $codernadom['ranking_name'] = $fields['code'];
+                $codernadom['code'] = $fields['code'];
             }
             unset($fields['coderandom']);
         } else {
@@ -414,11 +414,11 @@ class RankingData implements Model
 
 
         if ($data) {
-            if (isset($codernadom['ranking_name'])) {
+            if (isset($codernadom['code'])) {
                 $columns = Common::showColumns('rankingmembers');
-                $fieldsMembers['ranking_name'] = $wherevalue;
+                $fieldsMembers['code'] = $wherevalue;
                 $coderandomMark = Common::makeMarkKeys($codernadom, $columns);
-                $query = Update::updateRow('rankingmembers', $coderandomMark, 'ranking_name', $fieldsMembers['code']);
+                $query = Update::updateRow('rankingmembers', $coderandomMark, 'code', $fieldsMembers['code']);
                 $data = $database->getConnection()->query($query);
             }
 

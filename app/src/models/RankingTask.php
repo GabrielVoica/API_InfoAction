@@ -111,21 +111,95 @@ class RankingTask implements Model
         $database = new Database();
         $database->connect();
 
-        $columns = Common::showColumns('rankingdata');
-        $idMark = Common::makeMarkKeys($fields['code'], $columns);
 
-        $fieldsInput = ['code' => $fields['code']];
-        $query = GET::getDataField('rankingdata', $fieldsInput);
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
+        $dataRanking = $database->getConnection()->query($queryRanking);
+        $dataRanking = mysqli_fetch_assoc($dataRanking);
+
+        $ranking_name = 'R_' . $dataRanking['ranking_name'] . '_Task';
+        unset($fields['code']);
+
+        $columns = Common::showColumns($ranking_name);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+
+
+        $query = Insert::makeInsertQuery($ranking_name, $fieldsMark);
         $data = $database->getConnection()->query($query);
-        $data = mysqli_fetch_assoc($data);
-        $ranking_name = "R_" . $data['ranking_name'].'_Task';
+
+        if ($data) {
+            return array('result' => false, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
     }
 
     public static function delete($fields)
     {
+        $database = new Database();
+        $database->connect();
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
+        $dataRanking = $database->getConnection()->query($queryRanking);
+        $dataRanking = mysqli_fetch_assoc($dataRanking);
+
+        $ranking_name = 'R_' . $dataRanking['ranking_name'] . '_Task';
+        unset($fields['code']);
+
+        $fieldsInput = ['id' => $fieldsMark['id']];
+        $query = Delete::deleteRow($ranking_name, $fieldsInput);
+        $data = $database->getConnection()->query($query);
+
+
+        if ($data) {
+            return array('result' => false, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
+
     }
 
     public static function update(array $fields = null)
     {
+
+        $wherevalue = $fields['id'];
+        $database = new Database();
+        $database->connect();
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
+        $dataRanking = $database->getConnection()->query($queryRanking);
+        $dataRanking = mysqli_fetch_assoc($dataRanking);
+
+        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Task';
+        unset($fields['code']);
+        unset($fields['id']);
+
+
+
+        $columns = Common::showColumns($rankingName);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        $query = Update::updateRow($rankingName, $fieldsMark, 'id', $wherevalue);
+        $data = $database->getConnection()->query($query);
+
+
+        if ($data) {
+            return array('result' => true, 'message' => null);
+        } else {
+            return array('result' => false, 'message' => null);
+        }
+
+
     }
 }

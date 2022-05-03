@@ -5,7 +5,7 @@ require_once("services/errors/BadRequestError.php");
 require "services/responses/Response.php";
 require_once("services/Database.php");
 
-class RankingTask implements Controller
+class RankingTaskController implements Controller
 {
 
     private $connection;
@@ -36,10 +36,10 @@ class RankingTask implements Controller
       }
 
       if(count($params) > 2){
-        $result = Ranking::get($paramsinput);
+        $result = RankingTask::get($paramsinput);
       }
       else{
-        $result = Ranking::getAll($paramsinput);
+        $result = RankingTask::getAll($paramsinput);
       }
   
   
@@ -58,7 +58,7 @@ class RankingTask implements Controller
     public function post($variables)
     {
       $this->database->connect();
-      $result = Ranking::insert($variables);
+      $result = RankingTask::insert($variables);
   
   
       $response = Response::successful();
@@ -75,7 +75,7 @@ class RankingTask implements Controller
 
     public function put($variables)
     {
-      $result = Ranking::update($variables);
+      $result = RankingTask::update($variables);
 
       if ($result['result'] == true) {
         $response['code'] = Response::successful()['code'];
@@ -95,7 +95,7 @@ class RankingTask implements Controller
       $paramsinput['id'] = $variables[2];
 
       
-      $result = Ranking::delete($paramsinput,'user');
+      $result = RankingTask::delete($paramsinput,'user');
   
       $response = Response::successful();
       $response ['message'] = $result['message'];

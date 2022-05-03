@@ -380,6 +380,9 @@ class User implements Model
             if (!Validator::isExist('user', 'nick_name', $fieldsMark['nick_name'])) {
                 return array('result' => false, 'message' => '' . $fields['nick_name'] . ' exist, use another');
             }
+
+            $fields['image'] = "https://avatars.dicebear.com/api/bottts/" . $fields['nick_name'] . ".svg";
+
         }
 
 

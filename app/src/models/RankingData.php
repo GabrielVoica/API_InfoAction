@@ -169,7 +169,7 @@ class RankingData implements Model
 
         $tablename = "R_" . $fields['ranking_name'];
         $tablenameTask = "R_" . $fields['ranking_name']."_Task";
-        $tablenameHistory = "R_" . $fields['ranking_name']."_Notes";
+        $tablenameNotes = "R_" . $fields['ranking_name']."_Notes";
 
 
 
@@ -190,12 +190,24 @@ class RankingData implements Model
         );
 
         $rankingstructureTask = array(
-            "id" => "int",
+            "id" => "int NOT NULL AUTO_INCREMENT",
             "task_name" => "varchar(20)",
             "description" => "varchar(40)",
-            "creationdate" => "datetime"
+            "creationdate" => "datetime",
+            "PRIMARY KEY" => "(id)"
 
         );
+
+
+        $rankingstructureNotes = array(
+            "id" => "int",
+            "id_valued" => "int",
+            "id_evaluator" => "int",
+            "amount" => "int",
+            "creationdate" => "datetime",
+
+        );
+
 
 
         if ($data) {
@@ -203,6 +215,10 @@ class RankingData implements Model
             $data = $database->getConnection()->query($query);
 
             $query = Create::makeCreateQuery($tablenameTask, $rankingstructureTask);
+            print_r($query);
+            $data = $database->getConnection()->query($query);
+
+            $query = Create::makeCreateQuery($tablenameNotes, $rankingstructureNotes);
             $data = $database->getConnection()->query($query);
             //Create Event for table
             $query = Create::createEventUpdadePoints($tablename);
@@ -247,6 +263,9 @@ class RankingData implements Model
 
 
         $table = "R_" . $data['ranking_name'];
+        $tableTask = "R_" . $data['ranking_name']."_Task";
+        $tableNotes = "R_" . $data['ranking_name']."_Notes";
+
 
         $fieldsInput = ['code' => $fieldsMark['code']];
         $query = Delete::deleteRow('rankingdata', $fieldsInput);
@@ -256,6 +275,13 @@ class RankingData implements Model
 
             $query = Delete::deleteTable($table);
             $data = $database->getConnection()->query($query);
+
+            $query = Delete::deleteTable($tableTask);
+            $data = $database->getConnection()->query($query);
+
+            $query = Delete::deleteTable($tableNotes);
+            $data = $database->getConnection()->query($query);
+
 
             $fieldsInput = ['code' => $fieldsMark['code']];
             $query = Delete::deleteRow('rankingmembers', $fieldsInput);

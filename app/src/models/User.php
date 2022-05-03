@@ -533,6 +533,7 @@ class User implements Model
             $dat = User::get($fields['id']);
 
 
+            if(isset($dat['data']['code'])){
             for ($x = 0; $x < count($dat['data']['code']); $x++) {
                 $columns = Common::showColumns('rankingmembers');
                 $ranking_name['code'] = $dat['data']['code'][$x];
@@ -544,6 +545,7 @@ class User implements Model
                     $wishlist[] = $array;
                 }
             }
+        }
 
 
 

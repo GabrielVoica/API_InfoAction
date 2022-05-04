@@ -109,9 +109,12 @@ class Ranking implements Model
             $wishlist2[] = $array;
         }
 
-        $datafinal['accepted'] = $wishlist;
-        $datafinal['unaccepted'] = $wishlist2;
 
+
+        $datafinal['unaccepted'] = $wishlist;
+        $datafinal['accepted'] = $wishlist2;
+
+        print_r($datafinal);
 
 
         return array('result' => true, 'message' => null, 'data' => $datafinal);

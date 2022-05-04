@@ -200,7 +200,6 @@ class RankingData implements Model
 
 
         $rankingstructureNotes = array(
-            "id" => "int",
             "id_valued" => "int",
             "id_evaluator" => "int",
             "task" => "int",
@@ -429,6 +428,11 @@ class RankingData implements Model
                 $query = 'RENAME TABLE `R_' . $oldTableName . '` TO `R_' . $fields['ranking_name'] . '`';
                 $data = $database->getConnection()->query($query);
 
+                $query = 'RENAME TABLE `R_' . $oldTableName . '_Task` TO `R_' . $fields['ranking_name'] . '_Task`';
+                $data = $database->getConnection()->query($query);
+
+                $query = 'RENAME TABLE `R_' . $oldTableName . '_Notes` TO `R_' . $fields['ranking_name'] . '_Notes`';
+                $data = $database->getConnection()->query($query);
 
                 $query = Delete::deleteEventUpdatePoints('R_' . $oldTableName);
                 $data = $database->getConnection()->query($query);

@@ -57,19 +57,17 @@ class RankingController implements Controller
 
     public function post($variables)
     {
-      $this->database->connect();
       $result = Ranking::insert($variables);
   
-  
-      $response = Response::successful();
-      $response ['message'] = $result['message'];
-  
-  
-      if ($result == true) {
+      if ($result['result'] == true) {
+        $response = Response::successful();
+        $response ['message'] = Response::successful()['message'];
         return $response;
       } else {
-        return false;
-    }
+        $response = BadRequestError::throw();
+        $response ['message'] = $result['message'];
+        return $response;
+      }
 
   }
 

@@ -134,7 +134,7 @@ class User implements Model
                 return array('result' => false, 'message' => 'Nickname must include only letters');
             }
 
-            //Works
+            //Worksa
             $LenghtReturn = Validator::isLenght($fields['nick_name'], 'user', 'nick_name', 5, null);
             if ($LenghtReturn > 1) {
                 return array('result' => false, 'message' => $LenghtReturn['message']);

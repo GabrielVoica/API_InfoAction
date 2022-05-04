@@ -78,17 +78,19 @@ class Ranking implements Model
 
         $selectFields = array(0 => '*');
         $selectInnerFields = array(0 => 'image');
-        $query = Get::getAllData($rankingName, 'id', $selectFields, 'INNER JOIN', 'user', 'id', $selectInnerFields);
-        $query = $query . ' ORDER BY points DESC';
-        print_r($query);
-        $data = $database->getConnection()->query($query);
+        $fieldsInput = ['status' => 0];
+        $fieldsInput2 = ['status' => 1];
 
+
+        $query = Get::getAllData($rankingName, 'id', $selectFields, 'INNER JOIN', 'user', 'id', $selectInnerFields,$fieldsInput);
+        $query = $query . ' ORDER BY points DESC';
+        $data = $database->getConnection()->query($query);
 
         if ($data === false) {
             return array('result' => false, 'message' => NotFoundError::throw()['message']);
         }
         if (mysqli_num_rows($data) == 0) {
-            return array('result' => false, 'message' => "0 rows");
+            $wishlist[] = null;
         }
 
         while ($array = mysqli_fetch_assoc($data)) {
@@ -96,15 +98,19 @@ class Ranking implements Model
         }
 
 
+        $query = Get::getAllData($rankingName, 'id', $selectFields, 'INNER JOIN', 'user', 'id', $selectInnerFields,$fieldsInput2);
+        $query = $query . ' ORDER BY points DESC';
+        $data = $database->getConnection()->query($query);
 
-
-        foreach ($wishlist as $imagenull) {
-            $imagenull["image"] = "paco";
+        if (mysqli_num_rows($data) == 0) {
+            $wishlist2[] = null;
+        }
+        while ($array = mysqli_fetch_assoc($data)) {
+            $wishlist2[] = $array;
         }
 
 
-
-        return array('result' => true, 'message' => null, 'data' => $wishlist);
+        return array('result' => true, 'message' => null, 'data' => array($wishlist,$wishlist2));
     }
 
 

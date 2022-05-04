@@ -28,16 +28,17 @@ class Get
 
 
 
-    public static function getAllData($table, $field = null, $selectFields = null, $innerType = null, $innerTable = null, $innerField = null, $selectInnerFields = null)
+    public static function getAllData($table, $field = null, $selectFields = null, $innerType = null, $innerTable = null, $innerField = null, $selectInnerFields = null, $fieldinput = null)
     {
         $database = new Database();
         $database->connect();
 
-
+        $keys = array_keys($fieldinput);
+        $values = array_values($fieldinput);
 
         $query = "SELECT * FROM $table";
 
-        if ($field != null && $selectFields != null && $innerType != null && $innerTable != null && $innerField != null && $selectInnerFields != null) {
+        if ($field != null && $selectFields != null && $innerType != null && $innerTable != null && $innerField != null && $selectInnerFields != null && $fieldinput != null) {
 
             $selectFieldsFinal = null;
             $selectInnerFieldsFinal = null;
@@ -59,6 +60,13 @@ class Get
 
 
             $query .= "$innerType $innerTable ON $table.$field = $innerTable.$innerField";
+
+            if($fieldinput != null){
+            $query .= " WHERE ";
+            for ($x = 0; $x < count($keys); $x++) {
+                $query .= "$keys[$x] = $values[$x] AND ";
+            }
+            $query = substr($query, 0, -4);}
         }
 
         return $query;

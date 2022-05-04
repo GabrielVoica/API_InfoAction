@@ -80,11 +80,12 @@ class Ranking implements Model
         $selectInnerFields = array(0 => 'image');
         $query = Get::getAllData($rankingName, 'id', $selectFields, 'INNER JOIN', 'user', 'id', $selectInnerFields);
         $query = $query . ' ORDER BY points DESC';
+        print_r($query);
         $data = $database->getConnection()->query($query);
 
 
         if ($data === false) {
-            return array('result' => false, 'Error query select');
+            return array('result' => false, 'message' => NotFoundError::throw()['message']);
         }
         if (mysqli_num_rows($data) == 0) {
             return array('result' => false, 'message' => "0 rows");

@@ -50,7 +50,7 @@ class RankingController implements Controller
         return $response;
       } else {
         $response['code'] = NotFoundError::throw()['code'];
-        $response['message'] = NotFoundError::throw()['message'];
+        $response['message'] = $result['message'];
         return $response;
       }
     }

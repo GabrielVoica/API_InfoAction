@@ -350,6 +350,7 @@ class Ranking implements Model
         switch ($fields) {
             case isset($fields['points']):
                 $fields['points'] = $fields['points'] + $data['points'];
+                break;
             case isset($fields['pointsSpend']):
                 $fields['pointsSpend'] = $fields['pointsSpend'] + $data['pointsSpend'];
                 break;

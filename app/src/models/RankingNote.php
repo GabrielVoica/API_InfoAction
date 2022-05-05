@@ -2,6 +2,7 @@
 
 require_once("services/Database.php");
 require_once("services/errors/NotFoundError.php");
+require_once("src/models/Ranking.php");
 
 
 require_once("src/lib/Insert.php");
@@ -34,13 +35,11 @@ class RankingNote implements Model
         $dataRanking = $database->getConnection()->query($queryRanking);
         $dataRanking = mysqli_fetch_assoc($dataRanking);
 
-        $rankingName = 'R_' . $dataRanking['ranking_name'].'_Notes';
+        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Notes';
 
         $fieldsInput = ['id' => $fieldsMark['id']];
         $query = Get::getDataField($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
-
-
     }
 
 
@@ -68,27 +67,92 @@ class RankingNote implements Model
 
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
-      
     }
 
 
     public static function insert(array $fields = null)
     {
-      
 
+        //Create Database Connection
+        $database = new Database();
+        $database->connect();
+
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+        $columns = Common::showColumns('user');
+        $fieldsMark += Common::makeMarkKeys($fields, $columns);
+
+        //With ranking code, get ranking name and save ranking name in variable
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $query = GET::getDataField('rankingdata', $fieldsInput);
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+
+        $ranking_nameNotes = "R_" . $data['ranking_name'] . '_Notes';
+        $ranking_nameMain = "R_" . $data['ranking_name'];
+
+
+
+
+
+
+        switch ($fields['type']) {
+            case 'points':
+                $fieldsUpdateRanking['points'] = $fields['amount'];
+                break;
+            case 'responsabilidad':
+                $fieldsUpdateRanking['responsabilidad'] = $fields['amount'];
+                $fields['task'] = 'null';
+                break;
+            case 'cooperacion':
+                $fieldsUpdateRanking['cooperacion'] = $fields['amount'];
+                $fields['task'] = 'null';
+                break;
+            case 'autonomia_e_iniciativa':
+                $fieldsUpdateRanking['autonomia_e_iniciativa'] = $fields['amount'];
+                $fields['task'] = 'null';
+                break;
+            case 'gestion_emocional':
+                $fieldsUpdateRanking['gestion_emocional'] = $fields['amount'];
+                $fields['task'] = 'null';
+                break;
+            case 'habilidades_de_pensamiento':
+                $fieldsUpdateRanking['habilidades_de_pensamiento'] = $fields['amount'];
+                $fields['task'] = 'null';
+                break;
+        }
+        $fieldsUpdateRanking['code'] = $fields['code'];
+        $fieldsUpdateRanking['id'] = $fields['id_valued'];
+
+        unset($fields['code']);
+
+
+
+        $columns = Common::showColumns($ranking_nameNotes);
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+
+        $query = Insert::makeInsertQuery($ranking_nameNotes, $fieldsMark);
+        $data = $database->getConnection()->query($query);
+
+
+        if ($data) {
+            $updateRanking = Ranking::update($fieldsUpdateRanking);
+
+
+            return array('result' => true, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
     }
 
 
 
     public static function delete($fields)
     {
-       
     }
 
     public static function update()
     {
-        
-    
-       
     }
 }

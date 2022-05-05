@@ -200,6 +200,7 @@ class RankingData implements Model
 
 
         $rankingstructureNotes = array(
+            "id" => "int NOT NULL AUTO_INCREMENT",
             "id_valued" => "int",
             "id_evaluator" => "int",
             "task" => "int",

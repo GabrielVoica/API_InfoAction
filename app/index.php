@@ -81,6 +81,7 @@ foreach ($directory as $file) {
 
 $file_name = str_replace('.php', '', $file_name);
 
+
 //Main controller instance
 $controllerInstance = new $file_name(new Database());
 

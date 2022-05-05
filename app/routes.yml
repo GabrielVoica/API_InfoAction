@@ -37,12 +37,9 @@ rankingtask:
  route: 'rankingtask'
  controller: 'RankingTaskController'
 
-# GET POST Ranking Data 
-
- rankingnotes: 
-  route: 'rankingnotes'
-  controller: 'RankingNotesController'
-
+rankingnote: 
+ route: 'rankingnote'
+ controller: 'RankingNoteController'
 
 # GET POST Session
 session:

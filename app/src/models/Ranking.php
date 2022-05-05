@@ -172,6 +172,11 @@ class Ranking implements Model
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
+
+        if($data['user_type'] == 1){
+            return array('result' => false, 'message' => 'You can t add teachers');
+
+        }
         //Fields to make insert in Ranking Rows
         $fields['id'] = $data['id'];
         $fields['nick_name'] = $data['nick_name'];
@@ -343,8 +348,8 @@ class Ranking implements Model
 
 
         switch ($fields) {
-            case isset($fields['points']):
-                $fields['points'] = $fields['points'] + $data['points'];
+            case isset($fields['pointsSpend']):
+                $fields['pointsSpend'] = $fields['pointsSpend'] + $data['pointsSpend'];
                 break;
             case isset($fields['responsabilidad']):
                 $fields['responsabilidad'] = $fields['responsabilidad'] + $data['responsabilidad'];

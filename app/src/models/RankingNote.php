@@ -139,6 +139,7 @@ class RankingNote implements Model
 
         $query = Insert::makeInsertQuery($ranking_nameNotes, $fieldsMark);
         $data = $database->getConnection()->query($query);
+        
 
 
         if ($data) {
@@ -160,6 +161,83 @@ class RankingNote implements Model
 
     public static function delete($fields)
     {
+
+        $database = new Database();
+        $database->connect();
+
+        $columns = Common::showColumns('rankingdata');
+        $fieldsMark = Common::makeMarkKeys($fields, $columns);
+
+        $columns = Common::showColumns('user');
+        $fieldsMark += Common::makeMarkKeys($fields, $columns);
+
+        $fieldsInput = ['code' => $fieldsMark['code']];
+        $query = GET::getDataField('rankingdata', $fieldsInput);
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+
+        $rankingName = "R_" . $data['ranking_name'].'_Notes';
+
+
+        
+        $fieldsInput = ['id' => $fieldsMark['id']];
+        $query = Get::getDataField($rankingName, $fieldsInput);
+        $data = $database->getConnection()->query($query);
+        $data = mysqli_fetch_assoc($data);
+
+        $fieldsUpdateRanking['id'] = $data['id_evaluator'];
+        $fieldsUpdateRanking['pointsSpend'] = $data['amount'];
+        $fieldsUpdateRanking['code'] = $fields['code'];
+
+
+
+
+        switch ($data['type']) {
+            case 'points':
+                $fieldsUpdateRankingMinus['pointsSpend'] = -$data['amount'];
+                break;
+            case 'responsabilidad':
+                $fieldsUpdateRankingMinus['responsabilidad'] = -$data['amount'];
+                break;
+            case 'cooperacion':
+                $fieldsUpdateRankingMinus['cooperacion'] = -$data['amount'];
+                break;
+            case 'autonomia_e_iniciativa':
+                $fieldsUpdateRankingMinus['autonomia_e_iniciativa'] = -$data['amount'];
+                break;
+            case 'gestion_emocional':
+                $fieldsUpdateRankingMinus['gestion_emocional'] = -$data['amount'];
+                break;
+            case 'habilidades_de_pensamiento':
+                $fieldsUpdateRankingMinus['habilidades_de_pensamiento'] = -$data['amount'];
+                break;
+        }
+
+        $fieldsUpdateRankingMinus['code'] = $fields['code'];
+        $fieldsUpdateRankingMinus['id'] = $data['id_valued'];
+
+
+
+        
+
+        $fieldsInput = ['id' => $fieldsMark['id']];
+        $query = Delete::deleteRow($rankingName, $fieldsInput);
+        $data = $database->getConnection()->query($query);
+
+
+        if ($data) {
+            $updateRanking = Ranking::update($fieldsUpdateRanking);
+
+
+            $updateRanking = Ranking::update($fieldsUpdateRankingMinus);
+
+
+
+            return array('result' => false, 'message' => 'The insert has been made');
+        } else {
+            return array('result' => false, 'message' => 'The insert has not been made');
+        }
+
     }
 
     public static function update()

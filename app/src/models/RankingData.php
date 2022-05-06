@@ -207,7 +207,7 @@ class RankingData implements Model
             "task" => "int",
             "amount" => "int",
             "creationdate" => "datetime",
-
+            "PRIMARY KEY" => "(id)"
         );
 
 

@@ -125,6 +125,11 @@ class RankingNote implements Model
         $fieldsUpdateRanking['code'] = $fields['code'];
         $fieldsUpdateRanking['id'] = $fields['id_valued'];
 
+        $fieldsUpdateRankingMinus['code'] = $fields['code'];
+        $fieldsUpdateRankingMinus['id'] = $fields['id_evaluator'];
+        $fieldsUpdateRankingMinus['pointsSpend'] = -$fields['amount'];
+
+
         unset($fields['code']);
 
 
@@ -138,6 +143,11 @@ class RankingNote implements Model
 
         if ($data) {
             $updateRanking = Ranking::update($fieldsUpdateRanking);
+
+            if($fields['task'] = 'null'){
+                $updateRanking = Ranking::update($fieldsUpdateRankingMinus);
+
+            }
 
 
             return array('result' => true, 'message' => 'The insert has been made');

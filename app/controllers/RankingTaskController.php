@@ -35,6 +35,7 @@ class RankingTaskController implements Controller
       $paramsinput['id'] = $params[2];
       }
 
+      
       if(count($params) > 2){
         $result = RankingTask::get($paramsinput);
       }
@@ -50,7 +51,7 @@ class RankingTaskController implements Controller
         return $response;
       } else {
         $response['code'] = NotFoundError::throw()['code'];
-        $response['message'] = NotFoundError::throw()['message'];
+        $response['message'] = $result['message'];
         return $response;
       }
     }

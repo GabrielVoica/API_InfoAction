@@ -34,15 +34,22 @@ class RankingNoteController implements Controller
       if(count($params) > 2){
       $paramsinput['id'] = $params[2];
       }
+      if(count($params) > 3){
+        $paramsinput['type'] = $params[3];
+        }
 
       
-      if(count($params) > 2){
+      print_r(count($params));
+
+      if(count($params) == 3){
         $result = RankingNote::get($paramsinput);
       }
-      else{
+
+      if(count($params) == 1 || count($params) > 3 ){
         $result = RankingNote::getAll($paramsinput);
       }
-  
+      
+
   
        if ($result['result'] == true) {
         $response['code'] = Response::successful()['code'];

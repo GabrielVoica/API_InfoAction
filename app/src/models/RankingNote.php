@@ -25,32 +25,66 @@ class RankingNote implements Model
         $database = new Database();
         $database->connect();
 
-
         $columns = Common::showColumns('rankingdata');
-        $fieldsMark = Common::makeMarkKeys($id, $columns);
+        $idData['code'] = $id['code'];
+        $idMark = Common::makeMarkKeys($idData, $columns);
 
-
-        $fieldsInput = ['code' => $fieldsMark['code']];
+        $fieldsInput = ['code' => $idMark['code']];
         $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
         $dataRanking = $database->getConnection()->query($queryRanking);
         $dataRanking = mysqli_fetch_assoc($dataRanking);
 
         $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Notes';
 
-        $fieldsInput = ['id' => $fieldsMark['id']];
+        $columns = Common::showColumns($rankingName);
+        $idMark = Common::makeMarkKeys($id, $columns);
+        $fieldsInput = ['id' => $idMark['id']];
         $query = Get::getDataField($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
+
+
+
+        if ($data === false) {
+            return array('result' => false, 'Error query select');
+        }
+        if (mysqli_num_rows($data) == 0) {
+            return array('result' => false, 'message' => null);
+        }
+
+        $data = mysqli_fetch_assoc($data);
+
+        return array('result' => true, 'message' => null, 'data' => $data);
     }
 
 
 
-    public static function getAll()
+    public static function getAll($id = null)
     {
 
         $database = new Database();
         $database->connect();
-        $query = Get::getAllData('rankingdata');
 
+
+        $columns = Common::showColumns('rankingdata');
+        $idData['code'] = $id['code'];
+        $idMark = Common::makeMarkKeys($idData, $columns);
+
+        $fieldsInput = ['code' => $idMark['code']];
+        $query = Get::getDataField('rankingdata', $fieldsInput);
+        $dataRanking = $database->getConnection()->query($query);
+
+        if (mysqli_num_rows($dataRanking) == 0) {
+            return array('result' => false, 'message' => "0 rows");
+        }
+
+        $dataRanking = mysqli_fetch_assoc($dataRanking);
+        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Notes';
+
+
+        $query = Get::getAllData($rankingName);
+        if (isset($id['type'])){
+            $query .= ' ORDER BY '.$id['type'] . " DESC";
+        }
         $data = $database->getConnection()->query($query);
 
 
@@ -64,7 +98,6 @@ class RankingNote implements Model
         while ($array = mysqli_fetch_assoc($data)) {
             $wishlist[] = $array;
         }
-
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
     }

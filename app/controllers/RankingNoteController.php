@@ -34,9 +34,12 @@ class RankingNoteController implements Controller
       if(count($params) > 2){
       $paramsinput['id'] = $params[2];
       }
-      if(count($params) > 3){
-        $paramsinput['type'] = $params[3];
-        }
+      if(count($params) > 4){
+        $paramsinput['id-filtrer'] = $params[3];
+        $paramsinput['id-value'] = $params[4];
+
+      }
+        
 
       
       print_r(count($params));

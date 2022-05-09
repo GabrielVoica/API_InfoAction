@@ -82,9 +82,12 @@ class RankingNote implements Model
 
 
         $query = Get::getAllData($rankingName);
-        if (isset($id['type'])){
-            $query .= ' ORDER BY '.$id['type'] . " DESC";
+        if (count($id) == 4){
+            $values = array_values($id);
+            $query .= " WHERE ".$values[2].' = '.$values[3];
+
         }
+
         $data = $database->getConnection()->query($query);
 
 

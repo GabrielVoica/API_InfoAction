@@ -27,7 +27,7 @@ class RankingTask implements Model
         $database->connect();
 
         $columns = Common::showColumns('rankingdata');
-        $idData['code'] = $id['id-ranking'];
+        $idData['code'] = $id['code'];
         $idMark = Common::makeMarkKeys($idData, $columns);
 
         $fieldsInput = ['code' => $idMark['code']];
@@ -65,23 +65,21 @@ class RankingTask implements Model
 
 
         $columns = Common::showColumns('rankingdata');
-        $idData['code'] = $id['id-ranking'];
+        $idData['code'] = $id['code'];
         $idMark = Common::makeMarkKeys($idData, $columns);
 
         $fieldsInput = ['code' => $idMark['code']];
-        $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
-        $dataRanking = $database->getConnection()->query($queryRanking);
+        $query = Get::getDataField('rankingdata', $fieldsInput);
+        $dataRanking = $database->getConnection()->query($query);
 
         if (mysqli_num_rows($dataRanking) == 0) {
             return array('result' => false, 'message' => "0 rows");
         }
 
         $dataRanking = mysqli_fetch_assoc($dataRanking);
-        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_History';
+        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Task';
 
 
-        $selectFields = array(0 => '*');
-        $selectInnerFields = array(0 => 'image');
         $query = Get::getAllData($rankingName);
         $data = $database->getConnection()->query($query);
 

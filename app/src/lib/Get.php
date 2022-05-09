@@ -33,8 +33,11 @@ class Get
         $database = new Database();
         $database->connect();
 
-        $keys = array_keys($fieldinput);
-        $values = array_values($fieldinput);
+        if($fieldinput != null){
+            $keys = array_keys($fieldinput);
+            $values = array_values($fieldinput);
+        }
+     
 
         $query = "SELECT * FROM $table";
 
@@ -68,6 +71,8 @@ class Get
             }
             $query = substr($query, 0, -4);}
         }
+
+    
 
         return $query;
     }

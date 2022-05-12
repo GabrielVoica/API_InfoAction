@@ -374,7 +374,6 @@ class Ranking implements Model
         $columns = Common::showColumns($rankingName);
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
         $query = Update::updateRow($rankingName, $fieldsMark, 'id', $wherevalue);
-        print_r($query);
         $data = $database->getConnection()->query($query);
 
 

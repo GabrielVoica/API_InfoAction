@@ -176,9 +176,9 @@ class RankingNote implements Model
 
 
         if ($data) {
-            $updateRanking = Ranking::update($fieldsUpdateRanking);
+            // $updateRanking = Ranking::update($fieldsUpdateRanking);
 
-            if($fields['task'] = 'null'){
+            if($fields['task'] == 'null'){
                 $updateRanking = Ranking::update($fieldsUpdateRankingMinus);
 
             }

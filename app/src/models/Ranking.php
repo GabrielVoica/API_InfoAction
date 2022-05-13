@@ -323,6 +323,7 @@ class Ranking implements Model
         $database->connect();
 
 
+
         $columns = Common::showColumns('rankingdata');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
@@ -345,6 +346,7 @@ class Ranking implements Model
         $query = Get::getDataField($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data =  mysqli_fetch_assoc($data);
+
 
 
         switch ($fields) {

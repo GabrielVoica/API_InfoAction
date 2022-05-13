@@ -23,6 +23,13 @@ class Ranking implements Model
         $columns = Common::showColumns('rankingdata');
         $idMark = Common::makeMarkKeys($id, $columns);
 
+
+        if (isset($idMark['code'])) {
+            if (Validator::isExist('rankingdata', 'code', $idMark['code'])) {
+                return array('result' => false, 'message' => '' . $idMark['code'] . ' not exist, use another');
+            }
+        }
+        
         $fieldsInput = ['code' => $idMark['code']];
         $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
         $dataRanking = $database->getConnection()->query($queryRanking);
@@ -64,6 +71,11 @@ class Ranking implements Model
         $idData['code'] = $id['code'];
         $idMark = Common::makeMarkKeys($idData, $columns);
 
+        if (isset($idMark['code'])) {
+            if (Validator::isExist('rankingdata', 'code', $idMark['code'])) {
+                return array('result' => false, 'message' => '' . $idMark['code'] . ' not exist, use another');
+            }
+        }
         $fieldsInput = ['code' => $idMark['code']];
         $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
         $dataRanking = $database->getConnection()->query($queryRanking);
@@ -323,7 +335,6 @@ class Ranking implements Model
         $database->connect();
 
 
-
         $columns = Common::showColumns('rankingdata');
         $fieldsMark = Common::makeMarkKeys($fields, $columns);
 
@@ -346,7 +357,6 @@ class Ranking implements Model
         $query = Get::getDataField($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
         $data =  mysqli_fetch_assoc($data);
-
 
 
         switch ($fields) {

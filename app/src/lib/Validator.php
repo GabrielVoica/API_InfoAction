@@ -13,6 +13,8 @@ class Validator
         $database->connect();
 
         $query = "SELECT * FROM $table WHERE $tablefield = $value";
+
+        print_r($query);
         $result = $database->getConnection()->query($query);
 
 

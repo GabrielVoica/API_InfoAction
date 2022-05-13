@@ -106,14 +106,14 @@ class RankingNoteController implements Controller
       
       $result = RankingNote::delete($paramsinput,'user');
   
-      $response = Response::successful();
-      $response ['message'] = $result['message'];
-  
-  
-      if ($result == true) {
+      if ($result['result'] == true) {
+        $response['code'] = Response::successful()['code'];
+        $response['message'] = Response::successful()['message'];
         return $response;
       } else {
-        return false;
+        $response = BadRequestError::throw();
+        $response['message'] = $result['message'];
+        return $response;
       }
     }
 }

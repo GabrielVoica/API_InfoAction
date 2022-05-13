@@ -65,12 +65,16 @@ class RankingTaskController implements Controller
       $response = Response::successful();
       $response ['message'] = $result['message'];
   
-  
-      if ($result == true) {
+     
+      if ($result['result'] == true) {
+        $response = Response::successful();
+        $response ['message'] = Response::successful()['message'];
         return $response;
       } else {
-        return false;
-    }
+        $response = BadRequestError::throw();
+        $response ['message'] = $result['message'];
+        return $response;
+      }
 
   }
 
@@ -102,10 +106,14 @@ class RankingTaskController implements Controller
       $response ['message'] = $result['message'];
   
   
-      if ($result == true) {
+      if ($result['result'] == true) {
+        $response['code'] = Response::successful()['code'];
+        $response['message'] = Response::successful()['message'];
         return $response;
       } else {
-        return false;
+        $response['code'] = NotFoundError::throw()['code'];
+        $response['message'] = $result['message'];
+        return $response;
       }
     }
 }

@@ -130,9 +130,6 @@ class RankingNote implements Model
 
 
 
-
-
-
         switch ($fields['type']) {
             case 'points':
                 $fieldsUpdateRanking['points'] = $fields['amount'];

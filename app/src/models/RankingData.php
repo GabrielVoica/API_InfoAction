@@ -203,7 +203,7 @@ class RankingData implements Model
             "id" => "int NOT NULL AUTO_INCREMENT",
             "id_valued" => "int",
             "id_evaluator" => "int",
-            "type" => "varchar(25)",
+            "type" => "varchar(50)",
             "task" => "int",
             "amount" => "int",
             "creationdate" => "datetime",

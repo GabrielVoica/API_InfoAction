@@ -21,7 +21,7 @@ class Ranking implements Model
         $database->connect();
 
         $columns = Common::showColumns('rankingdata');
-        $idMark = Common::makeMarkKeys($id['code'], $columns);
+        $idMark = Common::makeMarkKeys($id, $columns);
 
         $fieldsInput = ['code' => $idMark['code']];
         $queryRanking = Get::getDataField('rankingdata', $fieldsInput);
@@ -32,7 +32,7 @@ class Ranking implements Model
 
         $columns = Common::showColumns($rankingName);
         $idMark = Common::makeMarkKeys($id, $columns);
-        $fieldsInput = ['id' => $idMark['id-task']];
+        $fieldsInput = ['id' => $idMark['id']];
         $query = Get::getDataField($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
 
@@ -61,7 +61,7 @@ class Ranking implements Model
 
 
         $columns = Common::showColumns('rankingdata');
-        $idData['code'] = $id['id-ranking'];
+        $idData['code'] = $id['code'];
         $idMark = Common::makeMarkKeys($idData, $columns);
 
         $fieldsInput = ['code' => $idMark['code']];

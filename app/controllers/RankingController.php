@@ -30,9 +30,9 @@ class RankingController implements Controller
         return BadRequestError::throw();
       }
 
-      $paramsinput['id-ranking'] = $params[1];
+      $paramsinput['code'] = $params[1];
       if(count($params) > 2){
-      $paramsinput['id-user'] = $params[2];
+      $paramsinput['id'] = $params[2];
       }
 
       if(count($params) > 2){

@@ -81,12 +81,24 @@ class RankingNote implements Model
         $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Notes';
 
 
+       ;
+
+
         $query = Get::getAllData($rankingName);
         if (count($id) == 4){
-            $values = array_values($id);
-            $query .= " WHERE ".$values[2].' = '.$values[3];
+            $table[$id['id-filtrer']] = $id['id-value'];
+
+            $columns = Common::showColumns($rankingName);
+    
+            $idMark = Common::makeMarkKeys($table, $columns);
+            
+            $values = array_values($idMark);
+            $keys = array_keys($idMark);
+
+            $query .= " WHERE ".$keys[0].' = '.$values[0];
 
         }
+
 
         $data = $database->getConnection()->query($query);
 

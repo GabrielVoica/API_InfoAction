@@ -78,29 +78,27 @@ class RankingNote implements Model
         }
 
         $dataRanking = mysqli_fetch_assoc($dataRanking);
-        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Notes';
-
-
-       ;
+        $rankingName = 'R_' . $dataRanking['ranking_name'] . '_Notes';;
 
 
         $query = Get::getAllData($rankingName);
-        if (count($id) == 4){
+        if (count($id) == 4) {
             $table[$id['id-filtrer']] = $id['id-value'];
 
             $columns = Common::showColumns($rankingName);
-    
+
             $idMark = Common::makeMarkKeys($table, $columns);
-            
+
             $values = array_values($idMark);
             $keys = array_keys($idMark);
 
-            $query .= " WHERE ".$keys[0].' = '.$values[0];
-
+            $query .= " WHERE " . $keys[0] . ' = ' . $values[0];
         }
 
 
         $data = $database->getConnection()->query($query);
+
+
 
 
         if ($data === false) {
@@ -110,9 +108,58 @@ class RankingNote implements Model
             return array('result' => false, 'message' => "0 rows");
         }
 
+
+
+
         while ($array = mysqli_fetch_assoc($data)) {
             $wishlist[] = $array;
         }
+
+
+        $data = $database->getConnection()->query($query);
+
+        while ($array = mysqli_fetch_assoc($data)) {
+            $wishlist[] = $array;
+        }
+
+
+
+
+        for ($i = 0; $i < count($wishlist); $i++) {
+            $fieldsInput = ['id' => $wishlist[$i]['id_valued']];
+            $query = Get::getDataField('user', $fieldsInput);
+            $datauser = $database->getConnection()->query($query);
+
+            while ($array = mysqli_fetch_assoc($datauser)) {
+                $prueba[] = $array;
+            }
+
+
+        }
+
+        for ($x = 0; $x < count($wishlist); $x++) {                
+            $wishlist[$x]['name_valued'][] = $prueba[$x]['nick_name'];
+         }
+
+
+
+         for ($i = 0; $i < count($wishlist); $i++) {
+            $fieldsInput = ['id' => $wishlist[$i]['id_evaluator']];
+            $query = Get::getDataField('user', $fieldsInput);
+            $datauser = $database->getConnection()->query($query);
+
+            while ($array = mysqli_fetch_assoc($datauser)) {
+                $prueba2[] = $array;
+            }
+
+        }
+
+
+        for ($x = 0; $x < count($wishlist); $x++) {                
+            $wishlist[$x]['name_evaluator'][] = $prueba2[$x]['nick_name'];
+         }
+
+
 
         return array('result' => true, 'message' => null, 'data' => $wishlist);
     }
@@ -184,15 +231,14 @@ class RankingNote implements Model
 
         $query = Insert::makeInsertQuery($ranking_nameNotes, $fieldsMark);
         $data = $database->getConnection()->query($query);
-        
+
 
 
         if ($data) {
             $updateRanking = Ranking::update($fieldsUpdateRanking);
 
-            if($fields['task'] == 'null'){
+            if ($fields['task'] == 'null') {
                 $updateRanking = Ranking::update($fieldsUpdateRankingMinus);
-
             }
 
 
@@ -221,10 +267,10 @@ class RankingNote implements Model
         $data = $database->getConnection()->query($query);
         $data = mysqli_fetch_assoc($data);
 
-        $rankingName = "R_" . $data['ranking_name'].'_Notes';
+        $rankingName = "R_" . $data['ranking_name'] . '_Notes';
 
 
-        
+
         $fieldsInput = ['id' => $fieldsMark['id']];
         $query = Get::getDataField($rankingName, $fieldsInput);
         $data = $database->getConnection()->query($query);
@@ -263,7 +309,7 @@ class RankingNote implements Model
 
 
 
-        
+
 
         $fieldsInput = ['id' => $fieldsMark['id']];
         $query = Delete::deleteRow($rankingName, $fieldsInput);
@@ -282,7 +328,6 @@ class RankingNote implements Model
         } else {
             return array('result' => false, 'message' => 'The insert has not been made');
         }
-
     }
 
     public static function update()

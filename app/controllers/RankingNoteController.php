@@ -42,8 +42,6 @@ class RankingNoteController implements Controller
         
 
       
-      print_r(count($params));
-
       if(count($params) == 3){
         $result = RankingNote::get($paramsinput);
       }
